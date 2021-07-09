@@ -1,0 +1,33 @@
+name: Python application
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        source '/usr/share/miniconda/etc/profile.d/conda.sh'
+        conda env create -n myenv
+    - name: Install package
+      run: |
+        source '/usr/share/miniconda/etc/profile.d/conda.sh'
+        conda activate myenv
+        python3 setup.py install
+    - name: Lint with flake8
+      run: |
+        source '/usr/share/miniconda/etc/profile.d/conda.sh'
+        conda activate myenv
+        flake8 . --show-source --statistics
+    - name: Test with pytest
+      run: |
+        source '/usr/share/miniconda/etc/profile.d/conda.sh'
+        conda activate myenv
+        pytest --cov
+#    - name: Build HTML docs
+#      run: |
+#        source '/usr/share/miniconda/etc/profile.d/conda.sh'
+#        conda activate myenv
+#        make -C ./docs html
