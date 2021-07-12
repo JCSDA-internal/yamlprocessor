@@ -15,7 +15,7 @@ import jmespath
 JSON_DUMP_CONFIG = {'indent': 2}
 
 
-def main():
+def main(argv=None):
     parser = ArgumentParser(description=__file__)
     parser.add_argument(
         'schema_filename',
@@ -25,7 +25,7 @@ def main():
         'config_filename',
         metavar='CONFIG-FILE',
         help='Name of the configuration file')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     # Get subschemas, detect any duplicates
     schema = json.load(open(args.schema_filename))
@@ -75,4 +75,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

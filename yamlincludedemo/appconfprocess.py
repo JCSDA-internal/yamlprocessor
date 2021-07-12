@@ -7,6 +7,7 @@ result.
 
 from argparse import ArgumentParser
 import os
+import sys
 
 import yaml
 
@@ -29,7 +30,7 @@ def get_filename(filename: str, orig_filename: str = None) -> str:
     return os.path.join(root_dir, filename)
 
 
-def main():
+def main(argv=None):
     parser = ArgumentParser(description=__file__)
     parser.add_argument(
         'in_filename',
@@ -39,7 +40,7 @@ def main():
         'out_filename',
         metavar='OUT-FILE',
         help='Name of output file')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     in_filename = get_filename(args.in_filename)
     root = yaml.safe_load(open(in_filename))
@@ -63,4 +64,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
