@@ -8,6 +8,7 @@ composed of include files.
 from argparse import ArgumentParser
 import json
 import os
+import sys
 
 import jmespath
 
