@@ -39,7 +39,7 @@ def test_main_1(monkeypatch, tmp_path):
                             {'$ref': 'schema-1.json'},
                             {
                                 'properties': {
-                                    '!include': {
+                                    'INCLUDE': {
                                         'type': 'string',
                                         'format': 'uri',
                                     },
@@ -112,7 +112,7 @@ def test_main_3(monkeypatch, tmp_path):
                             {'$ref': 'schema-1.json'},
                             {
                                 'properties': {
-                                    '!include': {
+                                    'INCLUDE': {
                                         'type': 'string',
                                         'format': 'uri',
                                     },
@@ -130,7 +130,7 @@ def test_main_3(monkeypatch, tmp_path):
                             {'$ref': 'schema-2.json'},
                             {
                                 'properties': {
-                                    '!include': {
+                                    'INCLUDE': {
                                         'type': 'string',
                                         'format': 'uri',
                                     },
@@ -159,7 +159,7 @@ def test_main_3(monkeypatch, tmp_path):
                         {'$ref': 'schema-3.json'},
                         {
                             'properties': {
-                                '!include': {
+                                'INCLUDE': {
                                     'type': 'string',
                                     'format': 'uri',
                                 },

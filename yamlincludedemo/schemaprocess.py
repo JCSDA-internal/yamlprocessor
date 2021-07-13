@@ -59,7 +59,7 @@ def main(argv=None):
                 {'$ref': filerelname},
                 {
                     "properties": {
-                        "!include": {"type": "string", "format": "uri"},
+                        "INCLUDE": {"type": "string", "format": "uri"},
                     },
                     "required": ["INCLUDE"],
                     "type": "object",
