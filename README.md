@@ -89,7 +89,7 @@ to tell it where to split up the schema in the syntax:
 {
     "OUTPUT-ROOT-SCHEMA-FILENAME": "",
     "OUTPUT-SUB-SCHEMA-FILENAME-1": "JMESPATH-1",
-    # and so on
+    /* and so on */
 }
 ```
 
@@ -121,7 +121,7 @@ which can be used to validate both `hello.yaml` and `hello-root.yaml`:
                                 "type": "string",
                                 "format": "uri"
                             }
-                        }
+                        },
                         "required": ["INCLUDE"],
                         "type": "object"
                     }
