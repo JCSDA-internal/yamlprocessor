@@ -104,6 +104,7 @@ subschemas. In the example above, we can give use the setting:
     "hello.schema.json": "",
     "hello-location.schema.json": "properties.hello.items"
 }
+```
 
 The resulting `hello.schema.json` will look like this,
 which can be used to validate both `hello.yaml` and `hello-root.yaml`:
