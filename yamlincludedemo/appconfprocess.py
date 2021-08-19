@@ -12,6 +12,9 @@ import sys
 import yaml
 
 
+INCLUDE_DIRECTIVE = 'yaml::'
+
+
 def get_filename(filename: str, orig_filename: str = None) -> str:
     """Return absolute path of filename.
 
@@ -30,6 +33,41 @@ def get_filename(filename: str, orig_filename: str = None) -> str:
     return os.path.join(root_dir, filename)
 
 
+def app_conf_process(in_filename: str, out_filename: str) -> None:
+    """Process includes in input file and dump results in output file.
+
+    :param in_filename: input file name.
+    :param out_filename: output file name.
+    """
+    in_filename = get_filename(in_filename)
+    root = yaml.safe_load(open(in_filename))
+    stack = [(root, in_filename)]
+    while stack:
+        data, current_filename = stack.pop()
+        if isinstance(data, str) and data.startswith(INCLUDE_DIRECTIVE):
+            filename = get_filename(
+                data[len(INCLUDE_DIRECTIVE):],
+                current_filename)
+            data = yaml.safe_load(open(filename))
+        items_iter = None
+        if isinstance(data, list):
+            items_iter = enumerate(data)
+        elif isinstance(data, dict):
+            items_iter = data.items()
+        if items_iter is None:
+            continue
+        for key, item in items_iter:
+            filename = current_filename
+            if isinstance(item, str) and item.startswith(INCLUDE_DIRECTIVE):
+                filename = get_filename(
+                    item[len(INCLUDE_DIRECTIVE):],
+                    current_filename)
+                item = data[key] = yaml.safe_load(open(filename))
+            if isinstance(item, dict) or isinstance(item, list):
+                stack.append((data[key], filename))
+    yaml.dump(root, open(out_filename, 'w'), default_flow_style=False)
+
+
 def main(argv=None):
     parser = ArgumentParser(description=__file__)
     parser.add_argument(
@@ -41,26 +79,7 @@ def main(argv=None):
         metavar='OUT-FILE',
         help='Name of output file')
     args = parser.parse_args(argv)
-
-    in_filename = get_filename(args.in_filename)
-    root = yaml.safe_load(open(in_filename))
-    stack = [(root, in_filename)]
-    while stack:
-        data, current_filename = stack.pop()
-        items_iter = None
-        if isinstance(data, list):
-            items_iter = enumerate(data)
-        elif isinstance(data, dict):
-            items_iter = data.items()
-        if items_iter is not None:
-            for key, item in items_iter:
-                filename = current_filename
-                if isinstance(item, dict) and list(item.keys()) == ['INCLUDE']:
-                    filename = get_filename(item['INCLUDE'], current_filename)
-                    item = data[key] = yaml.safe_load(open(filename))
-                if isinstance(item, dict) or isinstance(item, list):
-                    stack.append((data[key], filename))
-    yaml.dump(root, open(args.out_filename, 'w'), default_flow_style=False)
+    app_conf_process(args.in_filename, args.out_filename)
 
 
 if __name__ == '__main__':

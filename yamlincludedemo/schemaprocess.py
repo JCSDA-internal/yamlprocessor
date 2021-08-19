@@ -3,6 +3,15 @@
 
 Modularise a JSON schema and allows it to accept a data structure that can be
 composed of include files.
+
+Two positional arguments are expected:
+1. The file name of the JSON schema file.
+2. The file name of a configuration file in JSON format.
+
+The configuration file expects a mapping, where the keys are the file names
+(relative paths to current working directory) of the output sub-schema files,
+and the values are sub-schema break point locations (expressed as JMESPath
+format) in the input JSON schema document.
 """
 
 from argparse import ArgumentParser
@@ -12,27 +21,23 @@ import sys
 
 import jmespath
 
+from .appconfprocess import INCLUDE_DIRECTIVE
+
 
 JSON_DUMP_CONFIG = {'indent': 2}
 
 
-def main(argv=None):
-    parser = ArgumentParser(description=__file__)
-    parser.add_argument(
-        'schema_filename',
-        metavar='SCHEMA-FILE',
-        help='Name of the JSON schema file to modularise')
-    parser.add_argument(
-        'config_filename',
-        metavar='CONFIG-FILE',
-        help='Name of the configuration file')
-    args = parser.parse_args(argv)
+def schema_process(schema_filename: str, config_filename: str) -> None:
+    """Process schema to handle includes according configuration.
 
+    :param schema_filename: schema file name.
+    :param config_filename: configuration file name.
+    """
     # Get subschemas, detect any duplicates
-    schema = json.load(open(args.schema_filename))
+    schema = json.load(open(schema_filename))
     subschemas = {}  # {filerelname: subschema, ...}
-    schema_filebasename = '0-{}'.format(os.path.basename(args.schema_filename))
-    for filerelname, pathstr in json.load(open(args.config_filename)).items():
+    schema_filebasename = '0-{}'.format(os.path.basename(schema_filename))
+    for filerelname, pathstr in json.load(open(config_filename)).items():
         pathstr = pathstr.strip()
         if not pathstr:
             schema_filebasename = filerelname
@@ -57,13 +62,7 @@ def main(argv=None):
         subschema.update({
             'oneOf': [
                 {'$ref': filerelname},
-                {
-                    "properties": {
-                        "INCLUDE": {"type": "string", "format": "uri"},
-                    },
-                    "required": ["INCLUDE"],
-                    "type": "object",
-                },
+                {'pattern': '^' + INCLUDE_DIRECTIVE, 'type': 'string'},
             ],
         })
 
@@ -73,6 +72,20 @@ def main(argv=None):
             json.dump(subschema, subschema_file, **JSON_DUMP_CONFIG)
     with open(schema_filebasename, 'w') as schema_file:
         json.dump(schema, schema_file, **JSON_DUMP_CONFIG)
+
+
+def main(argv=None):
+    parser = ArgumentParser(description=__file__)
+    parser.add_argument(
+        'schema_filename',
+        metavar='SCHEMA-FILE',
+        help='Name of the JSON schema file to modularise')
+    parser.add_argument(
+        'config_filename',
+        metavar='CONFIG-FILE',
+        help='Name of the configuration file')
+    args = parser.parse_args(argv)
+    schema_process(args.schema_filename, args.config_filename)
 
 
 if __name__ == '__main__':

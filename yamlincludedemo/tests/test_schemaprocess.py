@@ -37,16 +37,7 @@ def test_main_1(monkeypatch, tmp_path):
                     'items': {
                         'oneOf': [
                             {'$ref': 'schema-1.json'},
-                            {
-                                'properties': {
-                                    'INCLUDE': {
-                                        'type': 'string',
-                                        'format': 'uri',
-                                    },
-                                },
-                                'required': ['INCLUDE'],
-                                'type': 'object',
-                            },
+                            {'pattern': '^yaml::', 'type': 'string'},
                         ],
                     },
                     'type': 'array',
@@ -110,16 +101,7 @@ def test_main_3(monkeypatch, tmp_path):
                     'items': {
                         'oneOf': [
                             {'$ref': 'schema-1.json'},
-                            {
-                                'properties': {
-                                    'INCLUDE': {
-                                        'type': 'string',
-                                        'format': 'uri',
-                                    },
-                                },
-                                'required': ['INCLUDE'],
-                                'type': 'object',
-                            },
+                            {'pattern': '^yaml::', 'type': 'string'},
                         ],
                     },
                     'type': 'array',
@@ -128,16 +110,7 @@ def test_main_3(monkeypatch, tmp_path):
                     'items': {
                         'oneOf': [
                             {'$ref': 'schema-2.json'},
-                            {
-                                'properties': {
-                                    'INCLUDE': {
-                                        'type': 'string',
-                                        'format': 'uri',
-                                    },
-                                },
-                                'required': ['INCLUDE'],
-                                'type': 'object',
-                            },
+                            {'pattern': '^yaml::', 'type': 'string'},
                         ],
                     },
                     'type': 'array',
@@ -157,16 +130,7 @@ def test_main_3(monkeypatch, tmp_path):
                 'name': {
                     'oneOf': [
                         {'$ref': 'schema-3.json'},
-                        {
-                            'properties': {
-                                'INCLUDE': {
-                                    'type': 'string',
-                                    'format': 'uri',
-                                },
-                            },
-                            'required': ['INCLUDE'],
-                            'type': 'object',
-                        },
+                        {'pattern': '^yaml::', 'type': 'string'},
                     ],
                 },
             },
