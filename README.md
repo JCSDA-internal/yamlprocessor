@@ -55,8 +55,8 @@ Let's call this `hello-root.yaml`:
 
 ```yaml
 hello:
-  - yaml:earth.yaml
-  - yaml:mars.yaml
+  - yaml::earth.yaml
+  - yaml::mars.yaml
 ```
 
 Where `earth.yaml` contains:
@@ -117,7 +117,7 @@ which can be used to validate both `hello.yaml` and `hello-root.yaml`:
                 "oneOf": [
                     {"$ref": "hello-location.schema.json"},
                     {
-                        "pattern": "^yaml:",
+                        "pattern": "^yaml::",
                         "type": "string"
                     }
                 ]
