@@ -1,7 +1,7 @@
 import os
 import yaml
 
-from ..appconfprocess import get_filename, main
+from ..dataprocess import get_filename, main
 
 
 def test_get_filename_abs():

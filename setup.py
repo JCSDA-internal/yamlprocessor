@@ -6,8 +6,8 @@ import os
 from setuptools import setup, find_packages
 
 
-PKGNAME = 'yamlincludedemo'
-URL = 'https://github.com/matthewrmshin/yaml-include-demo'
+PKGNAME = 'yamlprocessor'
+URL = 'https://github.com/matthewrmshin/yamlprocessor'
 
 
 # Get the long description from the README file
@@ -30,7 +30,7 @@ with open(
 setup(
     name=PKGNAME,
     version=VERSION,
-    description='Demo project',
+    description='Process values in YAML files',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url=URL,
@@ -44,7 +44,6 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Topic :: Scientific/Engineering',
-        # 'Topic :: Scientific/Engineering :: Atmospheric Science',
         'Topic :: Software Development',
     ],
     keywords='demo',
@@ -56,8 +55,8 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            f'demo-app-conf-process = {PKGNAME}.appconfprocess:main',
-            f'demo-schema-process = {PKGNAME}.schemaprocess:main',
+            f'yp-data = {PKGNAME}.dataprocess:main',
+            f'yp-schema = {PKGNAME}.schemaprocess:main',
         ],
     },
     include_package_data=True,

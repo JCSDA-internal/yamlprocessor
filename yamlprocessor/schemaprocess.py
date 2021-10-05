@@ -21,7 +21,7 @@ import sys
 
 import jmespath
 
-from .appconfprocess import INCLUDE_DIRECTIVE
+from .dataprocess import INCLUDE_DIRECTIVE
 
 
 JSON_DUMP_CONFIG = {'indent': 2}

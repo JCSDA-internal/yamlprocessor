@@ -1,8 +1,7 @@
-# yaml-include-demo
+# YAML Processor
 
-Demonstrate how to modularise YAML files using a controlled include file
-mechanism, backed by dividing the original JSON schema file into a set of
-subschema files.
+Allow modularisation of YAML files using a controlled include file mechanism,
+backed by dividing the original JSON schema file into a set of subschema files.
 
 Consider a YAML file `hello.yaml`:
 
