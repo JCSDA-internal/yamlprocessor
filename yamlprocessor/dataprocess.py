@@ -7,12 +7,38 @@ result.
 
 from argparse import ArgumentParser
 import os
+import re
 import sys
 
 import yaml
 
 
 INCLUDE_DIRECTIVE = 'yaml::'
+
+
+RE_SUBSTITUTE = re.compile(
+    r"\A"
+    r"(?P<head>.*?)"
+    r"(?P<escape>\\*)"
+    r"(?P<symbol>"
+    r"\$"
+    r"(?P<brace_open>\{)?"
+    r"(?P<name>[A-z_]\w*)"
+    r"(?(brace_open)\})"
+    r")"
+    r"(?P<tail>.*)"
+    r"\Z",
+    re.M | re.S)
+
+
+class UnboundVariableError(ValueError):
+
+    """An error raised on attempt to substitute an unbound variable."""
+
+    def __repr__(self):
+        return f"[UNBOUND VARIABLE] {self.args[0]}"
+
+    __str__ = __repr__
 
 
 def get_filename(filename: str, orig_filename: str = None) -> str:
@@ -24,6 +50,7 @@ def get_filename(filename: str, orig_filename: str = None) -> str:
     :param filename: File name to expand or return.
     :param orig_filename: File name in the original scope.
     """
+    filename = os.path.expanduser(filename)
     if os.path.isabs(filename):
         return filename
     if orig_filename is None:
@@ -33,7 +60,33 @@ def get_filename(filename: str, orig_filename: str = None) -> str:
     return os.path.join(root_dir, filename)
 
 
-def app_conf_process(in_filename: str, out_filename: str) -> None:
+def get_include(value: str) -> str:
+    """Returns include file str if value matches include file syntax.
+
+    :return: include file string where relevant, an empty string otherwise.
+    :param value: an input value.
+    """
+    if isinstance(value, str) and value.startswith(INCLUDE_DIRECTIVE):
+        return value[len(INCLUDE_DIRECTIVE):]
+    else:
+        return ""
+
+
+def load_include(value: object, orig_filename: str = None) -> object:
+    """Load include file if filename contains an include file name to load.
+
+    :param value: Value that may contain file name to load.
+    :param orig_filename: File name in the original scope.
+    """
+    include_filename = get_include(value)
+    if include_filename:
+        filename = get_filename(include_filename, orig_filename)
+        return yaml.safe_load(open(filename)), filename
+    else:
+        return value, orig_filename
+
+
+def process_data(in_filename: str, out_filename: str) -> None:
     """Process includes in input file and dump results in output file.
 
     :param in_filename: input file name.
@@ -44,11 +97,9 @@ def app_conf_process(in_filename: str, out_filename: str) -> None:
     stack = [(root, in_filename)]
     while stack:
         data, current_filename = stack.pop()
-        if isinstance(data, str) and data.startswith(INCLUDE_DIRECTIVE):
-            filename = get_filename(
-                data[len(INCLUDE_DIRECTIVE):],
-                current_filename)
-            data = yaml.safe_load(open(filename))
+        if isinstance(data, str):
+            data = process_variable(data)
+        data = load_include(data)[0]
         items_iter = None
         if isinstance(data, list):
             items_iter = enumerate(data)
@@ -57,15 +108,64 @@ def app_conf_process(in_filename: str, out_filename: str) -> None:
         if items_iter is None:
             continue
         for key, item in items_iter:
-            filename = current_filename
-            if isinstance(item, str) and item.startswith(INCLUDE_DIRECTIVE):
-                filename = get_filename(
-                    item[len(INCLUDE_DIRECTIVE):],
-                    current_filename)
-                item = data[key] = yaml.safe_load(open(filename))
+            if isinstance(item, str):
+                item = data[key] = process_variable(item)
+            include_data, filename = load_include(item, current_filename)
+            if include_data != item:
+                item = data[key] = include_data
             if isinstance(item, dict) or isinstance(item, list):
                 stack.append((data[key], filename))
     yaml.dump(root, open(out_filename, 'w'), default_flow_style=False)
+
+
+def process_variable(
+    text: str,
+    environ: dict = os.environ,
+    unbound: str = None,
+) -> str:
+    """Substitute environment variables into a string.
+
+    For each `$NAME` and `${NAME}` in `text`, substitute with the value
+    of the environment variable `NAME`.
+
+    If `NAME` is not defined in the `environ` and `unbound` is None, raise an
+    `UnboundVariableError`.
+
+    If `NAME` is not defined in the `environ` and `unbound` is not None,
+    substitute `NAME` with the value of `unbound`.
+
+    :param text: text to process.
+    :param unbound: text to substitute in unbound variables.
+    :param environ: mapping of variables that can be used in substitution.
+    :return: processed text.
+
+    """
+    ret = ""
+    try:
+        tail = text.decode()
+    except AttributeError:
+        tail = text
+    while tail:
+        match = RE_SUBSTITUTE.match(tail)
+        if match:
+            groups = match.groupdict()
+            substitute = groups["symbol"]
+            if len(groups["escape"]) % 2 == 0:
+                if groups["name"] in environ:
+                    substitute = environ[groups["name"]]
+                elif unbound is not None:
+                    substitute = str(unbound)
+                else:
+                    raise UnboundVariableError(groups["name"])
+            ret += (
+                groups["head"]
+                + groups["escape"][0:len(groups["escape"]) // 2]
+                + substitute)
+            tail = groups["tail"]
+        else:
+            ret += tail
+            tail = ""
+    return ret
 
 
 def main(argv=None):
@@ -79,7 +179,7 @@ def main(argv=None):
         metavar='OUT-FILE',
         help='Name of output file')
     args = parser.parse_args(argv)
-    app_conf_process(args.in_filename, args.out_filename)
+    process_data(args.in_filename, args.out_filename)
 
 
 if __name__ == '__main__':
