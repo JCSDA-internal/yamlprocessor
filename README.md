@@ -1,5 +1,7 @@
 # YAML Processor
 
+## YAML Modularisation / Include
+
 Allow modularisation of YAML files using a controlled include file mechanism,
 backed by dividing the original JSON schema file into a set of subschema files.
 
@@ -76,11 +78,11 @@ targets:
   - martian
 ```
 
-At runtime, we can run the `demo-app-conf-process INFILE OUTFILE`
+At runtime, we can run the `yp-data INFILE OUTFILE`
 command to process and recombine the YAML files.
 
 To split the schema to support these YAML files, however, we'll
-use the `demo-schema-process SCHEMA-FILE CONFIG-FILE` command.
+use the `yp-schema SCHEMA-FILE CONFIG-FILE` command.
 For this command to work, we need to supply it with some settings
 to tell it where to split up the schema in the syntax:
 
@@ -95,7 +97,7 @@ to tell it where to split up the schema in the syntax:
 Obviously, we must have a root schema output file name.
 The rest of the entries are output file names for the subschemas.
 The [https://jmespath.org/](JMESPath) syntax tells the
-`demo-schema-process` command where to split JSON schema into
+`yp-schema` command where to split JSON schema into
 subschemas. In the example above, we can give use the setting:
 
 ```json
@@ -150,4 +152,20 @@ which can be used to validate `earth.yaml` and `mars.yaml`:
     "required": ["location", "targets"],
     "type": "object"
 }
+```
+
+## YAML String Value Variable Substitution
+
+Process variable substitution syntax for string values in YAML files.
+Consider:
+
+```yaml
+key: ${SWEET_HOME}/sugar.txt
+```
+
+If `SWEET_HOME` is defined in the environment and has a value `/home/sweet`,
+then running `yp-data` on the above will give:
+
+```yaml
+key: /home/sweet/sugar.txt
 ```

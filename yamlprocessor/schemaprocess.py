@@ -21,7 +21,7 @@ import sys
 
 import jmespath
 
-from .dataprocess import INCLUDE_DIRECTIVE
+from .dataprocess import DataProcessor
 
 
 JSON_DUMP_CONFIG = {'indent': 2}
@@ -62,7 +62,10 @@ def schema_process(schema_filename: str, config_filename: str) -> None:
         subschema.update({
             'oneOf': [
                 {'$ref': filerelname},
-                {'pattern': '^' + INCLUDE_DIRECTIVE, 'type': 'string'},
+                {
+                    'pattern': '^' + DataProcessor.INCLUDE_DIRECTIVE,
+                    'type': 'string',
+                },
             ],
         })
 

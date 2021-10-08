@@ -1,24 +1,6 @@
-import os
 import yaml
 
-from ..dataprocess import get_filename, main
-
-
-def test_get_filename_abs():
-    name = os.path.abspath(__file__)
-    assert name == get_filename(name)
-
-
-def test_get_filename_rel_0():
-    assert os.path.abspath('myfile.txt') == get_filename('myfile.txt')
-
-
-def test_get_filename_rel_1(tmp_path):
-    orig_filename = tmp_path / 'original.txt'
-    assert (
-        str(tmp_path / 'myfile.txt')
-        == get_filename('myfile.txt', str(orig_filename))
-    )
+from ..dataprocess import main
 
 
 def test_main_0(tmp_path):
