@@ -73,7 +73,11 @@ class DataProcessor:
         :param out_filename: output file name.
         """
         in_filename = self.get_filename(in_filename, [])
-        root = yaml.safe_load(open(in_filename))
+        if in_filename == '-':
+            in_file = sys.stdin
+        else:
+            in_file = open(in_filename)
+        root = yaml.safe_load(in_file)
         stack = [[root, [in_filename]]]
         while stack:
             data, parent_filenames = stack.pop()
@@ -94,7 +98,11 @@ class DataProcessor:
                     item = data[key] = include_data
                 if isinstance(item, dict) or isinstance(item, list):
                     stack.append([data[key], parent_filenames])
-        yaml.dump(root, open(out_filename, 'w'), default_flow_style=False)
+        if out_filename == '-':
+            out_file = sys.stdout
+        else:
+            out_file = open(out_filename, 'w')
+        yaml.dump(root, out_file, default_flow_style=False)
 
     def get_filename(self, filename: str, parent_filenames: list[str]) -> str:
         """Return absolute path of filename.
@@ -107,10 +115,14 @@ class DataProcessor:
         :param parent_filenames: Stack of parent file names.
         """
         filename: str = os.path.expanduser(filename)
-        if os.path.isabs(filename):
+        if os.path.isabs(filename) or filename == '-':
             return filename
         root_dirs = (
-            list(os.path.abspath(os.path.dirname(f)) for f in parent_filenames)
+            list(
+                os.path.abspath(os.path.dirname(f))
+                for f in parent_filenames
+                if f != '-'
+            )
             + [os.path.abspath('.')]
             + self.include_paths
         )
@@ -203,11 +215,13 @@ def main(argv=None):
         'in_filename',
         metavar='IN-FILE',
         default='-',
+        nargs='?',
         help='Name of input file')
     parser.add_argument(
         'out_filename',
         metavar='OUT-FILE',
         default='-',
+        nargs='?',
         help='Name of output file')
     parser.add_argument(
         '--include', '-I',
