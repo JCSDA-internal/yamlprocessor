@@ -15,7 +15,7 @@ jobs:
       run: |
         source '/usr/share/miniconda/etc/profile.d/conda.sh'
         conda activate myenv
-        python3 setup.py install
+        python3 -m pip install .
     - name: Lint with flake8
       run: |
         source '/usr/share/miniconda/etc/profile.d/conda.sh'
