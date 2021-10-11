@@ -39,7 +39,7 @@ class DataProcessor:
         (list) Locations for searching include files.
       `.variable_map`:
         (dict) Mapping for variable substitutions. (Default=os.environ)
-      `.unbound_variable_value`:
+      `.unbound_placeholder`:
         (str) Value to substitute for unbound variables.
     """
 
@@ -64,7 +64,7 @@ class DataProcessor:
         self.is_process_variable = True
         self.include_paths = []
         self.variable_map = os.environ.copy()
-        self.unbound_variable_value = None
+        self.unbound_placeholder = None
 
     def process_data(self, in_filename: str, out_filename: str) -> None:
         """Process includes in input file and dump results in output file.
@@ -142,22 +142,21 @@ class DataProcessor:
         :param value: Value that may contain file name to load.
         :param parent_filenames: Stack of parent file names.
         """
-        if (
+        if parent_filenames is None:
+            parent_filenames = []
+        else:
+            parent_filenames = list(parent_filenames)
+        while (
             self.is_process_include
             and isinstance(value, str)
             and value.startswith(self.INCLUDE_DIRECTIVE)
         ):
-            include_filename = value[len(self.INCLUDE_DIRECTIVE):]
-        else:
-            include_filename = ''
-        if include_filename:
+            include_filename = self.process_variable(
+                value[len(self.INCLUDE_DIRECTIVE):])
             filename = self.get_filename(include_filename, parent_filenames)
-            return (
-                yaml.safe_load(open(filename)),
-                parent_filenames + [filename],
-            )
-        else:
-            return value, parent_filenames
+            parent_filenames.append(filename)
+            value = yaml.safe_load(open(filename))
+        return value, parent_filenames
 
     def process_variable(self, item: object) -> object:
         """Substitute environment variables into a string value.
@@ -169,11 +168,11 @@ class DataProcessor:
         of the environment variable `NAME`.
 
         If `NAME` is not defined in the `.variable_map` and
-        `.unbound_variable_value` is None, raise an `UnboundVariableError`.
+        `.unbound_placeholder` is None, raise an `UnboundVariableError`.
 
         If `NAME` is not defined in the `.variable_map` and
-        `.unbound_variable_value` is not None, substitute `NAME` with the value
-        of `.unbound_variable_value`.
+        `.unbound_placeholder` is not None, substitute `NAME` with the value
+        of `.unbound_placeholder`.
 
         :param item: Item to process. Do nothing if not a str.
         :return: Processed item on success.
@@ -194,8 +193,8 @@ class DataProcessor:
                 if len(groups["escape"]) % 2 == 0:
                     if groups["name"] in self.variable_map:
                         substitute = self.variable_map[groups["name"]]
-                    elif self.unbound_variable_value is not None:
-                        substitute = str(self.unbound_variable_value)
+                    elif self.unbound_placeholder is not None:
+                        substitute = str(self.unbound_placeholder)
                     else:
                         raise UnboundVariableError(groups["name"])
                 ret += (
@@ -250,6 +249,11 @@ def main(argv=None):
         default=False,
         help='Do not use environment variables in variable substitutions')
     parser.add_argument(
+        '--unbound-placeholder',
+        metavar='VALUE',
+        default=None,
+        help='Substitute an unbound variable with VALUE instead of failing')
+    parser.add_argument(
         '--no-process-include',
         dest='is_process_include',
         action='store_false',
@@ -278,6 +282,7 @@ def main(argv=None):
     for item in args.defines:
         key, value = item.split('=', 1)
         processor.variable_map[key] = value
+    processor.unbound_placeholder = args.unbound_placeholder
 
     processor.process_data(args.in_filename, args.out_filename)
 
