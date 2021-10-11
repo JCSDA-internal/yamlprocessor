@@ -25,6 +25,15 @@ from .dataprocess import DataProcessor
 
 
 JSON_DUMP_CONFIG = {'indent': 2}
+INCLUDE_SCHEMA = {
+    'properties': {
+        DataProcessor.INCLUDE_DIRECTIVE: {
+            'type': 'string',
+        },
+    },
+    'required': [DataProcessor.INCLUDE_DIRECTIVE],
+    'type': 'object',
+}
 
 
 def schema_process(schema_filename: str, config_filename: str) -> None:
@@ -60,13 +69,7 @@ def schema_process(schema_filename: str, config_filename: str) -> None:
     for filerelname, subschema in subschemas.items():
         subschema.clear()
         subschema.update({
-            'oneOf': [
-                {'$ref': filerelname},
-                {
-                    'pattern': '^' + DataProcessor.INCLUDE_DIRECTIVE,
-                    'type': 'string',
-                },
-            ],
+            'oneOf': [{'$ref': filerelname}, INCLUDE_SCHEMA],
         })
 
     # Dump subschemas from copies, because original has been modified in place.

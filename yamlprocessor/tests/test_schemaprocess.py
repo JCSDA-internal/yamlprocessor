@@ -1,6 +1,6 @@
 import json
 
-from ..schemaprocess import main
+from ..schemaprocess import INCLUDE_SCHEMA, main
 
 
 def test_main_1(monkeypatch, tmp_path):
@@ -35,10 +35,7 @@ def test_main_1(monkeypatch, tmp_path):
             'properties': {
                 'testing': {
                     'items': {
-                        'oneOf': [
-                            {'$ref': 'schema-1.json'},
-                            {'pattern': '^yaml::', 'type': 'string'},
-                        ],
+                        'oneOf': [{'$ref': 'schema-1.json'}, INCLUDE_SCHEMA],
                     },
                     'type': 'array',
                 },
@@ -99,19 +96,13 @@ def test_main_3(monkeypatch, tmp_path):
             'properties': {
                 'testing': {
                     'items': {
-                        'oneOf': [
-                            {'$ref': 'schema-1.json'},
-                            {'pattern': '^yaml::', 'type': 'string'},
-                        ],
+                        'oneOf': [{'$ref': 'schema-1.json'}, INCLUDE_SCHEMA],
                     },
                     'type': 'array',
                 },
                 'examining': {
                     'items': {
-                        'oneOf': [
-                            {'$ref': 'schema-2.json'},
-                            {'pattern': '^yaml::', 'type': 'string'},
-                        ],
+                        'oneOf': [{'$ref': 'schema-2.json'}, INCLUDE_SCHEMA],
                     },
                     'type': 'array',
                 },
@@ -128,10 +119,7 @@ def test_main_3(monkeypatch, tmp_path):
                     'type': 'integer',
                 },
                 'name': {
-                    'oneOf': [
-                        {'$ref': 'schema-3.json'},
-                        {'pattern': '^yaml::', 'type': 'string'},
-                    ],
+                    'oneOf': [{'$ref': 'schema-3.json'}, INCLUDE_SCHEMA],
                 },
             },
             'type': 'object',

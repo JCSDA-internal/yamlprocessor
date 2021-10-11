@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Read a YAML application configuration, process any includes.
+"""Process includes and variable substitutions in a YAML file.
 
-Read a YAML application configuration, process any includes, and dump out the
-result.
+For each value `{"INCLUDE": "filename.yaml"}`, load content from include file
+and substitute the value with the content of the include file.
+
+For each string value with `$NAME` or `${NAME}` syntax, substitute with value
+of corresponding (environment) variable.
 """
 
 from argparse import ArgumentParser
@@ -43,7 +46,7 @@ class DataProcessor:
         (str) Value to substitute for unbound variables.
     """
 
-    INCLUDE_DIRECTIVE = 'yaml::'
+    INCLUDE_DIRECTIVE = 'INCLUDE'
 
     RE_SUBSTITUTE = re.compile(
         r"\A"
@@ -148,11 +151,11 @@ class DataProcessor:
             parent_filenames = list(parent_filenames)
         while (
             self.is_process_include
-            and isinstance(value, str)
-            and value.startswith(self.INCLUDE_DIRECTIVE)
+            and isinstance(value, dict)
+            and self.INCLUDE_DIRECTIVE in value
         ):
             include_filename = self.process_variable(
-                value[len(self.INCLUDE_DIRECTIVE):])
+                value[self.INCLUDE_DIRECTIVE])
             filename = self.get_filename(include_filename, parent_filenames)
             parent_filenames.append(filename)
             value = yaml.safe_load(open(filename))
