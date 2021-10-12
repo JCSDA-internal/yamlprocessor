@@ -1,5 +1,13 @@
 # YAML Processor
 
+## Installation
+
+To install from PyPI, run:
+
+```sh
+python3 -m pip install yamlprocessor
+```
+
 ## YAML Modularisation / Include
 
 Allow modularisation of YAML files using a controlled include file mechanism,

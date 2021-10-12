@@ -16,6 +16,8 @@ import sys
 
 import yaml
 
+from . import __version__
+
 
 class UnboundVariableError(ValueError):
 
@@ -220,6 +222,8 @@ def main(argv=None):
     parser.add_argument(
         'in_filename',
         metavar='IN-FILE',
+        default='-',
+        nargs='?',
         help='Name of input file, "-" for STDIN')
     parser.add_argument(
         'out_filename',
@@ -270,7 +274,16 @@ def main(argv=None):
         action='store_false',
         default=True,
         help='Do not process variable substitutions')
+    parser.add_argument(
+        '--version', '-V',
+        dest='is_print_version',
+        action='store_true',
+        default=False,
+        help='Print version and exit')
     args = parser.parse_args(argv)
+
+    if args.is_print_version:
+        parser.exit(0, f'{parser.prog} {__version__}\n')
 
     processor = DataProcessor()
     processor.is_process_include = args.is_process_include
