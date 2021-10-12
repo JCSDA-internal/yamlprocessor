@@ -107,7 +107,7 @@ class DataProcessor:
             out_file = open(out_filename, 'w')
         yaml.dump(root, out_file, default_flow_style=False)
 
-    def get_filename(self, filename: str, parent_filenames: list[str]) -> str:
+    def get_filename(self, filename: str, parent_filenames: list) -> str:
         """Return absolute path of filename.
 
         If `filename` is a relative path, look for the file but looking the
@@ -138,8 +138,8 @@ class DataProcessor:
     def load_file(
         self,
         value: object,
-        parent_filenames: list[str] = None,
-    ) -> tuple[object, str]:
+        parent_filenames: list = None,
+    ) -> tuple:
         """Load data if value indicates the root file or an include file.
 
         :param value: Value that may contain file name to load.
@@ -216,15 +216,13 @@ def main(argv=None):
     parser.add_argument(
         'in_filename',
         metavar='IN-FILE',
-        default='-',
-        nargs='?',
-        help='Name of input file')
+        help='Name of input file, "-" for STDIN')
     parser.add_argument(
         'out_filename',
         metavar='OUT-FILE',
         default='-',
         nargs='?',
-        help='Name of output file')
+        help='Name of output file, "-" for STDOUT')
     parser.add_argument(
         '--include', '-I',
         dest='include_paths',

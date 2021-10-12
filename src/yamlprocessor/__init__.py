@@ -1,2 +1,2 @@
-"""Demostrate how to support YAML include files with JSON schema."""
-__version__ = '0.1'
+"""Process YAML include files and variable substitutions."""
+__version__ = '0.1.1'
