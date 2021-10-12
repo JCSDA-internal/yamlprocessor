@@ -8,7 +8,7 @@ For each string value with `$NAME` or `${NAME}` syntax, substitute with value
 of corresponding (environment) variable.
 """
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from errno import ENOENT
 import os
 import re
@@ -105,7 +105,8 @@ class DataProcessor:
             out_file = sys.stdout
         else:
             out_file = open(out_filename, 'w')
-        yaml.dump(root, out_file, default_flow_style=False)
+        # Set sort_keys=False to preserve dict ordering (with Python 3.7+)
+        yaml.dump(root, out_file, default_flow_style=False, sort_keys=False)
 
     def get_filename(self, filename: str, parent_filenames: list) -> str:
         """Return absolute path of filename.
@@ -212,7 +213,10 @@ class DataProcessor:
 
 
 def main(argv=None):
-    parser = ArgumentParser(description=__file__)
+    parser = ArgumentParser(
+        description=__doc__,
+        formatter_class=RawDescriptionHelpFormatter,
+    )
     parser.add_argument(
         'in_filename',
         metavar='IN-FILE',

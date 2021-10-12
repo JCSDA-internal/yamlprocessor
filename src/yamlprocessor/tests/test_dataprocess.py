@@ -140,3 +140,16 @@ def test_main_7(tmp_path):
     outfilename = tmp_path / 'b.yaml'
     main(['-I', str(include_d), str(infilename), str(outfilename)])
     assert yaml.safe_load(outfilename.open()) == data
+
+
+def test_main_8(tmp_path):
+    """Test main, YAML object (i.e. dict) key order."""
+    infilename = tmp_path / 'a.yaml'
+    incontent = "xyz: 1\npqrs: 2\nabc: 3\nijk: 4\n"
+    with infilename.open('w') as infile:
+        infile.write(incontent)
+    outfilename = tmp_path / 'b.yaml'
+    main([str(infilename), str(outfilename)])
+    with outfilename.open() as outfile:
+        outcontent = outfile.read()
+    assert incontent == outcontent
