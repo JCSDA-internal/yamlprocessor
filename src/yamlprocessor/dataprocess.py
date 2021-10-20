@@ -10,6 +10,7 @@ of corresponding (environment) variable.
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from errno import ENOENT
+import jmespath
 import os
 import re
 import sys
@@ -48,7 +49,8 @@ class DataProcessor:
         (str) Value to substitute for unbound variables.
     """
 
-    INCLUDE_DIRECTIVE = 'INCLUDE'
+    INCLUDE_KEY = 'INCLUDE'
+    QUERY_KEY = 'QUERY'
 
     RE_SUBSTITUTE = re.compile(
         r"\A"
@@ -78,16 +80,12 @@ class DataProcessor:
         :param out_filename: output file name.
         """
         in_filename = self.get_filename(in_filename, [])
-        if in_filename == '-':
-            in_file = sys.stdin
-        else:
-            in_file = open(in_filename)
-        root = yaml.safe_load(in_file)
+        root = self.load_file(in_filename)
         stack = [[root, [in_filename]]]
         while stack:
             data, parent_filenames = stack.pop()
             data = self.process_variable(data)
-            data = self.load_file(data)[0]
+            data = self.load_include_file(data)[0]
             items_iter = None
             if isinstance(data, list):
                 items_iter = enumerate(data)
@@ -97,7 +95,7 @@ class DataProcessor:
                 continue
             for key, item in items_iter:
                 item = data[key] = self.process_variable(item)
-                include_data, parent_filenames = self.load_file(
+                include_data, parent_filenames = self.load_include_file(
                     item, parent_filenames)
                 if include_data != item:
                     item = data[key] = include_data
@@ -138,7 +136,7 @@ class DataProcessor:
                 return name
         raise OSError(ENOENT, filename, os.strerror(ENOENT))
 
-    def load_file(
+    def load_include_file(
         self,
         value: object,
         parent_filenames: list = None,
@@ -155,14 +153,31 @@ class DataProcessor:
         while (
             self.is_process_include
             and isinstance(value, dict)
-            and self.INCLUDE_DIRECTIVE in value
+            and self.INCLUDE_KEY in value
         ):
             include_filename = self.process_variable(
-                value[self.INCLUDE_DIRECTIVE])
+                value[self.INCLUDE_KEY])
             filename = self.get_filename(include_filename, parent_filenames)
             parent_filenames.append(filename)
-            value = yaml.safe_load(open(filename))
+            loaded_value = self.load_file(filename)
+            if self.QUERY_KEY in value:
+                value = jmespath.search(value[self.QUERY_KEY], loaded_value)
+            else:
+                value = loaded_value
         return value, parent_filenames
+
+    @staticmethod
+    def load_file(filename: str) -> object:
+        """Load content of (YAML) file into a data structure.
+
+        :param filename: name of file to load content.
+        :return: the loaded data structure.
+        """
+        if filename == '-':
+            return yaml.safe_load(sys.stdin)
+        else:
+            with open(filename) as file_:
+                return yaml.safe_load(file_)
 
     def process_variable(self, item: object) -> object:
         """Substitute environment variables into a string value.

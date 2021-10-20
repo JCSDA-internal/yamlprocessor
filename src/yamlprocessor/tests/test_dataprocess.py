@@ -153,3 +153,28 @@ def test_main_8(tmp_path):
     with outfilename.open() as outfile:
         outcontent = outfile.read()
     assert incontent == outcontent
+
+
+def test_main_9(tmp_path):
+    """Test main, single include with query."""
+    data = {'testing': [1, 2, 3]}
+    data_0 = {'testing': {
+        'INCLUDE': '1.yaml',
+        'QUERY': "[?favourite].value",
+    }}
+    data_1 = [
+        {'value': 1, 'favourite': True},
+        {'value': 1.5, 'favourite': False},
+        {'value': 2, 'favourite': True},
+        {'value': 2.7, 'favourite': False},
+        {'value': 3, 'favourite': True},
+        {'value': 3.1, 'favourite': False},
+    ]
+    infilename = tmp_path / 'a.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(data_0, infile)
+    with (tmp_path / '1.yaml').open('w') as infile_1:
+        yaml.dump(data_1, infile_1)
+    outfilename = tmp_path / 'b.yaml'
+    main([str(infilename), str(outfilename)])
+    assert yaml.safe_load(outfilename.open()) == data

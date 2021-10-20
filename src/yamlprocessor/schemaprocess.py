@@ -27,11 +27,14 @@ from .dataprocess import DataProcessor
 JSON_DUMP_CONFIG = {'indent': 2}
 INCLUDE_SCHEMA = {
     'properties': {
-        DataProcessor.INCLUDE_DIRECTIVE: {
+        DataProcessor.INCLUDE_KEY: {
+            'type': 'string',
+        },
+        DataProcessor.QUERY_KEY: {
             'type': 'string',
         },
     },
-    'required': [DataProcessor.INCLUDE_DIRECTIVE],
+    'required': [DataProcessor.INCLUDE_KEY],
     'type': 'object',
 }
 

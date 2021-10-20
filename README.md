@@ -129,6 +129,9 @@ which can be used to validate both `hello.yaml` and `hello-root.yaml`:
                         "properties": {
                             "INCLUDE": {
                                 "type": "string"
+                            },
+                            "QUERY": {
+                                "type": "string"
                             }
                         },
                         "required": ["INCLUDE"],
@@ -165,6 +168,53 @@ which can be used to validate `earth.yaml` and `mars.yaml`:
     "required": ["location", "targets"],
     "type": "object"
 }
+```
+
+## YAML Modularisation / Include with Query
+
+Consider an example where we want to include only a subset of the data structure
+from the include file. We can use a [JMESPath](https://jmespath.org/)
+query to achieve this.
+
+For example, we may have something like this in `hello-root.yaml`:
+
+```yaml
+hello:
+  INCLUDE: planets.yaml
+  QUERY: "[?type=='rocky'].{location: location, targets: targets}"
+```
+
+Where `planets.yaml` contains:
+
+```yaml
+- location: earth
+  type: rocky
+  targets:
+    - human
+    - cat
+    - dog
+- location: mars
+  type: rocky
+  targets:
+    - martian
+- location: jupiter
+  type: gaseous
+  targets:
+    - ...
+```
+
+Running `yp-data hello-root.yaml` will return:
+
+```yaml
+hello:
+- location: earth
+  targets:
+    - human
+    - cat
+    - dog
+- location: mars
+  targets:
+    - martian
 ```
 
 ## YAML String Value Variable Substitution
