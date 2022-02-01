@@ -89,8 +89,16 @@ class DataProcessor:
         (bool) Turn on/off variable substitution.
       `.include_paths`:
         (list) Locations for searching include files.
+      `.schema_prefix`:
+        (str) Prefix for JSON schema specified as non-existing relative paths.
+      `.time_formats`:
+        (dict) Default and named time formats. (Default=`{'': '%FT%T%z'}`)
+      `.time_now`:
+        (datetime) Date-time at instance initialisation.
+      `.time_ref`:
+        (datetime) Reference date-time. (Default=`.time_now`)
       `.variable_map`:
-        (dict) Mapping for variable substitutions. (Default=os.environ)
+        (dict) Mapping for variable substitutions. (Default=`os.environ`)
       `.unbound_placeholder`:
         (str) Value to substitute for unbound variables.
     """

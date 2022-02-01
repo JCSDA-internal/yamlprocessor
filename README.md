@@ -8,6 +8,40 @@ To install from PyPI, run:
 python3 -m pip install yamlprocessor
 ```
 
+## Introduction
+
+This project provides two command line utilities `yp-data` and `yp-schema`.
+
+The `yp-data` utility allows automation of the following in a single command:
+
+* Modularisation of YAML files via a simple include mechanism.
+* Variable substitutions in string values.
+  * Environment and pre-defined variables.
+  * Date-time variables, based on the current time and/or a reference time.
+* Validation using JSON schema.
+
+The `yp-schema` utility is a compliment to the YAML modularisation / include
+functionality provided by `yp-data`. It allows users to break up a monolithic
+JSON schema file into a set of subschema files.
+
+## Basic Usages
+
+Command line:
+
+```sh
+yp-data [options] input-file-name output-file-name
+```
+
+Type `-yp-data --help` for a list of options, and see below for usage detail.
+
+Python:
+
+```python
+from yamlprocessor.dataprocess import DataProcessor
+processor = DataProcess()
+processor.process_data(in_file_name, out_file_name)
+```
+
 ## YAML Modularisation / Include
 
 Allow modularisation of YAML files using a controlled include file mechanism,
