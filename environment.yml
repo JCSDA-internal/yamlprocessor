@@ -5,6 +5,9 @@ dependencies:
   - python>=3.7
   - flake8
   - jmespath
+  - jsonschema
   - pytest
   - pytest-cov
+  - python-build
+  - python-dateutil
   - pyyaml
