@@ -32,7 +32,7 @@ Command line:
 yp-data [options] input-file-name output-file-name
 ```
 
-Type `-yp-data --help` for a list of options, and see below for usage detail.
+Type `yp-data --help` for a list of options, and see below for usage detail.
 
 Python:
 
@@ -140,7 +140,7 @@ Obviously, we must have a root schema output file name.
 The rest of the entries are output file names for the subschemas.
 The [https://jmespath.org/](JMESPath) syntax tells the
 `yp-schema` command where to split JSON schema into
-subschemas. In the example above, we can give use the setting:
+subschemas. In the example above, we can use the setting:
 
 ```json
 {
@@ -258,7 +258,7 @@ the current YAML file by adding a `#!<SCHEMA-URI>` to the beginning
 of the YAML file. The `SCHEMA-URI` is a string pointing to the location
 of a JSON schema file. Some simple assumptions apply:
 
-* If `SCHMEA-URI` is a normal URI with a leading scheme,
+* If `SCHEMA-URI` is a normal URI with a leading scheme,
   e.g. `https://`, it is used as-is.
 * If `SCHEMA-URI` does not have a leading scheme and exists in the local
   file system, then it is also used as-is.
@@ -299,12 +299,12 @@ or the `--time-ref=VALUE` command line option). If no value is set
 for the reference time, any reference to the reference time will
 simply use the current time.
 
-You can use one or more of these trialing suffixes to apply deltas for the date-time:
+You can use one or more of these trailing suffixes to apply deltas for the date-time:
 
-* `_ADD_XXX`: adds the duration to the date-time.
+* `_PLUS_XXX`: adds the duration to the date-time.
 * `_MINUS_XXX`: substracts the duration to the date-time.
 * `_AT_xxx`: sets individual fields of the date-time. E.g. `_AT_T0H` will set
-  the hour of the day part the date-time to 00 hour.
+  the hour of the day part of the date-time to 00 hour.
 
 where `xxx` is date-time duration-like syntax in the form `nYnMnDTnHnMnS`, e.g.:
 * 12Y is 12 years.
@@ -314,16 +314,16 @@ where `xxx` is date-time duration-like syntax in the form `nYnMnDTnHnMnS`, e.g.:
 
 Examples, (for argument sake, let's assume the
 current time is `2022-02-01T10:11:18Z` and
-we have set the reference time to `2024-12-25T00:00:00Z`.)
+we have set the reference time to `2024-12-25T11:11:11Z`.)
 
 ```sh
-${YP_TIME_NOW}                      # 2022-02-01T10:11:18+0000
-${YP_TIME_NOW_AT_0H0M0S}            # 2022-02-01T00:00:00+0000
-${YP_TIME_NOW_AT_0H0M0S_PLUS_T12H}  # 2022-02-01T12:00:00+0000
-${YP_TIME_REF}                      # 2024-12-25T00:00:00+0000
-${YP_TIME_REF_AT_1DT18H}            # 2024-12-01T18:00:00+0000
-${YP_TIME_REF_PLUS_T6H30M}          # 2024-12-25T06:30:00+0000
-${YP_TIME_REF_MINUS_1D}             # 2024-12-24T00:00:00+0000
+${YP_TIME_NOW}                       # 2022-02-01T10:11:18+0000
+${YP_TIME_NOW_AT_T0H0M0S}            # 2022-02-01T00:00:00+0000
+${YP_TIME_NOW_AT_T0H0M0S_PLUS_T12H}  # 2022-02-01T12:00:00+0000
+${YP_TIME_REF}                       # 2024-12-25T11:11:11+0000
+${YP_TIME_REF_AT_1DT18H}             # 2024-12-01T18:11:11+0000
+${YP_TIME_REF_PLUS_T6H30M}           # 2024-12-25T17:41:11+0000
+${YP_TIME_REF_MINUS_1D}              # 2024-12-24T11:11:11+0000
 ```
 
 You can control date-time output formats using the
