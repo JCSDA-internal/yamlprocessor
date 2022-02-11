@@ -182,7 +182,7 @@ class DataProcessor:
     def get_filename(self, filename: str, parent_filenames: list) -> str:
         """Return absolute path of filename.
 
-        If `filename` is a relative path, look for the file but looking the
+        If `filename` is a relative path, look for the file but looking in the
         directories containing the parent files, then the current working
         directory, then each path in `.include_paths`.
 
@@ -359,8 +359,8 @@ class DataProcessor:
 
         NNN is in the same format as XXX, but the values are absolute
         information to replace the original date-time value. E.g. If the
-        current/reference time is 2022-01-14T12:00Z, applying _AT_1DT2H will
-        change the time to 2022-01-01T02:00Z.
+        current/reference time is 2022-01-14T12:30Z, applying _AT_1DT2H will
+        change the time to 2022-01-01T02:30Z.
 
         Deltas will be applied in the order they are defined.
 

@@ -40,7 +40,7 @@ INCLUDE_SCHEMA = {
 
 
 def schema_process(schema_filename: str, config_filename: str) -> None:
-    """Process schema to handle includes according configuration.
+    """Process schema to handle includes according to configuration.
 
     :param schema_filename: schema file name.
     :param config_filename: configuration file name.
