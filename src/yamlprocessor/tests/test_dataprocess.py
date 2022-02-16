@@ -46,29 +46,29 @@ def test_process_variable_2():
     """Test DataProcessor.process_variable time substitution syntax."""
     processor = DataProcessor()
     processor.variable_map.clear()
-    processor.time_now = datetimeparse('2012-01-20T12:01')
-    processor.time_ref = datetimeparse('2022-02-20T22:02')
-    assert (
-        processor.process_variable(r"${YP_TIME_NOW}")
-        == '2012-01-20T12:01:00')
+    processor.time_ref = datetimeparse('2022-02-20T22:02Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF}")
-        == '2022-02-20T22:02:00')
+        == '2022-02-20T22:02:00+0000')
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_T0H0M0S}")
-        == '2022-02-20T00:00:00')
+        == '2022-02-20T00:00:00+0000')
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_1DT0H0M0S}")
-        == '2022-02-01T00:00:00')
+        == '2022-02-01T00:00:00+0000')
     assert (
         processor.process_variable(r"${YP_TIME_REF_MINUS_T10H2M}")
-        == '2022-02-20T12:00:00')
+        == '2022-02-20T12:00:00+0000')
     assert (
         processor.process_variable(r"${YP_TIME_REF_PLUS_10D}")
-        == '2022-03-02T22:02:00')
+        == '2022-03-02T22:02:00+0000')
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_1DT0H0M0S_MINUS_T12H}")
-        == '2022-01-31T12:00:00')
+        == '2022-01-31T12:00:00+0000')
+    tzstr = processor.time_now.strftime('%z')
+    assert (
+        processor.process_variable(r"${YP_TIME_NOW_AT_2025Y12M25DT1H23M4S}")
+        == f'2025-12-25T01:23:04{tzstr}')
 
 
 def test_process_variable_3():

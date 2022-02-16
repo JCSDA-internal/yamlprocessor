@@ -21,6 +21,7 @@ from urllib.parse import urlparse
 
 from dateutil.parser import parse as datetimeparse
 from dateutil.relativedelta import relativedelta
+from dateutil.tz import tzlocal
 import jmespath
 import jsonschema
 import yaml
@@ -137,7 +138,7 @@ class DataProcessor:
         self.include_paths = []
         self.schema_prefix = None
         self.time_formats = {'': '%FT%T%z'}
-        self.time_now = datetime.now()  # assume this application is fast
+        self.time_now = datetime.now(tzlocal())  # assume application is fast
         self.time_ref = self.time_now
         self.variable_map = os.environ.copy()
         self.unbound_placeholder = None
