@@ -25,6 +25,7 @@ from dateutil.tz import tzlocal
 import jmespath
 import jsonschema
 import yaml
+from yaml.dumper import SafeDumper
 
 from . import __version__
 
@@ -67,6 +68,37 @@ def configure_basic_logging():
     })
 
 
+def strftime_with_colon_z(dto: datetime, time_format: str):
+    """Wrap dto.strftime to support %:z, %::z and %:::z format code.
+
+    Always use Z for UTC - it is short and recognised by any parser.
+    """
+    utcoffset = dto.utcoffset()
+    if utcoffset is None:
+        return dto.strftime(time_format)
+    # Hopefully, we don't need to have sub-seconds in time zones.
+    offset_total_seconds = int(utcoffset.total_seconds())
+    # Always use Z for UTC
+    if offset_total_seconds == 0:
+        for code in ('%z', '%:z', '%::z', '%:::z'):
+            time_format = time_format.replace(code, 'Z')
+        return dto.strftime(time_format)
+    # datetime.strftime can handle '%z' but not '%:z' etc
+    if not any(code in time_format for code in ('%:z', '%::z', '%:::z')):
+        return dto.strftime(time_format)
+    offset_str = '%+03d:%02d:%02d' % (
+        offset_total_seconds / 3600,  # hours
+        abs(offset_total_seconds // 60 % 60),  # minutes of hour
+        abs(offset_total_seconds % 60))  # seconds of minute
+    short_offset_str = offset_str
+    while short_offset_str.endswith(':00'):
+        short_offset_str = short_offset_str[0:-3]
+    time_format = time_format.replace('%:z', offset_str[0:6])
+    time_format = time_format.replace('%::z', offset_str)
+    time_format = time_format.replace('%:::z', short_offset_str)
+    return dto.strftime(time_format)
+
+
 class UnboundVariableError(ValueError):
 
     """An error raised on attempt to substitute an unbound variable."""
@@ -75,6 +107,26 @@ class UnboundVariableError(ValueError):
         return f"[UNBOUND VARIABLE] {self.args[0]}"
 
     __str__ = __repr__
+
+
+class YpSafeDumper(SafeDumper):
+    """Override dumping method for a time stamp to dump out str."""
+
+    @classmethod
+    def set_time_format(cls, time_format: str):
+        """Set time format."""
+        cls.time_format = time_format
+
+    def represent_datetime(self, data: datetime):
+        """Dump datetime as string."""
+        if hasattr(self, 'time_format'):
+            value = strftime_with_colon_z(data, self.time_format)
+            return self.represent_scalar('tag:yaml.org,2002:str', value)
+        else:
+            return super().represent_datetime(data)
+
+
+YpSafeDumper.add_representer(datetime, YpSafeDumper.represent_datetime)
 
 
 class DataProcessor:
@@ -137,7 +189,7 @@ class DataProcessor:
         self.is_process_variable = True
         self.include_paths = []
         self.schema_prefix = None
-        self.time_formats = {'': '%FT%T%z'}
+        self.time_formats = {'': '%FT%T%:z'}
         self.time_now = datetime.now(tzlocal())  # assume application is fast
         self.time_ref = self.time_now
         self.variable_map = os.environ.copy()
@@ -176,8 +228,14 @@ class DataProcessor:
             out_file = sys.stdout
         else:
             out_file = open(out_filename, 'w')
+        YpSafeDumper.set_time_format(self.time_formats[''])
         # Set sort_keys=False to preserve dict ordering (with Python 3.7+)
-        yaml.dump(root, out_file, default_flow_style=False, sort_keys=False)
+        yaml.dump(
+            root,
+            out_file,
+            Dumper=YpSafeDumper,
+            default_flow_style=False,
+            sort_keys=False)
         self.validate_data(root, out_filename, schema_location)
 
     def get_filename(self, filename: str, parent_filenames: list) -> str:
@@ -340,12 +398,12 @@ class DataProcessor:
             raise UnboundVariableError(name)
         for delta in deltas:
             dto = dto + delta
-        time_format_name = ''
+        time_fmt_key = ''
         match = self.REC_SUBSTITUTE_TIME_FORMAT.search(tail)
         if match:
-            time_format_name = match.groups()[0]
+            time_fmt_key = match.groups()[0]
         try:
-            return dto.strftime(self.time_formats[time_format_name])
+            return strftime_with_colon_z(dto, self.time_formats[time_fmt_key])
         except KeyError:
             raise UnboundVariableError(name)
 
@@ -566,7 +624,7 @@ def main(argv=None):
         processor.time_formats[name] = value
     for item in args.time_formats:
         if '=' in item:
-            time_format_name, time_format = item.split('=', 1)
+            name, time_format = item.split('=', 1)
         else:
             name, time_format = ('', item)
         processor.time_formats[name] = time_format
