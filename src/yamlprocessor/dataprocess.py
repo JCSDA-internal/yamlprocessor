@@ -142,14 +142,19 @@ class DataProcessor:
         (bool) Turn on/off variable substitution.
       `.include_paths`:
         (list) Locations for searching include files.
+        (Default is the value of the `YP_INCLUDE_PATH` environment variable
+        split into a list.)
       `.schema_prefix`:
         (str) Prefix for JSON schema specified as non-existing relative paths.
+        (Default is the value of the `YP_SCHEMA_PREFIX` environment variable.)
       `.time_formats`:
         (dict) Default and named time formats. (Default=`{'': '%FT%T%z'}`)
       `.time_now`:
         (datetime) Date-time at instance initialisation.
       `.time_ref`:
-        (datetime) Reference date-time. (Default=`.time_now`)
+        (datetime) Reference date-time. (Default is the `datetime` object
+        representation of the `YP_SCHEMA_PREFIX` environment variable or
+        `.time_now` if the environment variable is not defined.)
       `.variable_map`:
         (dict) Mapping for variable substitutions. (Default=`os.environ`)
       `.unbound_placeholder`:
@@ -187,11 +192,18 @@ class DataProcessor:
     def __init__(self):
         self.is_process_include = True
         self.is_process_variable = True
-        self.include_paths = []
-        self.schema_prefix = None
+        self.include_paths = list(
+            item
+            for item in os.getenv('YP_INCLUDE_PATH', '').split(os.pathsep)
+            if item)
+        self.schema_prefix = os.getenv('YP_SCHEMA_PREFIX')
         self.time_formats = {'': '%FT%T%:z'}
         self.time_now = datetime.now(tzlocal())  # assume application is fast
-        self.time_ref = self.time_now
+        time_ref_value = os.getenv('YP_TIME_REF_VALUE')
+        if time_ref_value is None:
+            self.time_ref = self.time_now
+        else:
+            self.time_ref = datetimeparse(time_ref_value)
         self.variable_map = os.environ.copy()
         self.unbound_placeholder = None
 
@@ -514,7 +526,7 @@ def main(argv=None):
     parser.add_argument(
         '--include', '-I',
         dest='include_paths',
-        metavar='PATH',
+        metavar='DIR',
         action='append',
         default=[],
         help='Add search locations for item specified as relative paths')
@@ -558,7 +570,7 @@ def main(argv=None):
         '--schema-prefix',
         metavar='PREFIX',
         dest='schema_prefix',
-        default=os.getenv('YP_SCHEMA_PREFIX'),
+        default=None,
         help='Prefix for relative path schemas. (Override $YP_SCHEMA_PREFIX)')
     parser.add_argument(
         '--time-format',
@@ -575,7 +587,7 @@ def main(argv=None):
         '--time-ref',
         metavar='TIME',
         dest='time_ref',
-        default=os.getenv('YP_TIME_REF_VALUE'),
+        default=None,
         help=(
             'Reference value for date-time substitutions.'
             ' (Override $YP_TIME_REF_VALUE)'
@@ -612,7 +624,7 @@ def main(argv=None):
         processor.variable_map[key] = value
     processor.unbound_placeholder = args.unbound_placeholder
     # Date-time substitution options
-    if args.time_ref:
+    if args.time_ref is not None:
         processor.time_ref = datetimeparse(args.time_ref)
     for key, value in os.environ.items():
         if key == 'YP_TIME_FORMAT':
@@ -629,7 +641,8 @@ def main(argv=None):
             name, time_format = ('', item)
         processor.time_formats[name] = time_format
     # Schema validation options
-    processor.schema_prefix = args.schema_prefix
+    if args.schema_prefix is not None:
+        processor.schema_prefix = args.schema_prefix
 
     processor.process_data(args.in_filename, args.out_filename)
 
