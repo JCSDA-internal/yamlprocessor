@@ -257,9 +257,9 @@ For example, if you set:
 Then:
 
 ```sh
-${YP_TIME_REF}                        # 2024-12-25T00:00:00Z
-${YP_TIME_REF_FORMAT_CTIME}           # Wed 25 Dec 00:00:00 GMT 2024
-${YP_TIME_REF_PLUS_T12H_FORMAT_ABBR}  # 20241225T120000Z
+${YP_TIME_REF}                        # 2024-12-25T11:11:11Z
+${YP_TIME_REF_FORMAT_CTIME}           # Wed 25 Dec 11:11:11 GMT 2024
+${YP_TIME_REF_PLUS_T12H_FORMAT_ABBR}  # 20241225T231111Z
 ```
 
 See [strftime](https://man7.org/linux/man-pages/man3/strftime.3.html),
