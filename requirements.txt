@@ -1,4 +1,0 @@
-jmespath
-jsonschema
-python-dateutil
-pyyaml

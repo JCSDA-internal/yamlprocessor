@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API &mdash; yamlprocessor 0.4 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Command Line Reference" href="cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> yamlprocessor
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-process.html">Data Processor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schema-process.html">Schema Processor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-yamlprocessor.dataprocess">yamlprocessor.dataprocess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-yamlprocessor.schemaprocess">yamlprocessor.schemaprocess</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yamlprocessor</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Python API</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//MetOffice/yamlprocessor/blob/api.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="python-api">
+<h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-yamlprocessor.dataprocess">
+<span id="yamlprocessor-dataprocess"></span><h2>yamlprocessor.dataprocess<a class="headerlink" href="#module-yamlprocessor.dataprocess" title="Permalink to this headline">¶</a></h2>
+<p>Process includes and variable substitutions in a YAML file.</p>
+<p>For each value <code class="docutils literal notranslate"><span class="pre">{&quot;INCLUDE&quot;:</span> <span class="pre">&quot;filename.yaml&quot;}</span></code>, load content from include file
+and substitute the value with the content of the include file.</p>
+<p>For each string value with <code class="docutils literal notranslate"><span class="pre">$NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">${NAME}</span></code> syntax, substitute with
+value of corresponding (environment) variable.</p>
+<p>For each string value with <code class="docutils literal notranslate"><span class="pre">$YP_TIME_*</span></code> or <code class="docutils literal notranslate"><span class="pre">${YP_TIME_*}</span></code> syntax,
+substitute with value of corresponding date-time string.</p>
+<p>Validate against specified JSON schema if root file starts with a
+<code class="docutils literal notranslate"><span class="pre">#!&lt;SCHEMA-URI&gt;</span></code> line.</p>
+<dl class="py class">
+<dt id="yamlprocessor.dataprocess.DataProcessor">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></code><code class="sig-name descname"><span class="pre">DataProcessor</span></code><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process YAML and compatible data structure.</p>
+<p>Import sub-data-structure from include files.
+Process variable substitution in string values.
+Process date-time substitution in string values.
+Validate against JSON schema.</p>
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..is_process_include">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">is_process_include</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..is_process_include" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on/off include file processing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..is_process_variable">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">is_process_variable</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..is_process_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on/off variable substitution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..include_paths">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">include_paths</span></code><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..include_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locations for searching include files. Default is the value of the
+<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_INCLUDE_PATH</span></code> environment variable split into a list.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..schema_prefix">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">schema_prefix</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">os.getenv(&quot;YP_SCHEMA_PREFIX&quot;)</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..schema_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prefix for JSON schema specified as non-existing relative paths.
+See also <span class="target" id="index-1"></span><a class="reference internal" href="cli.html#envvar-YP_SCHEMA_PREFIX"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_SCHEMA_PREFIX</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..time_formats">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">time_formats</span></code><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'':</span> <span class="pre">'%FT%T%z'}</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default and named time formats.
+See also <span class="target" id="index-2"></span><a class="reference internal" href="cli.html#envvar-YP_TIME_FORMAT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_FORMAT</span></code></a> and <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_FORMAT_</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..time_now">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">time_now</span></code><em class="property"><span class="pre">:</span> <span class="pre">datetime.datetime</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Date-time at instance initialisation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..time_ref">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">time_ref</span></code><em class="property"><span class="pre">:</span> <span class="pre">datetime.datetime</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference date-time. Default is the value of the
+<span class="target" id="index-4"></span><a class="reference internal" href="cli.html#envvar-YP_SCHEMA_PREFIX"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_SCHEMA_PREFIX</span></code></a> environment variable as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code> or <a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor..time_now" title="yamlprocessor.dataprocess.DataProcessor..time_now"><code class="xref py py-attr docutils literal notranslate"><span class="pre">time_now</span></code></a> if the environment
+variable is not defined.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..variable_map">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">variable_map</span></code><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">os.environ</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..variable_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping for variable substitutions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="yamlprocessor.dataprocess.DataProcessor..unbound_placeholder">
+<code class="sig-prename descclassname"><span class="pre">.</span></code><code class="sig-name descname"><span class="pre">unbound_placeholder</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..unbound_placeholder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value to substitute for unbound variables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.get_filename">
+<code class="sig-name descname"><span class="pre">get_filename</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_filenames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.get_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return absolute path of filename.</p>
+<p>If <cite>filename</cite> is a relative path, look for the file but looking in the
+directories containing the parent files, then the current working
+directory, then each path in <cite>.include_paths</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – File name to expand or return.</p></li>
+<li><p><strong>parent_filenames</strong> – Stack of parent file names.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.load_file">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">load_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load content of (YAML) file into a data structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – name of file to load content.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the loaded data structure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.load_file_schema">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">load_file_schema</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_file_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load schema location from #! line of file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – name of file to load schema location.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a string containing the location of the schema or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.load_include_file">
+<code class="sig-name descname"><span class="pre">load_include_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_filenames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_include_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data if value indicates the root file or an include file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – Value that may contain file name to load.</p></li>
+<li><p><strong>parent_filenames</strong> – Stack of parent file names.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.process_data">
+<code class="sig-name descname"><span class="pre">process_data</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process includes in input file and dump results in output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_filename</strong> – input file name.</p></li>
+<li><p><strong>out_filename</strong> – output file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.process_variable">
+<code class="sig-name descname"><span class="pre">process_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute environment variables into a string value.</p>
+<p>Return <cite>item</cite> as-is if not <cite>.is_process_variable</cite> or if <cite>item</cite> is not a
+string.</p>
+<p>For each <cite>$NAME</cite> and <cite>${NAME}</cite> in <cite>item</cite>, substitute with the value
+of the environment variable <cite>NAME</cite>.</p>
+<p>If <cite>NAME</cite> is not defined in the <cite>.variable_map</cite> and
+<cite>.unbound_placeholder</cite> is None, raise an <cite>UnboundVariableError</cite>.</p>
+<p>If <cite>NAME</cite> is not defined in the <cite>.variable_map</cite> and
+<cite>.unbound_placeholder</cite> is not None, substitute <cite>NAME</cite> with the value
+of <cite>.unbound_placeholder</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – Item to process. Do nothing if not a str.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Processed item on success.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.DataProcessor.validate_data">
+<code class="sig-name descname"><span class="pre">validate_data</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.validate_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to find the schema and use it to validate data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The data structure to be validated.</p></li>
+<li><p><strong>schema_location</strong> – File name containing a JSON Schema.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="yamlprocessor.dataprocess.YpSafeDumper">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></code><code class="sig-name descname"><span class="pre">YpSafeDumper</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_flow_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_unicode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_break</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.YpSafeDumper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override dumping method for a time stamp to dump out str.</p>
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.YpSafeDumper.represent_datetime">
+<code class="sig-name descname"><span class="pre">represent_datetime</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.YpSafeDumper.represent_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump datetime as string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="yamlprocessor.dataprocess.YpSafeDumper.set_time_format">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">set_time_format</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.YpSafeDumper.set_time_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set time format.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="yamlprocessor.dataprocess.UnboundVariableError">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></code><code class="sig-name descname"><span class="pre">UnboundVariableError</span></code><a class="headerlink" href="#yamlprocessor.dataprocess.UnboundVariableError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error raised on attempt to substitute an unbound variable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="yamlprocessor.dataprocess.strftime_with_colon_z">
+<code class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></code><code class="sig-name descname"><span class="pre">strftime_with_colon_z</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dto</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.strftime_with_colon_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap dto.strftime to support %:z, %::z and %:::z format code.</p>
+<p>Always use Z for UTC - it is short and recognised by any parser.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-yamlprocessor.schemaprocess">
+<span id="yamlprocessor-schemaprocess"></span><h2>yamlprocessor.schemaprocess<a class="headerlink" href="#module-yamlprocessor.schemaprocess" title="Permalink to this headline">¶</a></h2>
+<p>Modularise a JSON schema</p>
+<p>Modularise a JSON schema and allows it to accept a data structure that can be
+composed of include files.</p>
+<p>Two positional arguments are expected:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The file name of the JSON schema file.</p></li>
+<li><p>The file name of a configuration file in JSON format.</p></li>
+</ol>
+</div></blockquote>
+<p>The configuration file expects a mapping, where the keys are the file names
+(relative paths to current working directory) of the output sub-schema files,
+and the values are sub-schema break point locations (expressed as
+<a class="reference external" href="https://jmespath.org/">JMESPath</a> format) in the input JSON schema document.</p>
+<dl class="py function">
+<dt id="yamlprocessor.schemaprocess.schema_process">
+<code class="sig-prename descclassname"><span class="pre">yamlprocessor.schemaprocess.</span></code><code class="sig-name descname"><span class="pre">schema_process</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#yamlprocessor.schemaprocess.schema_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process schema to handle includes according to configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_filename</strong> – schema file name.</p></li>
+<li><p><strong>config_filename</strong> – configuration file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli.html" class="btn btn-neutral float-left" title="Command Line Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Matt Shin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
