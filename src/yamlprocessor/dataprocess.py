@@ -25,6 +25,7 @@ from dateutil.tz import tzlocal
 import jmespath
 import jsonschema
 import yaml
+from yaml.dumper import SafeDumper
 
 from . import __version__
 
@@ -67,6 +68,37 @@ def configure_basic_logging():
     })
 
 
+def strftime_with_colon_z(dto: datetime, time_format: str):
+    """Wrap dto.strftime to support %:z, %::z and %:::z format code.
+
+    Always use Z for UTC - it is short and recognised by any parser.
+    """
+    utcoffset = dto.utcoffset()
+    if utcoffset is None:
+        return dto.strftime(time_format)
+    # Hopefully, we don't need to have sub-seconds in time zones.
+    offset_total_seconds = int(utcoffset.total_seconds())
+    # Always use Z for UTC
+    if offset_total_seconds == 0:
+        for code in ('%z', '%:z', '%::z', '%:::z'):
+            time_format = time_format.replace(code, 'Z')
+        return dto.strftime(time_format)
+    # datetime.strftime can handle '%z' but not '%:z' etc
+    if not any(code in time_format for code in ('%:z', '%::z', '%:::z')):
+        return dto.strftime(time_format)
+    offset_str = '%+03d:%02d:%02d' % (
+        offset_total_seconds / 3600,  # hours
+        abs(offset_total_seconds // 60 % 60),  # minutes of hour
+        abs(offset_total_seconds % 60))  # seconds of minute
+    short_offset_str = offset_str
+    while short_offset_str.endswith(':00'):
+        short_offset_str = short_offset_str[0:-3]
+    time_format = time_format.replace('%:z', offset_str[0:6])
+    time_format = time_format.replace('%::z', offset_str)
+    time_format = time_format.replace('%:::z', short_offset_str)
+    return dto.strftime(time_format)
+
+
 class UnboundVariableError(ValueError):
 
     """An error raised on attempt to substitute an unbound variable."""
@@ -75,6 +107,26 @@ class UnboundVariableError(ValueError):
         return f"[UNBOUND VARIABLE] {self.args[0]}"
 
     __str__ = __repr__
+
+
+class YpSafeDumper(SafeDumper):
+    """Override dumping method for a time stamp to dump out str."""
+
+    @classmethod
+    def set_time_format(cls, time_format: str):
+        """Set time format."""
+        cls.time_format = time_format
+
+    def represent_datetime(self, data: datetime):
+        """Dump datetime as string."""
+        if hasattr(self, 'time_format'):
+            value = strftime_with_colon_z(data, self.time_format)
+            return self.represent_scalar('tag:yaml.org,2002:str', value)
+        else:
+            return super().represent_datetime(data)
+
+
+YpSafeDumper.add_representer(datetime, YpSafeDumper.represent_datetime)
 
 
 class DataProcessor:
@@ -90,14 +142,19 @@ class DataProcessor:
         (bool) Turn on/off variable substitution.
       `.include_paths`:
         (list) Locations for searching include files.
+        (Default is the value of the `YP_INCLUDE_PATH` environment variable
+        split into a list.)
       `.schema_prefix`:
         (str) Prefix for JSON schema specified as non-existing relative paths.
+        (Default is the value of the `YP_SCHEMA_PREFIX` environment variable.)
       `.time_formats`:
         (dict) Default and named time formats. (Default=`{'': '%FT%T%z'}`)
       `.time_now`:
         (datetime) Date-time at instance initialisation.
       `.time_ref`:
-        (datetime) Reference date-time. (Default=`.time_now`)
+        (datetime) Reference date-time. (Default is the `datetime` object
+        representation of the `YP_SCHEMA_PREFIX` environment variable or
+        `.time_now` if the environment variable is not defined.)
       `.variable_map`:
         (dict) Mapping for variable substitutions. (Default=`os.environ`)
       `.unbound_placeholder`:
@@ -135,11 +192,18 @@ class DataProcessor:
     def __init__(self):
         self.is_process_include = True
         self.is_process_variable = True
-        self.include_paths = []
-        self.schema_prefix = None
-        self.time_formats = {'': '%FT%T%z'}
+        self.include_paths = list(
+            item
+            for item in os.getenv('YP_INCLUDE_PATH', '').split(os.pathsep)
+            if item)
+        self.schema_prefix = os.getenv('YP_SCHEMA_PREFIX')
+        self.time_formats = {'': '%FT%T%:z'}
         self.time_now = datetime.now(tzlocal())  # assume application is fast
-        self.time_ref = self.time_now
+        time_ref_value = os.getenv('YP_TIME_REF_VALUE')
+        if time_ref_value is None:
+            self.time_ref = self.time_now
+        else:
+            self.time_ref = datetimeparse(time_ref_value)
         self.variable_map = os.environ.copy()
         self.unbound_placeholder = None
 
@@ -176,8 +240,14 @@ class DataProcessor:
             out_file = sys.stdout
         else:
             out_file = open(out_filename, 'w')
+        YpSafeDumper.set_time_format(self.time_formats[''])
         # Set sort_keys=False to preserve dict ordering (with Python 3.7+)
-        yaml.dump(root, out_file, default_flow_style=False, sort_keys=False)
+        yaml.dump(
+            root,
+            out_file,
+            Dumper=YpSafeDumper,
+            default_flow_style=False,
+            sort_keys=False)
         self.validate_data(root, out_filename, schema_location)
 
     def get_filename(self, filename: str, parent_filenames: list) -> str:
@@ -340,12 +410,12 @@ class DataProcessor:
             raise UnboundVariableError(name)
         for delta in deltas:
             dto = dto + delta
-        time_format_name = ''
+        time_fmt_key = ''
         match = self.REC_SUBSTITUTE_TIME_FORMAT.search(tail)
         if match:
-            time_format_name = match.groups()[0]
+            time_fmt_key = match.groups()[0]
         try:
-            return dto.strftime(self.time_formats[time_format_name])
+            return strftime_with_colon_z(dto, self.time_formats[time_fmt_key])
         except KeyError:
             raise UnboundVariableError(name)
 
@@ -456,7 +526,7 @@ def main(argv=None):
     parser.add_argument(
         '--include', '-I',
         dest='include_paths',
-        metavar='PATH',
+        metavar='DIR',
         action='append',
         default=[],
         help='Add search locations for item specified as relative paths')
@@ -500,7 +570,7 @@ def main(argv=None):
         '--schema-prefix',
         metavar='PREFIX',
         dest='schema_prefix',
-        default=os.getenv('YP_SCHEMA_PREFIX'),
+        default=None,
         help='Prefix for relative path schemas. (Override $YP_SCHEMA_PREFIX)')
     parser.add_argument(
         '--time-format',
@@ -517,7 +587,7 @@ def main(argv=None):
         '--time-ref',
         metavar='TIME',
         dest='time_ref',
-        default=os.getenv('YP_TIME_REF_VALUE'),
+        default=None,
         help=(
             'Reference value for date-time substitutions.'
             ' (Override $YP_TIME_REF_VALUE)'
@@ -554,7 +624,7 @@ def main(argv=None):
         processor.variable_map[key] = value
     processor.unbound_placeholder = args.unbound_placeholder
     # Date-time substitution options
-    if args.time_ref:
+    if args.time_ref is not None:
         processor.time_ref = datetimeparse(args.time_ref)
     for key, value in os.environ.items():
         if key == 'YP_TIME_FORMAT':
@@ -566,12 +636,13 @@ def main(argv=None):
         processor.time_formats[name] = value
     for item in args.time_formats:
         if '=' in item:
-            time_format_name, time_format = item.split('=', 1)
+            name, time_format = item.split('=', 1)
         else:
             name, time_format = ('', item)
         processor.time_formats[name] = time_format
     # Schema validation options
-    processor.schema_prefix = args.schema_prefix
+    if args.schema_prefix is not None:
+        processor.schema_prefix = args.schema_prefix
 
     processor.process_data(args.in_filename, args.out_filename)
 

@@ -4,7 +4,8 @@ from dateutil.parser import parse as datetimeparse
 import pytest
 import yaml
 
-from ..dataprocess import DataProcessor, main, UnboundVariableError
+from ..dataprocess import (
+    DataProcessor, main, strftime_with_colon_z, UnboundVariableError)
 
 
 def test_process_variable_0():
@@ -49,23 +50,23 @@ def test_process_variable_2():
     processor.time_ref = datetimeparse('2022-02-20T22:02Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF}")
-        == '2022-02-20T22:02:00+0000')
+        == '2022-02-20T22:02:00Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_T0H0M0S}")
-        == '2022-02-20T00:00:00+0000')
+        == '2022-02-20T00:00:00Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_1DT0H0M0S}")
-        == '2022-02-01T00:00:00+0000')
+        == '2022-02-01T00:00:00Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_MINUS_T10H2M}")
-        == '2022-02-20T12:00:00+0000')
+        == '2022-02-20T12:00:00Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_PLUS_10D}")
-        == '2022-03-02T22:02:00+0000')
+        == '2022-03-02T22:02:00Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_1DT0H0M0S_MINUS_T12H}")
-        == '2022-01-31T12:00:00+0000')
-    tzstr = processor.time_now.strftime('%z')
+        == '2022-01-31T12:00:00Z')
+    tzstr = strftime_with_colon_z(processor.time_now, '%:z')
     assert (
         processor.process_variable(r"${YP_TIME_NOW_AT_2025Y12M25DT1H23M4S}")
         == f'2025-12-25T01:23:04{tzstr}')
@@ -79,20 +80,67 @@ def test_process_variable_3():
         'ABBR': '%Y%m%dT%H%M%S%z',
         'MIN_UTC': '%Y%m%dT%H%MZ',
         'CTIME': '%a %e %b %T %Y',
+        'LONG_2': '%FT%T%::z',
+        'LONG_3': '%FT%T%:::z',
     })
     processor.time_ref = datetimeparse('2022-02-20T22:02Z')
+    # Default time format %FT%T%:z
     assert (
         processor.process_variable(r"${YP_TIME_REF}")
-        == '2022-02-20T22:02:00+0000')
+        == '2022-02-20T22:02:00Z')
+    # Custom time formats
     assert (
         processor.process_variable(r"${YP_TIME_REF_FORMAT_ABBR}")
-        == '20220220T220200+0000')
+        == '20220220T220200Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_FORMAT_MIN_UTC}")
         == '20220220T2202Z')
     assert (
         processor.process_variable(r"${YP_TIME_REF_FORMAT_CTIME}")
         == 'Sun 20 Feb 22:02:00 2022')
+    assert (
+        processor.process_variable(r"${YP_TIME_REF_FORMAT_LONG_2}")
+        == '2022-02-20T22:02:00Z')
+    assert (
+        processor.process_variable(r"${YP_TIME_REF_FORMAT_LONG_3}")
+        == '2022-02-20T22:02:00Z')
+
+
+def test_process_variable_4():
+    """Test DataProcessor.process_variable time zone substitution format."""
+    processor = DataProcessor()
+    processor.variable_map.clear()
+    processor.time_formats.update({
+        'ABBR': '%Y%m%dT%H%M%S%z',
+        # '': '%FT%T%:z',  # default format
+        'LONG_2': '%FT%T%::z',
+        'LONG_3': '%FT%T%:::z',
+    })
+    for in_, out0, out1, out2, out3 in (
+        ('-12:00', '-1200', '-12:00', '-12:00:00', '-12'),
+        ('-09:30', '-0930', '-09:30', '-09:30:00', '-09:30'),
+        ('-01:00', '-0100', '-01:00', '-01:00:00', '-01'),
+        ('+00:00', 'Z', 'Z', 'Z', 'Z'),
+        ('-00:00', 'Z', 'Z', 'Z', 'Z'),
+        ('+01:00', '+0100', '+01:00', '+01:00:00', '+01'),
+        ('+04:30', '+0430', '+04:30', '+04:30:00', '+04:30'),
+        ('+05:45', '+0545', '+05:45', '+05:45:00', '+05:45'),
+        ('+12:45', '+1245', '+12:45', '+12:45:00', '+12:45'),
+        ('+14:00', '+1400', '+14:00', '+14:00:00', '+14'),
+    ):
+        processor.time_ref = datetimeparse('2022-02-20T22:02' + in_)
+        assert (
+            processor.process_variable(r"${YP_TIME_REF_FORMAT_ABBR}")
+            == '20220220T220200' + out0)
+        assert (
+            processor.process_variable(r"${YP_TIME_REF}")  # default format
+            == '2022-02-20T22:02:00' + out1)
+        assert (
+            processor.process_variable(r"${YP_TIME_REF_FORMAT_LONG_2}")
+            == '2022-02-20T22:02:00' + out2)
+        assert (
+            processor.process_variable(r"${YP_TIME_REF_FORMAT_LONG_3}")
+            == '2022-02-20T22:02:00' + out3)
 
 
 def test_main_0(tmp_path):
@@ -234,6 +282,25 @@ def test_main_9(tmp_path):
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
     assert yaml.safe_load(outfilename.open()) == data
+
+
+def test_main_10(tmp_path):
+    """Test main, with date-time string."""
+    data = {
+        'you-time': '2030-04-05T06:07:08Z',
+        'me-time': '2030-04-05T06:07:08+09:00',
+        'that-time': '2040-06-08T10:12:14-10:30',
+    }
+    infilename = tmp_path / 'a.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(data, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main([str(infilename), str(outfilename)])
+    assert yaml.safe_load(outfilename.open()) == {
+        'you-time': '2030-04-05T06:07:08Z',
+        'me-time': '2030-04-05T06:07:08+09:00',
+        'that-time': '2040-06-08T10:12:14-10:30',
+    }
 
 
 def test_main_validate_1(tmp_path, capsys):
