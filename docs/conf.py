@@ -20,7 +20,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'yamlprocessor'
-copyright = '2022, Matt Shin'
+copyright = 'British Crown (Met Office) & Contributors'
 author = 'Matt Shin'
 
 # The full version, including alpha/beta/rc tags
@@ -35,6 +35,7 @@ release = '0.4'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -64,3 +65,7 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+intersphinx_mapping = {
+    'python': ('http://python.readthedocs.org/en/latest/', None),
+}
