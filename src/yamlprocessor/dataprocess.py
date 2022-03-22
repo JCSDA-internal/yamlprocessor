@@ -100,10 +100,16 @@ def strftime_with_colon_z(dto: datetime, time_format: str):
     # datetime.strftime can handle '%z' but not '%:z' etc
     if not any(code in time_format for code in ('%:z', '%::z', '%:::z')):
         return dto.strftime(time_format)
-    offset_str = '%+03d:%02d:%02d' % (
+    if offset_total_seconds >= 0:
+        offset_sign = '+'
+    else:
+        offset_sign = '-'
+    offset_total_seconds = abs(offset_total_seconds)
+    offset_str = '%s%02d:%02d:%02d' % (
+        offset_sign,
         offset_total_seconds / 3600,  # hours
-        abs(offset_total_seconds // 60 % 60),  # minutes of hour
-        abs(offset_total_seconds % 60))  # seconds of minute
+        offset_total_seconds // 60 % 60,  # minutes of hour
+        offset_total_seconds % 60)  # seconds of minute
     short_offset_str = offset_str
     while short_offset_str.endswith(':00'):
         short_offset_str = short_offset_str[0:-3]
