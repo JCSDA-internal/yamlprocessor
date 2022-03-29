@@ -20,7 +20,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'yamlprocessor'
-copyright = 'British Crown (Met Office) & Contributors'
+copyright = 'British Crown (Met Office) & JCSDA & Contributors'
 author = 'Matt Shin'
 
 # The full version, including alpha/beta/rc tags
@@ -51,7 +51,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_context = {
     'source_url_prefix':
-    'https://github.com/MetOffice/yamlprocessor/blob/HEAD/docs/',
+    'https://github.com/JCSDA-internal/yamlprocessor/blob/HEAD/docs/',
 }
 
 # html_static_path = ['_static']
