@@ -2,3 +2,5 @@ jmespath
 jsonschema
 python-dateutil
 pyyaml
+sphinx
+sphinx-rtd-theme

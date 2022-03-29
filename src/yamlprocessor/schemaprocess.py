@@ -5,13 +5,14 @@ Modularise a JSON schema and allows it to accept a data structure that can be
 composed of include files.
 
 Two positional arguments are expected:
-1. The file name of the JSON schema file.
-2. The file name of a configuration file in JSON format.
+
+ 1. The file name of the JSON schema file.
+ 2. The file name of a configuration file in JSON format.
 
 The configuration file expects a mapping, where the keys are the file names
 (relative paths to current working directory) of the output sub-schema files,
-and the values are sub-schema break point locations (expressed as JMESPath
-format) in the input JSON schema document.
+and the values are sub-schema break point locations (expressed as
+`JMESPath <https://jmespath.org/>`_ format) in the input JSON schema document.
 """
 
 from argparse import ArgumentParser
@@ -84,7 +85,7 @@ def schema_process(schema_filename: str, config_filename: str) -> None:
 
 
 def main(argv=None):
-    parser = ArgumentParser(description=__file__)
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument(
         'schema_filename',
         metavar='SCHEMA-FILE',

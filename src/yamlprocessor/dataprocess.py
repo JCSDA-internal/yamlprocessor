@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """Process includes and variable substitutions in a YAML file.
 
-For each value `{"INCLUDE": "filename.yaml"}`, load content from include file
+For each value ``{"INCLUDE": "filename.yaml"}``, load content from include file
 and substitute the value with the content of the include file.
 
-For each string value with `$NAME` or `${NAME}` syntax, substitute with value
-of corresponding (environment) variable.
+For each string value with ``$NAME`` or ``${NAME}`` syntax, substitute with
+value of corresponding (environment) variable.
+
+For each string value with ``$YP_TIME_*`` or ``${YP_TIME_*}`` syntax,
+substitute with value of corresponding date-time string.
+
+Validate against specified JSON schema if root file starts with a
+``#!<SCHEMA-URI>`` line.
+
 """
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -35,6 +42,13 @@ def configure_basic_logging():
 
     Basic no-frill format.
     Stream handler prints message on STDERR.
+
+    Normal usage:
+
+    >>> from yamlprocessor.dataprocess import DataProcessor
+    >>> processor = DataProcessor()
+    >>> # ... Customise the `DataProcessor` instance as necessary ..., then:
+    >>> processor.process_data(in_file_name, out_file_name)
     """
     logging.config.dictConfig({
         'version': 1,
@@ -134,31 +148,62 @@ class DataProcessor:
 
     Import sub-data-structure from include files.
     Process variable substitution in string values.
+    Process date-time substitution in string values.
+    Validate against JSON schema.
 
-    Attributes:
-      `.is_process_include`:
-        (bool) Turn on/off include file processing.
-      `.is_process_variable`:
-        (bool) Turn on/off variable substitution.
-      `.include_paths`:
-        (list) Locations for searching include files.
-        (Default is the value of the `YP_INCLUDE_PATH` environment variable
-        split into a list.)
-      `.schema_prefix`:
-        (str) Prefix for JSON schema specified as non-existing relative paths.
-        (Default is the value of the `YP_SCHEMA_PREFIX` environment variable.)
-      `.time_formats`:
-        (dict) Default and named time formats. (Default=`{'': '%FT%T%z'}`)
-      `.time_now`:
-        (datetime) Date-time at instance initialisation.
-      `.time_ref`:
-        (datetime) Reference date-time. (Default is the `datetime` object
-        representation of the `YP_SCHEMA_PREFIX` environment variable or
-        `.time_now` if the environment variable is not defined.)
-      `.variable_map`:
-        (dict) Mapping for variable substitutions. (Default=`os.environ`)
-      `.unbound_placeholder`:
-        (str) Value to substitute for unbound variables.
+    .. py:attribute:: .is_process_include
+       :type: bool
+
+       Turn on/off include file processing.
+
+    .. py:attribute:: .is_process_variable
+       :type: bool
+
+       Turn on/off variable substitution.
+
+    .. py:attribute:: .include_paths
+       :type: list
+
+       Locations for searching include files. Default is the value of the
+       :envvar:`YP_INCLUDE_PATH` environment variable split into a list.
+
+    .. py:attribute:: .schema_prefix
+       :type: str
+       :value: os.getenv("YP_SCHEMA_PREFIX")
+
+       Prefix for JSON schema specified as non-existing relative paths.
+       See also :envvar:`YP_SCHEMA_PREFIX`.
+
+    .. py:attribute:: .time_formats
+       :type: dict
+       :value: {'': '%FT%T%z'}
+
+       Default and named time formats.
+       See also :envvar:`YP_TIME_FORMAT` and :envvar:`YP_TIME_FORMAT_<NAME>`.
+
+    .. py:attribute:: .time_now
+       :type: datetime.datetime
+
+       Date-time at instance initialisation.
+
+    .. py:attribute:: .time_ref
+       :type: datetime.datetime
+
+       Reference date-time. Default is the value of the
+       :envvar:`YP_SCHEMA_PREFIX` environment variable as
+       :py:class:`datetime.datetime` or :py:attr:`.time_now` if the environment
+       variable is not defined.
+
+    .. py:attribute:: .variable_map
+       :type: dict
+       :value: os.environ
+
+       Mapping for variable substitutions.
+
+    .. py:attribute:: .unbound_placeholder
+       :type: str
+
+       Value to substitute for unbound variables.
     """
 
     INCLUDE_KEY = 'INCLUDE'

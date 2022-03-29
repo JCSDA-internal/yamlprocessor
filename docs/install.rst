@@ -1,0 +1,20 @@
+Installation
+============
+
+To install from `PyPI <https://pypi.org/project/yamlprocessor/>`_, run:
+
+.. code-block:: bash
+
+    python3 -m pip install yamlprocessor
+
+To install from source on
+`GitHub <https://github.com/MetOffice/yamlprocessor/>`_ using Conda,
+run, for example:
+
+.. code-block:: bash
+
+    git clone https://github.com/MetOffice/yamlprocessor
+    cd yamlprocessor
+    conda env create -n yamlprocessor
+    conda activate yamlprocessor
+    python3 -m pip install .
