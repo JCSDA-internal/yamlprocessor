@@ -66,10 +66,9 @@ def test_process_variable_2():
     assert (
         processor.process_variable(r"${YP_TIME_REF_AT_1DT0H0M0S_MINUS_T12H}")
         == '2022-01-31T12:00:00Z')
-    tzstr = strftime_with_colon_z(processor.time_now, '%:z')
     assert (
-        processor.process_variable(r"${YP_TIME_NOW_AT_2025Y12M25DT1H23M4S}")
-        == f'2025-12-25T01:23:04{tzstr}')
+        processor.process_variable(r"${YP_TIME_NOW}")
+        == strftime_with_colon_z(processor.time_now, '%FT%T%:z'))
 
 
 def test_process_variable_3():
