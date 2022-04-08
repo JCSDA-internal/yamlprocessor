@@ -307,6 +307,49 @@ def test_main_10(tmp_path):
     }
 
 
+def test_main_11(tmp_path):
+    """Test main, include file with variables."""
+    hello_data = {
+        'hello': [
+            {
+                'INCLUDE': 'world.yaml',
+                'VARIABLES': {'NAME': 'venus', 'PEOPLE': 'venusian'},
+            },
+            {
+                'INCLUDE': 'world2.yaml',
+                'VARIABLES': {'NAME': 'mars', 'PEOPLE': 'martian'},
+            },
+            {
+                'INCLUDE': 'world.yaml',
+            },
+        ],
+    }
+    world_data = {
+        'location': '${NAME}',
+        'people': '${PEOPLE}',
+    }
+    infilename = tmp_path / 'hello.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(hello_data, infile)
+    with (tmp_path / 'world.yaml').open('w') as infile:
+        yaml.dump(world_data, infile)
+    with (tmp_path / 'world2.yaml').open('w') as infile:
+        yaml.dump({'INCLUDE': 'world.yaml'}, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main([
+        '--define=NAME=earth',
+        '--define=PEOPLE=human',
+        str(infilename),
+        str(outfilename)])
+    assert yaml.safe_load(outfilename.open()) == {
+        'hello': [
+            {'location': 'venus', 'people': 'venusian'},
+            {'location': 'mars', 'people': 'martian'},
+            {'location': 'earth', 'people': 'human'},
+        ],
+    }
+
+
 def test_main_validate_1(tmp_path, capsys):
     """Test main, YAML with JSON schema validation."""
     schema = {

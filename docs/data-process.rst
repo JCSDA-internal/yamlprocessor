@@ -167,6 +167,48 @@ relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance to a
 string value.
 
 
+String Value Variable Substitution Include Scope
+------------------------------------------------
+
+It is possible to define or override the values of the variables for
+substitution in include files. The scope of the change will be local to the
+include file (and files that it includes). The following is an example of how
+to specify include scope variables.
+
+Suppose we have a file called ``hello.yaml`` with:
+
+.. code-block:: yaml
+
+   hello:
+     - INCLUDE: world.yaml
+       VARIABLES:
+         WORLD_NAME: venus
+     - INCLUDE: world.yaml
+       VARIABLES:
+         WORLD_NAME: mars
+     - INCLUDE: world.yaml
+
+And a file called ``world.yaml`` with:
+
+.. code-block:: yaml
+
+   name: ${WORLD_NAME}
+   is_rocky: true
+
+Running :program:`yp-data --define=WORLD_NAME=earth hello.yaml <yp-data>` will
+give:
+
+.. code-block:: yaml
+
+   hello:
+     - name: venus
+       is_rocky: true
+     - name: mars
+       is_rocky: true
+     - name: earth
+       is_rocky: true
+
+
 String Value Date-Time Substitution
 -----------------------------------
 
