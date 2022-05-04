@@ -51,7 +51,7 @@ for it from these locations in order:
  - The folder/directory containing the parent file.
  - The current working folder/directory.
  - The list of include folders/directories. This list can be specified:
- 
+
    - Using the environment variable ``YP_INCLUDE_PATH``. Use the same syntax as
      the ``PATH`` environment variable on your platform to specify multiple
      folders/directories.
@@ -61,17 +61,20 @@ for it from these locations in order:
    - In the :py:attr:`.include_paths` (list) attribute of the relevant
      :py:class:`yamlprocessor.dataprocess.DataProcessor` instance.
 
-LIMITATION. It is worth noting that YAML anchors/references will only work
-within files, so an include file will not see anchors in the parent file,
-and vice versa.
+LIMITATIONS
+
+ - YAML anchors/references will only work within files, so an include file will
+   not see anchors in the parent file, and vice versa.
+ - Since INCLUDE is part of a map/dict, keys in the same map/dict that are not
+   recognised will not be processed.
 
 
 Modularisation / Include with Query
 -----------------------------------
 
-Consider an example where we want to include only a subset of the data structure
-from the include file. We can use a `JMESPath <https://jmespath.org/>`_
-query to achieve this.
+Consider an example where we want to include only a subset of the data
+structure from the include file.
+We can use a `JMESPath <https://jmespath.org/>`_ query to achieve this.
 
 For example, we may have something like this in ``hello-root.yaml``:
 
@@ -127,8 +130,9 @@ Consider:
 
    key: ${SWEET_HOME}/sugar.txt
 
-If ``SWEET_HOME`` is defined in the environment and has a value ``/home/sweet``,
-then passing the above input to the processor will give the following output:
+If ``SWEET_HOME`` is defined in the environment and has a value
+``/home/sweet``, then passing the above input to the processor will give the
+following output:
 
 .. code-block:: yaml
 
@@ -149,9 +153,9 @@ On the command line:
    to define new variables or override the value of an existing one.
  - Use the :option:`--undefine=KEY <yp-data --undefine>` (``-U KEY``)
    option to remove a variable.
- - Use the :option:`--no-environment <yp-data --no-environment>` (``-i``) option
-   if you do not want to use any variables defined in the environment for
-   substitution. (So only those specified with
+ - Use the :option:`--no-environment <yp-data --no-environment>` (``-i``)
+   option if you do not want to use any variables defined in the environment
+   for substitution. (So only those specified with
    :option:`--define=KEY=VALUE <yp-data --define>` will work.)
 
 In Python, simply manipulate the :py:attr:`.variable_map` (dict) attribute of
@@ -159,8 +163,8 @@ the relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance. The
 dict is a copy of :py:data:`os.environ` at initialisation.
 
 Finally, if you reference a variable in YAML that is not defined, you will
-normally get an unbound variable error. You can modify this behaviour by setting
-a place holder. On the command line, use the
+normally get an unbound variable error. You can modify this behaviour by
+setting a place holder. On the command line, use the
 :option:`--unbound-placeholder=VALUE <yp-data --unbound-placeholder>`
 option. In Python, set the :py:attr:`.unbound_placeholder` attribute of the
 relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance to a
@@ -208,6 +212,39 @@ give:
      - name: earth
        is_rocky: true
 
+This can even be nested. For example, suppose we have ``main.yaml``:
+
+.. code-block:: yaml
+
+   hello:
+   - INCLUDE: building.yaml
+     VARIABLES:
+       building: Castle
+       car: Porsche
+
+And a file called ``building.yaml`` with:
+
+.. code-block:: yaml
+
+   property: ${building}
+   car:
+     INCLUDE: cars.yaml
+
+And a file called ``cars.yaml`` with:
+
+.. code-block:: yaml
+
+   type: ${car}
+
+Running :program:`yp-data main.yaml <yp-data>` will give:
+
+.. code-block:: yaml
+
+   hello:
+   - property: Castle
+     car:
+       type: Porsche
+
 
 String Value Date-Time Substitution
 -----------------------------------
@@ -218,8 +255,9 @@ similar syntax, for variables names starting with:
  - ``YP_TIME_NOW`` (current time, time when :program:`yp-data` starts running
    or set on initialisation of a
    :py:class:`yamlprocessor.dataprocess.DataProcessor` instance).
- - ``YP_TIME_REF`` (reference time, specified using the :envvar:`YP_TIME_REF_VALUE`
-   environment variable, the :option:`--time-ref=VALUE <yp-data --time-ref>`
+ - ``YP_TIME_REF`` (reference time, specified using
+   the :envvar:`YP_TIME_REF_VALUE` environment variable,
+   the :option:`--time-ref=VALUE <yp-data --time-ref>`
    command line option, or the :py:attr:`.time_ref` attribute of the relevant
    :py:class:`yamlprocessor.dataprocess.DataProcessor` instance in Python). If
    no value is set for the reference time, any reference to the reference time
