@@ -3,6 +3,7 @@ channels:
   - defaults
 dependencies:
   - python>=3.7
+  - doc8
   - flake8
   - jmespath
   - jsonschema
