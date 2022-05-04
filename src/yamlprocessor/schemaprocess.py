@@ -34,7 +34,15 @@ INCLUDE_SCHEMA = {
         DataProcessor.QUERY_KEY: {
             'type': 'string',
         },
+        DataProcessor.VARIABLES_KEY: {
+            'patternProperties': {
+                r'^[A-z_]\w*$': {'type': 'string'},
+            },
+            'additionalProperties': False,
+            'type': 'object',
+        },
     },
+    'additionalProperties': False,
     'required': [DataProcessor.INCLUDE_KEY],
     'type': 'object',
 }
