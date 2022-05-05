@@ -214,6 +214,7 @@ class DataProcessor:
 
     INCLUDE_KEY = 'INCLUDE'
     QUERY_KEY = 'QUERY'
+    VARIABLES_KEY = 'VARIABLES'
 
     REC_SUBSTITUTE = re.compile(
         r"\A"
@@ -267,11 +268,12 @@ class DataProcessor:
         in_filename = self.get_filename(in_filename, [])
         root = self.load_file(in_filename)
         schema_location = self.load_file_schema(in_filename)
-        stack = [[root, [in_filename]]]
+        stack = [[root, [in_filename], self.variable_map]]
         while stack:
-            data, parent_filenames = stack.pop()
-            data = self.process_variable(data)
-            data = self.load_include_file(data)[0]
+            data, parent_filenames, variable_map = stack.pop()
+            data = self.process_variable(data, variable_map)
+            data, parent_filenames, variable_map = self.load_include_file(
+                data, parent_filenames, variable_map)
             items_iter = None
             if isinstance(data, list):
                 items_iter = enumerate(data)
@@ -280,13 +282,15 @@ class DataProcessor:
             if items_iter is None:
                 continue
             for key, item in items_iter:
-                item = data[key] = self.process_variable(item)
-                include_data, parent_filenames = self.load_include_file(
-                    item, parent_filenames)
+                item = data[key] = self.process_variable(item, variable_map)
+                include_data, parent_filenames_x, variable_map_x = (
+                    self.load_include_file(
+                        item, parent_filenames, variable_map))
                 if include_data != item:
                     item = data[key] = include_data
                 if isinstance(item, dict) or isinstance(item, list):
-                    stack.append([data[key], parent_filenames])
+                    stack.append(
+                        [data[key], parent_filenames_x, variable_map_x])
         if out_filename == '-':
             out_file = sys.stdout
         else:
@@ -332,17 +336,18 @@ class DataProcessor:
     def load_include_file(
         self,
         value: object,
-        parent_filenames: list = None,
+        parent_filenames: list,
+        variable_map: dict,
     ) -> tuple:
-        """Load data if value indicates the root file or an include file.
+        """Load data if value indicates an include file.
 
         :param value: Value that may contain file name to load.
         :param parent_filenames: Stack of parent file names.
+        :param variable_map: :py:attr:`.variable_map` in the local scope,
+                             may have additional variables.
         """
-        if parent_filenames is None:
-            parent_filenames = []
-        else:
-            parent_filenames = list(parent_filenames)
+        parent_filenames = list(parent_filenames)
+        variable_map = dict(variable_map)
         while (
             self.is_process_include
             and isinstance(value, dict)
@@ -353,11 +358,13 @@ class DataProcessor:
             filename = self.get_filename(include_filename, parent_filenames)
             parent_filenames.append(filename)
             loaded_value = self.load_file(filename)
+            if self.VARIABLES_KEY in value:
+                variable_map.update(value[self.VARIABLES_KEY])
             if self.QUERY_KEY in value:
                 value = jmespath.search(value[self.QUERY_KEY], loaded_value)
             else:
                 value = loaded_value
-        return value, parent_filenames
+        return value, parent_filenames, variable_map
 
     @staticmethod
     def load_file(filename: str) -> object:
@@ -389,7 +396,11 @@ class DataProcessor:
         else:
             return None
 
-    def process_variable(self, item: object) -> object:
+    def process_variable(
+        self,
+        item: object,
+        variable_map: dict = None,
+    ) -> object:
         """Substitute environment variables into a string value.
 
         Return `item` as-is if not `.is_process_variable` or if `item` is not a
@@ -407,10 +418,14 @@ class DataProcessor:
 
         :param item: Item to process. Do nothing if not a str.
         :return: Processed item on success.
+        :param variable_map: :py:attr:`.variable_map` in the local scope,
+                             may have additional variables.
 
         """
         if not self.is_process_variable or not isinstance(item, str):
             return item
+        if variable_map is None:
+            variable_map = self.variable_map
         ret = ""
         try:
             tail = item.decode()
@@ -422,8 +437,8 @@ class DataProcessor:
                 groups = match.groupdict()
                 substitute = groups["symbol"]
                 if len(groups["escape"]) % 2 == 0:
-                    if groups["name"] in self.variable_map:
-                        substitute = self.variable_map[groups["name"]]
+                    if groups["name"] in variable_map:
+                        substitute = variable_map[groups["name"]]
                     elif groups["name"].startswith('YP_TIME'):
                         substitute = self._process_time_variable(
                             groups["name"])

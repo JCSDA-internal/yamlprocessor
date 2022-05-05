@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install flake8 pytest pytest-cov
+          python3 -m pip install doc8 flake8 pytest pytest-cov
           python3 -m pip install -r ./requirements.txt
       - name: Install package
         run: |
@@ -32,6 +32,9 @@ jobs:
       - name: Test with pytest
         run: |
           pytest --cov
+      - name: Lint rst with doc8
+        run: |
+          doc8 ./docs
       - name: Build docs
         run: |
           make -C ./docs/ html
