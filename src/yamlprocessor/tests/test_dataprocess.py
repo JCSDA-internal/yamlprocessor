@@ -363,25 +363,26 @@ def test_main_validate_1(tmp_path, capsys):
         json.dump(schema, schemafile)
     outfilename = tmp_path / 'b.yaml'
     infilename = tmp_path / 'a.yaml'
-    # Schema specified as an absolute file system path
-    with infilename.open('w') as infile:
-        infile.write(f'#!{schemafilename}\n')
-        yaml.dump({'hello': 'earth'}, infile)
-    main([str(infilename), str(outfilename)])
-    captured = capsys.readouterr()
-    assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
-    # Schema specified as a file:// URL
-    with infilename.open('w') as infile:
-        infile.write(f'#!file://{schemafilename}\n')
-        yaml.dump({'hello': 'earth'}, infile)
-    main([str(infilename), str(outfilename)])
-    captured = capsys.readouterr()
-    assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
-    # Schema specified as a relative path, with schema prefix
-    with infilename.open('w') as infile:
-        infile.write('#!hello.schema.json\n')
-        yaml.dump({'hello': 'earth'}, infile)
-    schema_prefix = f'--schema-prefix=file://{tmp_path}/'
-    main([schema_prefix, str(infilename), str(outfilename)])
-    captured = capsys.readouterr()
-    assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
+    for prefix in ('#!', '# yaml-language-server: $schema='):
+        # Schema specified as an absolute file system path
+        with infilename.open('w') as infile:
+            infile.write(f'{prefix}{schemafilename}\n')
+            yaml.dump({'hello': 'earth'}, infile)
+        main([str(infilename), str(outfilename)])
+        captured = capsys.readouterr()
+        assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
+        # Schema specified as a file:// URL
+        with infilename.open('w') as infile:
+            infile.write(f'{prefix}file://{schemafilename}\n')
+            yaml.dump({'hello': 'earth'}, infile)
+        main([str(infilename), str(outfilename)])
+        captured = capsys.readouterr()
+        assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
+        # Schema specified as a relative path, with schema prefix
+        with infilename.open('w') as infile:
+            infile.write(f'{prefix}hello.schema.json\n')
+            yaml.dump({'hello': 'earth'}, infile)
+        schema_prefix = f'--schema-prefix=file://{tmp_path}/'
+        main([schema_prefix, str(infilename), str(outfilename)])
+        captured = capsys.readouterr()
+        assert f'[INFO] ok {outfilename}' in captured.err.splitlines()

@@ -378,9 +378,14 @@ Validation with JSON Schema
 ---------------------------
 
 You can tell the processor to look for a JSON schema file and validate
-the current YAML file by adding a ``#!<SCHEMA-URI>`` to the beginning
-of the YAML file. The ``SCHEMA-URI`` is a string pointing to the location
-of a JSON schema file. Some simple assumptions apply:
+the current YAML file by adding a schema association line to the beginning
+of the YAML file, which can be one of:
+
+ - ``#!<SCHEMA-URI>``
+ - ``# yaml-language-server: $schema=<SCHEMA-URI>``
+
+Where the ``SCHEMA-URI`` is a string pointing to the location of a JSON schema
+file.  Some simple assumptions apply:
 
  - If ``SCHEMA-URI`` is a normal URI with a leading scheme,
    e.g., ``https://``, it is used as-is.

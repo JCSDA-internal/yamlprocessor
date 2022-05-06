@@ -10,9 +10,8 @@ value of corresponding (environment) variable.
 For each string value with ``$YP_TIME_*`` or ``${YP_TIME_*}`` syntax,
 substitute with value of corresponding date-time string.
 
-Validate against specified JSON schema if root file starts with a
-``#!<SCHEMA-URI>`` line.
-
+Validate against specified JSON schema if root file starts with either
+``#!<SCHEMA-URI>`` or ``# yaml-language-server: $schema=<SCHEMA-URI>`` line.
 """
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -381,7 +380,7 @@ class DataProcessor:
 
     @staticmethod
     def load_file_schema(filename: str) -> object:
-        """Load schema location from #! line of file.
+        """Load schema location from the schema association line of file.
 
         :param filename: name of file to load schema location.
         :return: a string containing the location of the schema or None.
@@ -391,8 +390,9 @@ class DataProcessor:
         else:
             with open(filename) as file_:
                 line = file_.readline()
-        if line.startswith('#!'):
-            return line[2:].strip()
+        for prefix in ('#!', '# yaml-language-server: $schema='):
+            if line.startswith(prefix):
+                return line[len(prefix):].strip()
         else:
             return None
 
