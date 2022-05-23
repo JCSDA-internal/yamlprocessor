@@ -47,8 +47,8 @@ to tell it where to split up the schema in the syntax:
 .. code-block:: json
 
    {
-       "OUTPUT-ROOT-SCHEMA-FILENAME": "",
-       "OUTPUT-SUB-SCHEMA-FILENAME-1": "JMESPATH-1",
+       "": "OUTPUT-ROOT-SCHEMA-FILENAME",
+       "JMESPATH-1": "OUTPUT-SUB-SCHEMA-FILENAME-1",
        "And so on": "..."
    }
 
@@ -61,8 +61,8 @@ subschemas. In the example above, we can use the setting:
 .. code-block:: json
 
    {
-       "hello.schema.json": "",
-       "hello-location.schema.json": "properties.hello.items"
+       "": "hello.schema.json",
+       "properties.hello.items": "hello-location.schema.json"
    }
 
 The resulting ``hello.schema.json`` will look like this,
@@ -76,18 +76,7 @@ which can be used to validate both ``hello.yaml`` and ``hello-root.yaml``.
                "items": {
                    "oneOf": [
                        {"$ref": "hello-location.schema.json"},
-                       {
-                           "properties": {
-                               "INCLUDE": {
-                                   "type": "string"
-                               },
-                               "QUERY": {
-                                   "type": "string"
-                               }
-                           },
-                           "required": ["INCLUDE"],
-                           "type": "string"
-                       }
+                       {"$ref": "yp-include.schema.json"},
                    ]
                },
                "type": "array"
@@ -119,3 +108,23 @@ which can be used to validate ``earth.yaml`` and ``mars.yaml``:
        "required": ["location", "targets"],
        "type": "object"
    }
+
+You may notice a file called ``yp-include.schema.json`` in the current
+working directory. This is the sub-schema for the syntax related to the
+``INCLUDE`` functionality described in :doc:`data-process`. The file is
+referenced by ``hello.schema.json`` in the example above.
+
+The default output location of the file is ``yp-include.schema.json``, but you
+can change it by adding an entry for ``$ref.yp-include.schema.json`` in the
+configuration file. Using the above example configuration file, you can do:
+
+.. code-block:: json
+
+   {
+       "": "hello.schema.json",
+       "$ref:yp-include.schema.json": "yp-include.schema.json",
+       "properties.hello.items": "hello-location.schema.json"
+   }
+
+(Note: ``$ref:yp-include.schema.json`` is a special entry. It is not a valid
+JMESPath syntax.)
