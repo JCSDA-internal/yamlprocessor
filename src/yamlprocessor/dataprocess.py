@@ -223,6 +223,7 @@ class DataProcessor:
         r"\$"
         r"(?P<brace_open>\{)?"
         r"(?P<name>[A-z_]\w*)"
+        r"(?P<cast>\.(?:int|float|bool))?"
         r"(?(brace_open)\})"
         r")"
         r"(?P<tail>.*)"
@@ -426,7 +427,7 @@ class DataProcessor:
             return item
         if variable_map is None:
             variable_map = self.variable_map
-        ret = ""
+        ret = ''
         try:
             tail = item.decode()
         except AttributeError:
@@ -435,25 +436,43 @@ class DataProcessor:
             match = self.REC_SUBSTITUTE.match(tail)
             if match:
                 groups = match.groupdict()
-                substitute = groups["symbol"]
-                if len(groups["escape"]) % 2 == 0:
-                    if groups["name"] in variable_map:
-                        substitute = variable_map[groups["name"]]
-                    elif groups["name"].startswith('YP_TIME'):
+                substitute = groups['symbol']
+                if len(groups['escape']) % 2 == 0:
+                    if groups['name'] in variable_map:
+                        substitute = variable_map[groups['name']]
+                    elif groups['name'].startswith('YP_TIME'):
                         substitute = self._process_time_variable(
-                            groups["name"])
+                            groups['name'])
                     elif self.unbound_placeholder is not None:
                         substitute = str(self.unbound_placeholder)
                     else:
-                        raise UnboundVariableError(groups["name"])
-                ret += (
-                    groups["head"]
-                    + groups["escape"][0:len(groups["escape"]) // 2]
-                    + substitute)
-                tail = groups["tail"]
+                        raise UnboundVariableError(groups['name'])
+                if groups['cast']:
+                    if groups['head'] or tail != item:
+                        raise ValueError(
+                            f'{item}: bad substitution expression')
+                    try:
+                        if groups['cast'] == '.int':
+                            substitute = int(substitute)
+                        elif groups['cast'] == '.float':
+                            substitute = float(substitute)
+                        elif groups['cast'] == '.bool':
+                            substitute = (
+                                substitute.lower() not in ('0', 'false', 'no'))
+                    except ValueError:
+                        raise ValueError(
+                            f'{item}: bad substitution value: {substitute}')
+                    ret = substitute
+                    tail = ''
+                else:
+                    ret += (
+                        groups['head']
+                        + groups['escape'][0:len(groups['escape']) // 2]
+                        + substitute)
+                    tail = groups['tail']
             else:
                 ret += tail
-                tail = ""
+                tail = ''
         return ret
 
     def _process_time_variable(self, name: str) -> str:

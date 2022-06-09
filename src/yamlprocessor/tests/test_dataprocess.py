@@ -147,6 +147,47 @@ def test_process_variable_4():
             == '2022-02-20T22:02:00' + out3)
 
 
+def test_process_variable_5():
+    """Test DataProcessor.process_variable int, float, bool substitution."""
+    processor = DataProcessor()
+    processor.variable_map.clear()
+    # Variables for substitution
+    processor.variable_map.update({
+        'N_PLANETS': '8',
+        'COLD': '-10',
+        'PI': '3.14',
+        'CHARGE': '-1.6E-19',
+        'GOOD': 'true',
+        'LOWER_FALSE': 'false',
+        'UPPER_FALSE': 'FALSE',
+        'NO': 'no',
+        'ZERO': '0',
+        'STRING': 'string',
+    })
+    # Good usages
+    assert processor.process_variable(r'${N_PLANETS.int}') == 8
+    assert processor.process_variable(r'${COLD.int}') == -10
+    assert processor.process_variable(r'${PI.float}') == 3.14
+    assert processor.process_variable(r'${CHARGE.float}') == -1.6E-19
+    assert processor.process_variable(r'${GOOD.bool}') is True
+    for name in ('LOWER_FALSE', 'UPPER_FALSE', 'NO', 'ZERO'):
+        assert processor.process_variable(r"${" + name + r".bool}") is False
+    # Bad usages
+    with pytest.raises(ValueError) as excinfo:
+        processor.process_variable(r'Not ${PI.float}.')
+        assert (
+            str(excinfo.value)
+            == 'Not ${PI.float}.: bad substitution expression'
+        )
+    for cast in ('.int', '.float'):
+        item = r'${STRING' + cast + r'}'
+        with pytest.raises(ValueError) as excinfo:
+            processor.process_variable(item)
+            assert (
+                str(excinfo.value) == item + ': bad substitution value: string'
+            )
+
+
 def test_main_0(tmp_path):
     """Test main, basic."""
     data = {'testing': [1, 2, 3]}
