@@ -386,3 +386,24 @@ def test_main_validate_1(tmp_path, capsys):
         main([schema_prefix, str(infilename), str(outfilename)])
         captured = capsys.readouterr()
         assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
+
+
+def test_process_data_1(tmp_path):
+    """Test DataProcessor.process_data, with DataProcessor.include_dict."""
+    data = {'testing': ['one', 2, {3: [3.1, 3.14]}]}
+    data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, {'INCLUDE': '3.yaml'}]}
+    infilename = tmp_path / 'a.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(data_0, infile)
+    with (tmp_path / '1.yaml').open('w') as infile_1:
+        yaml.dump(1, infile_1)
+    with (tmp_path / '3.yaml').open('w') as infile_3:
+        yaml.dump({3: {'INCLUDE': '3x.yaml'}}, infile_3)
+    processor = DataProcessor()
+    processor.include_dict.update({
+        '1.yaml': 'one',
+        '3x.yaml': [3.1, 3.14],
+    })
+    outfilename = tmp_path / 'b.yaml'
+    processor.process_data(str(infilename), str(outfilename))
+    assert yaml.safe_load(outfilename.open()) == data

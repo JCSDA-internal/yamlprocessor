@@ -166,6 +166,11 @@ class DataProcessor:
 
        Turn on/off variable substitution.
 
+    .. py:attribute:: .include_dict
+       :type: dict
+
+       Dictonary for values that can be substituted for include.
+
     .. py:attribute:: .include_paths
        :type: list
 
@@ -247,6 +252,7 @@ class DataProcessor:
             item
             for item in os.getenv('YP_INCLUDE_PATH', '').split(os.pathsep)
             if item)
+        self.include_dict = {}
         self.schema_prefix = os.getenv('YP_SCHEMA_PREFIX')
         self.time_formats = {'': '%FT%T%:z'}
         self.time_now = datetime.now(tzlocal())  # assume application is fast
@@ -354,9 +360,14 @@ class DataProcessor:
         ):
             include_filename = self.process_variable(
                 value[self.INCLUDE_KEY])
-            filename = self.get_filename(include_filename, parent_filenames)
+            try:
+                loaded_value = self.include_dict[include_filename]
+                filename = include_filename
+            except KeyError:
+                filename = self.get_filename(
+                    include_filename, parent_filenames)
+                loaded_value = self.load_file(filename)
             parent_filenames.append(filename)
-            loaded_value = self.load_file(filename)
             if self.VARIABLES_KEY in value:
                 variable_map.update(value[self.VARIABLES_KEY])
             if self.QUERY_KEY in value:
