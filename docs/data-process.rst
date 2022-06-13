@@ -391,6 +391,10 @@ will give:
    version: 4
    speed: 3.14
 
+Note: The processor casts integers and floats using Python's built-in
+:py:func:`int` and :py:func:`float` functions. The exact behaviour may change
+with the version of Python you are using.
+
 However, a single value can only have a single substitution with a cast:
 
 .. code-block:: yaml
