@@ -158,7 +158,7 @@ def test_process_variable_5():
         'PI': '3.14',
         'CHARGE': '-1.6E-19',
         'LOWER_TRUE': 'true',
-        'UPPER_TRUE': 'true',
+        'UPPER_TRUE': 'TRUE',
         'YES': 'yes',
         'ONE': '1',
         'LOWER_FALSE': 'false',
