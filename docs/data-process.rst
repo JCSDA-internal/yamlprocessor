@@ -358,9 +358,10 @@ reference time.
 Cast Value Variable Substitution
 --------------------------------
 
-For non-string scalar values, i.e. integers, floats and booleans, the YAML
-processor utility supports casting the value to the correct type before using
-it for substitution:
+Environment variables are strings by nature, but YAML scalars can be numbers or
+booleans. Therefore, for non-string scalar values, i.e. integers, floats and
+booleans, the YAML processor utility supports casting the value to the correct
+type before using it for substitution:
 
 ``${NAME.int}``
     Cast value of ``NAME`` to an integer.
@@ -369,7 +370,10 @@ it for substitution:
     Cast value of ``NAME`` to a float.
 
 ``${NAME.bool}``
-    Cast value of ``NAME`` to a boolean.
+    Cast value of ``NAME`` to a boolean. Value of ``NAME`` must be one of
+    the supported case insensitive strings: ``yes``, ``true`` and ``1`` will
+    cast to the boolean ``true``, and ``no``, ``false`` and ``0`` will be cast
+    to the boolean ``false``.
 
 For example, suppose we have ``main.yaml``:
 

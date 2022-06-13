@@ -157,7 +157,10 @@ def test_process_variable_5():
         'COLD': '-10',
         'PI': '3.14',
         'CHARGE': '-1.6E-19',
-        'GOOD': 'true',
+        'LOWER_TRUE': 'true',
+        'UPPER_TRUE': 'true',
+        'YES': 'yes',
+        'ONE': '1',
         'LOWER_FALSE': 'false',
         'UPPER_FALSE': 'FALSE',
         'NO': 'no',
@@ -169,7 +172,8 @@ def test_process_variable_5():
     assert processor.process_variable(r'${COLD.int}') == -10
     assert processor.process_variable(r'${PI.float}') == 3.14
     assert processor.process_variable(r'${CHARGE.float}') == -1.6E-19
-    assert processor.process_variable(r'${GOOD.bool}') is True
+    for name in ('LOWER_TRUE', 'UPPER_TRUE', 'YES', 'ONE'):
+        assert processor.process_variable(r"${" + name + r".bool}") is True
     for name in ('LOWER_FALSE', 'UPPER_FALSE', 'NO', 'ZERO'):
         assert processor.process_variable(r"${" + name + r".bool}") is False
     # Bad usages
@@ -179,7 +183,7 @@ def test_process_variable_5():
             str(excinfo.value)
             == 'Not ${PI.float}.: bad substitution expression'
         )
-    for cast in ('.int', '.float'):
+    for cast in ('.int', '.float', '.bool'):
         item = r'${STRING' + cast + r'}'
         with pytest.raises(ValueError) as excinfo:
             processor.process_variable(item)

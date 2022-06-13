@@ -456,9 +456,18 @@ class DataProcessor:
                             substitute = int(substitute)
                         elif groups['cast'] == '.float':
                             substitute = float(substitute)
-                        elif groups['cast'] == '.bool':
-                            substitute = (
-                                substitute.lower() not in ('0', 'false', 'no'))
+                        elif (
+                            groups['cast'] == '.bool'
+                            and substitute.lower() in ('0', 'false', 'no')
+                        ):
+                            substitute = False
+                        elif (
+                            groups['cast'] == '.bool'
+                            and substitute.lower() in ('1', 'true', 'yes')
+                        ):
+                            substitute = True
+                        else:
+                            raise ValueError
                     except ValueError:
                         raise ValueError(
                             f'{item}: bad substitution value: {substitute}')
