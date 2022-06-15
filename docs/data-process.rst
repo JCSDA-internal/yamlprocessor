@@ -355,6 +355,55 @@ YP_TIME_REF=whatever``, then you will get the value ``whatever`` instead of the
 reference time.
 
 
+Cast Value Variable Substitution
+--------------------------------
+
+Environment variables are strings by nature, but YAML scalars can be numbers or
+booleans. Therefore, for non-string scalar values, i.e. integers, floats and
+booleans, the YAML processor utility supports casting the value to the correct
+type before using it for substitution:
+
+``${NAME.int}``
+    Cast value of ``NAME`` to an integer.
+
+``${NAME.float}``
+    Cast value of ``NAME`` to a float.
+
+``${NAME.bool}``
+    Cast value of ``NAME`` to a boolean. Value of ``NAME`` must be one of
+    the supported case insensitive strings: ``yes``, ``true`` and ``1`` will
+    cast to the boolean ``true``, and ``no``, ``false`` and ``0`` will be cast
+    to the boolean ``false``.
+
+For example, suppose we have ``main.yaml``:
+
+.. code-block:: yaml
+
+   version: ${ITEM_VERSION.int}
+   speed: ${ITEM_SPEED.float}
+
+Running
+:program:`yp-data -D ITEM_VERSION=4 -D ITEM_SPEED=3.14 main.yaml <yp-data>`
+will give:
+
+.. code-block:: yaml
+
+   version: 4
+   speed: 3.14
+
+Note: The processor casts integers and floats using Python's built-in
+:py:func:`int` and :py:func:`float` functions. The exact behaviour may change
+with the version of Python you are using.
+
+However, a single value can only have a single substitution with a cast:
+
+.. code-block:: yaml
+
+   - ${NUM2.int}             # good
+   - xyz${NUM2.int}          # bad
+   - ${NUM2.int}${NUM3.int}  # bad
+
+
 Turn Off Processing
 -------------------
 
