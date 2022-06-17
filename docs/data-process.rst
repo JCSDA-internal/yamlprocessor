@@ -61,6 +61,36 @@ for it from these locations in order:
    - In the :py:attr:`.include_paths` (list) attribute of the relevant
      :py:class:`yamlprocessor.dataprocess.DataProcessor` instance.
 
+(In Python only.) The :py:attr:`.include_dict` (dict) attribute of the relevant
+:py:class:`yamlprocessor.dataprocess.DataProcessor` instance can be populated
+with keys to match ``INCLUDE`` names. On a matching key, the value will be
+inserted as if it were the content loaded from an include file. The processor
+will always attempt to find a match from this attribute before looking for
+matching include files from the file system. Suppose we use the following
+Python logic with the above files:
+
+.. code-block:: python
+
+   from yamlprocessor.dataprocess import DataProcessor
+   # ...
+   processor = DataProcessor()
+   processor.include_dict.update({
+       'earth.yaml': {'location': 'earth', 'targets': ['dinosaur']},
+   })
+   processor.process_data('hello.yaml')
+
+We'll get:
+
+.. code-block:: yaml
+
+   hello:
+     - location: earth
+       targets:
+         - dinosaur
+     - location: mars
+       targets:
+         - martian
+
 LIMITATIONS
 
  - YAML anchors/references will only work within files, so an include file will
