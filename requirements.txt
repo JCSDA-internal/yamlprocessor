@@ -1,6 +1,6 @@
 jmespath
 jsonschema
 python-dateutil
-pyyaml
+ruamel.yaml
 sphinx
 sphinx-rtd-theme

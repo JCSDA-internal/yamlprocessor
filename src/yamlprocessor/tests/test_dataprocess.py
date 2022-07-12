@@ -2,10 +2,15 @@ import json
 
 from dateutil.parser import parse as datetimeparse
 import pytest
-import yaml
+from ruamel.yaml import YAML
 
 from ..dataprocess import (
     DataProcessor, main, strftime_with_colon_z, UnboundVariableError)
+
+
+@pytest.fixture
+def yaml():
+    return YAML(typ='safe', pure=True)
 
 
 def test_process_variable_0():
@@ -192,7 +197,7 @@ def test_process_variable_5():
             )
 
 
-def test_main_0(tmp_path):
+def test_main_0(tmp_path, yaml):
     """Test main, basic."""
     data = {'testing': [1, 2, 3]}
     infilename = tmp_path / 'a.yaml'
@@ -200,10 +205,10 @@ def test_main_0(tmp_path):
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_1(tmp_path):
+def test_main_1(tmp_path, yaml):
     """Test main, single include."""
     data = {'testing': [1, 2, 3]}
     data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, 3]}
@@ -214,10 +219,10 @@ def test_main_1(tmp_path):
         yaml.dump(1, infile_1)
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_3(tmp_path):
+def test_main_3(tmp_path, yaml):
     """Test main, 3 way include."""
     data = {'testing': [1, 2, {3: [3.1, 3.14]}]}
     data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, {'INCLUDE': '3.yaml'}]}
@@ -232,10 +237,10 @@ def test_main_3(tmp_path):
         yaml.dump([3.1, 3.14], infile_3x)
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_4(tmp_path):
+def test_main_4(tmp_path, yaml):
     """Test main, no process include."""
     data = {'testing': [{'INCLUDE': '1.yaml'}, 2, {'INCLUDE': '3.yaml'}]}
     infilename = tmp_path / 'a.yaml'
@@ -243,10 +248,10 @@ def test_main_4(tmp_path):
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
     main(['--no-process-include', str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_5(tmp_path):
+def test_main_5(tmp_path, yaml):
     """Test main, process variable."""
     data = ['${GREET} ${PERSON}', '${GREET} ${ALIEN}']
     infilename = tmp_path / 'a.yaml'
@@ -261,10 +266,10 @@ def test_main_5(tmp_path):
         str(infilename),
         str(outfilename),
     ])
-    assert yaml.safe_load(outfilename.open()) == ['Hello Jo', 'Hello unknown']
+    assert yaml.load(outfilename.open()) == ['Hello Jo', 'Hello unknown']
 
 
-def test_main_6(tmp_path):
+def test_main_6(tmp_path, yaml):
     """Test main, no process variable."""
     data = ['${GREET} ${PERSON}', '${GREET} ${ALIEN}']
     infilename = tmp_path / 'a.yaml'
@@ -272,10 +277,10 @@ def test_main_6(tmp_path):
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
     main(['--no-process-variable', str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_7(tmp_path):
+def test_main_7(tmp_path, yaml):
     """Test main, include files in a separate folder."""
     data = {'testing': [1, 2, {3: [3.1, 3.14]}]}
     data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, {'INCLUDE': '3.yaml'}]}
@@ -292,10 +297,10 @@ def test_main_7(tmp_path):
         yaml.dump([3.1, 3.14], infile_3x)
     outfilename = tmp_path / 'b.yaml'
     main(['-I', str(include_d), str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_8(tmp_path):
+def test_main_8(tmp_path, yaml):
     """Test main, YAML object (i.e. dict) key order."""
     infilename = tmp_path / 'a.yaml'
     incontent = "xyz: 1\npqrs: 2\nabc: 3\nijk: 4\n"
@@ -308,7 +313,7 @@ def test_main_8(tmp_path):
     assert incontent == outcontent
 
 
-def test_main_9(tmp_path):
+def test_main_9(tmp_path, yaml):
     """Test main, single include with query."""
     data = {'testing': [1, 2, 3]}
     data_0 = {'testing': {
@@ -330,10 +335,10 @@ def test_main_9(tmp_path):
         yaml.dump(data_1, infile_1)
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
 
 
-def test_main_10(tmp_path):
+def test_main_10(tmp_path, yaml):
     """Test main, with date-time string."""
     data = {
         'you-time': '2030-04-05T06:07:08Z',
@@ -345,14 +350,14 @@ def test_main_10(tmp_path):
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == {
+    assert yaml.load(outfilename.open()) == {
         'you-time': '2030-04-05T06:07:08Z',
         'me-time': '2030-04-05T06:07:08+09:00',
         'that-time': '2040-06-08T10:12:14-10:30',
     }
 
 
-def test_main_11(tmp_path):
+def test_main_11(tmp_path, yaml):
     """Test main, include file with variables."""
     hello_data = {
         'hello': [
@@ -386,7 +391,7 @@ def test_main_11(tmp_path):
         '--define=PEOPLE=human',
         str(infilename),
         str(outfilename)])
-    assert yaml.safe_load(outfilename.open()) == {
+    assert yaml.load(outfilename.open()) == {
         'hello': [
             {'location': 'venus', 'people': 'venusian'},
             {'location': 'mars', 'people': 'martian'},
@@ -395,7 +400,7 @@ def test_main_11(tmp_path):
     }
 
 
-def test_main_validate_1(tmp_path, capsys):
+def test_main_validate_1(tmp_path, capsys, yaml):
     """Test main, YAML with JSON schema validation."""
     schema = {
         'type': 'object',
@@ -433,7 +438,7 @@ def test_main_validate_1(tmp_path, capsys):
         assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
 
 
-def test_process_data_include_dict(tmp_path):
+def test_process_data_include_dict(tmp_path, yaml):
     """Test DataProcessor.process_data, with DataProcessor.include_dict."""
     data = {'testing': ['one', 2, {3: [3.1, 3.14]}]}
     data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, {'INCLUDE': '3.yaml'}]}
@@ -453,4 +458,4 @@ def test_process_data_include_dict(tmp_path):
     })
     outfilename = tmp_path / 'b.yaml'
     processor.process_data(str(infilename), str(outfilename))
-    assert yaml.safe_load(outfilename.open()) == data
+    assert yaml.load(outfilename.open()) == data
