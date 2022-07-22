@@ -400,6 +400,74 @@ def test_main_11(tmp_path, yaml):
     }
 
 
+def test_main_12(tmp_path, yaml):
+    """Test main, merge include files into a list."""
+    root_data = [
+        {'name': 'cat', 'speak': ['meow', 'miaow']},
+        {'INCLUDE': 'more-farm-1.yaml', 'MERGE': True},
+        {'INCLUDE': 'more-farm-2.yaml', 'MERGE': True},
+        {'name': 'fish', 'speak': ['bubble', 'bubble']},
+    ]
+    more_data_1 = [
+        {'name': 'dog', 'speak': ['woof', 'bark']},
+        {'name': 'sheep', 'speak': ['baa', 'baa']},
+    ]
+    more_data_2 = [
+        {'name': 'duck', 'speak': ['quack', 'quack']},
+        {'name': 'farmer', 'speak': ['e-i-e-i-o']},
+    ]
+    infilename = tmp_path / 'root.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(root_data, infile)
+    include_infilename = tmp_path / 'more-farm-1.yaml'
+    with include_infilename.open('w') as infile:
+        yaml.dump(more_data_1, infile)
+    include_infilename = tmp_path / 'more-farm-2.yaml'
+    with include_infilename.open('w') as infile:
+        yaml.dump(more_data_2, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main([str(infilename), str(outfilename)])
+    assert yaml.load(outfilename.open()) == [
+        {'name': 'cat', 'speak': ['meow', 'miaow']},
+        {'name': 'dog', 'speak': ['woof', 'bark']},
+        {'name': 'sheep', 'speak': ['baa', 'baa']},
+        {'name': 'duck', 'speak': ['quack', 'quack']},
+        {'name': 'farmer', 'speak': ['e-i-e-i-o']},
+        {'name': 'fish', 'speak': ['bubble', 'bubble']},
+    ]
+
+
+def test_main_13(tmp_path, yaml):
+    """Test main, merge include files into a map/object."""
+    root_data = {
+        'cat': {
+            'speak': ['meow', 'miaow'],
+            'dummy': {'INCLUDE': 'cat-data.yaml', 'MERGE': True},
+            'young': 'kitten',
+        },
+    }
+    cat_data = {
+        'chase': ['rodents', 'birds'],
+        'like': ['food', 'play'],
+    }
+    infilename = tmp_path / 'root.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(root_data, infile)
+    include_infilename = tmp_path / 'cat-data.yaml'
+    with include_infilename.open('w') as infile:
+        yaml.dump(cat_data, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main([str(infilename), str(outfilename)])
+    assert yaml.load(outfilename.open()) == {
+        'cat': {
+            'speak': ['meow', 'miaow'],
+            'young': 'kitten',
+            'chase': ['rodents', 'birds'],
+            'like': ['food', 'play'],
+        },
+    }
+
+
 def test_main_validate_1(tmp_path, capsys, yaml):
     """Test main, YAML with JSON schema validation."""
     schema = {

@@ -221,6 +221,7 @@ class DataProcessor:
     """
 
     INCLUDE_KEY = 'INCLUDE'
+    MERGE_KEY = 'MERGE'
     QUERY_KEY = 'QUERY'
     VARIABLES_KEY = 'VARIABLES'
 
@@ -282,21 +283,57 @@ class DataProcessor:
         while stack:
             data, parent_filenames, variable_map = stack.pop()
             data = self.process_variable(data, variable_map)
-            data, parent_filenames, variable_map = self.load_include_file(
-                data, parent_filenames, variable_map)
+            if data is root:
+                # Handle INCLUDE at root level.
+                # Ignore the MERGE flag.
+                data, parent_filenames, variable_map = self.load_include_file(
+                    data, parent_filenames, variable_map)[0:3]
+            type_of_data = type(data)
             items_iter = None
-            if isinstance(data, list):
+            if type_of_data is list:
                 items_iter = enumerate(data)
-            elif isinstance(data, dict):
-                items_iter = data.items()
+            elif type_of_data is dict:
+                items_iter = data.copy().items()
             if items_iter is None:
                 continue
             for key, item in items_iter:
                 item = data[key] = self.process_variable(item, variable_map)
-                include_data, parent_filenames_x, variable_map_x = (
+                include_data, parent_filenames_x, variable_map_x, is_merge = (
                     self.load_include_file(
                         item, parent_filenames, variable_map))
-                if include_data != item:
+                if is_merge and type_of_data != type(include_data):
+                    raise TypeError()
+                if is_merge and type_of_data is list:
+                    # For a list, the iterator seems to handle the new items
+                    # perfectly fine. We insert the included list at and after
+                    # the current position. The current item is logically
+                    # replaced by the first item of the inserted list.
+                    del data[key]
+                    item = None
+                    for i, include_item in enumerate(include_data):
+                        data.insert(key + i, include_item)
+                        if i == 0:
+                            item = include_item
+                elif is_merge and type_of_data is dict:
+                    # For a dict, the iterator cannot handle size changes, so
+                    # we can only iterate over a copy of the original dict. We
+                    # insert the items in the dict normally, but we'll need to
+                    # add elements of the dict to the stack to ensure we visit
+                    # any sub-trees for include files, etc.
+                    del data[key]
+                    item = None
+                    for include_key, include_item in include_data.items():
+                        if (
+                            isinstance(include_item, dict)
+                            or isinstance(include_item, list)
+                        ):
+                            data[include_key] = include_item
+                            stack.append([
+                                include_item,
+                                parent_filenames_x,
+                                variable_map_x,
+                            ])
+                elif include_data != item:
                     item = data[key] = include_data
                 if isinstance(item, dict) or isinstance(item, list):
                     stack.append(
@@ -355,13 +392,16 @@ class DataProcessor:
         :param variable_map: :py:attr:`.variable_map` in the local scope,
                              may have additional variables.
         """
+        orig_value = value
         parent_filenames = list(parent_filenames)
         variable_map = dict(variable_map)
+        is_merge = False
         while (
             self.is_process_include
             and isinstance(value, dict)
             and self.INCLUDE_KEY in value
         ):
+            is_merge = (self.MERGE_KEY in orig_value)
             include_filename = self.process_variable(
                 value[self.INCLUDE_KEY])
             try:
@@ -378,7 +418,7 @@ class DataProcessor:
                 value = jmespath.search(value[self.QUERY_KEY], loaded_value)
             else:
                 value = loaded_value
-        return value, parent_filenames, variable_map
+        return value, parent_filenames, variable_map, is_merge
 
     @staticmethod
     def load_file(filename: str) -> object:
