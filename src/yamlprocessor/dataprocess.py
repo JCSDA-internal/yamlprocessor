@@ -30,8 +30,8 @@ from dateutil.relativedelta import relativedelta
 from dateutil.tz import tzlocal
 import jmespath
 import jsonschema
-import yaml
-from yaml.dumper import SafeDumper
+from ruamel.yaml import YAML
+from ruamel.yaml.constructor import ConstructorError
 
 from . import __version__
 
@@ -88,6 +88,8 @@ def strftime_with_colon_z(dto: datetime, time_format: str):
     """
     utcoffset = dto.utcoffset()
     if utcoffset is None:
+        for code in ('%z', '%:z', '%::z', '%:::z'):
+            time_format = time_format.replace(code, '')
         return dto.strftime(time_format)
     # Hopefully, we don't need to have sub-seconds in time zones.
     offset_total_seconds = int(utcoffset.total_seconds())
@@ -128,24 +130,26 @@ class UnboundVariableError(ValueError):
     __str__ = __repr__
 
 
-class YpSafeDumper(SafeDumper):
-    """Override dumping method for a time stamp to dump out str."""
-
-    @classmethod
-    def set_time_format(cls, time_format: str):
-        """Set time format."""
-        cls.time_format = time_format
-
-    def represent_datetime(self, data: datetime):
-        """Dump datetime as string."""
-        if hasattr(self, 'time_format'):
-            value = strftime_with_colon_z(data, self.time_format)
-            return self.represent_scalar('tag:yaml.org,2002:str', value)
-        else:
-            return super().represent_datetime(data)
+def construct_yaml_timestamp(constructor, node):
+    """Return a method to add to the YAML constructor to parse datetime."""
+    print(1, file=sys.stderr)
+    try:
+        return datetimeparse(node.value)
+    except ValueError:
+        raise ConstructorError(
+            None,
+            None,
+            f'failed to construct timestamp from "{node.value}"',
+            node.start_mark,
+        )
 
 
-YpSafeDumper.add_representer(datetime, YpSafeDumper.represent_datetime)
+def get_represent_datetime(time_format: str):
+    """Return a method to add to the YAML representer to represent datetime."""
+
+    return lambda representer, data: representer.represent_scalar(
+        'tag:yaml.org,2002:str',
+        strftime_with_colon_z(data, time_format))
 
 
 class DataProcessor:
@@ -301,14 +305,13 @@ class DataProcessor:
             out_file = sys.stdout
         else:
             out_file = open(out_filename, 'w')
-        YpSafeDumper.set_time_format(self.time_formats[''])
-        # Set sort_keys=False to preserve dict ordering (with Python 3.7+)
-        yaml.dump(
-            root,
-            out_file,
-            Dumper=YpSafeDumper,
-            default_flow_style=False,
-            sort_keys=False)
+        yaml = YAML(typ='safe', pure=True)
+        yaml.default_flow_style = False
+        yaml.sort_base_mapping_type_on_output = False
+        yaml.representer.add_representer(
+            datetime,
+            get_represent_datetime(self.time_formats['']))
+        yaml.dump(root, out_file)
         self.validate_data(root, out_filename, schema_location)
 
     def get_filename(self, filename: str, parent_filenames: list) -> str:
@@ -384,11 +387,15 @@ class DataProcessor:
         :param filename: name of file to load content.
         :return: the loaded data structure.
         """
+        yaml = YAML(typ='safe', pure=True)
+        yaml.constructor.add_constructor(
+            'tag:yaml.org,2002:timestamp',
+            construct_yaml_timestamp)
         if filename == '-':
-            return yaml.safe_load(sys.stdin)
+            return yaml.load(sys.stdin)
         else:
             with open(filename) as file_:
-                return yaml.safe_load(file_)
+                return yaml.load(file_)
 
     @staticmethod
     def load_file_schema(filename: str) -> object:
