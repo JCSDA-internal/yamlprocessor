@@ -104,8 +104,8 @@ Modularisation / Include with Merge
 
 A common use case for include is to merge a list read from an include
 file into the current list, (or similarly to merge a map/object read from an
-include file into the current map/object). We can tell the processor with the
-``MERGE`` keyword.
+include file into the current map/object). We can tell the processor by adding
+the ``MERGE: true`` option to the ``INCLUDE: ...`` instruction.
 
 The following example shows how to merge a list read from an include file
 into a list in place:
