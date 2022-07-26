@@ -290,6 +290,7 @@ class DataProcessor:
                     data, parent_filenames, variable_map)[0:3]
             type_of_data = type(data)
             items_iter = None
+            skip_keys = set()
             if type_of_data is list:
                 items_iter = enumerate(data)
             elif type_of_data is dict:
@@ -297,6 +298,8 @@ class DataProcessor:
             if items_iter is None:
                 continue
             for key, item in items_iter:
+                if key in skip_keys:
+                    continue
                 item = data[key] = self.process_variable(item, variable_map)
                 include_data, parent_filenames_x, variable_map_x, is_merge = (
                     self.load_include_file(
@@ -323,11 +326,12 @@ class DataProcessor:
                     del data[key]
                     item = None
                     for include_key, include_item in include_data.items():
+                        data[include_key] = include_item
+                        skip_keys.add(include_key)
                         if (
                             isinstance(include_item, dict)
                             or isinstance(include_item, list)
                         ):
-                            data[include_key] = include_item
                             stack.append([
                                 include_item,
                                 parent_filenames_x,

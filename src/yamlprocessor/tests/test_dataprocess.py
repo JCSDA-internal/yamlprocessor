@@ -444,11 +444,12 @@ def test_main_13(tmp_path, yaml):
             'speak': ['meow', 'miaow'],
             'dummy': {'INCLUDE': 'cat-data.yaml', 'MERGE': True},
             'young': 'kitten',
+            'like': ['food'],
         },
     }
     cat_data = {
         'chase': ['rodents', 'birds'],
-        'like': ['food', 'play'],
+        'like': ['food', 'play', 'sleep'],
     }
     infilename = tmp_path / 'root.yaml'
     with infilename.open('w') as infile:
@@ -463,7 +464,7 @@ def test_main_13(tmp_path, yaml):
             'speak': ['meow', 'miaow'],
             'young': 'kitten',
             'chase': ['rodents', 'birds'],
-            'like': ['food', 'play'],
+            'like': ['food', 'play', 'sleep'],
         },
     }
 
