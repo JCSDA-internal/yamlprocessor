@@ -16,6 +16,8 @@
 
 import sphinx_rtd_theme
 
+import yamlprocessor
+
 
 # -- Project information -----------------------------------------------------
 
@@ -24,7 +26,7 @@ copyright = 'British Crown (Met Office) & JCSDA & Contributors'
 author = 'Matt Shin'
 
 # The full version, including alpha/beta/rc tags
-release = '0.4'
+release = yamlprocessor.__version__
 
 
 # -- General configuration ---------------------------------------------------
