@@ -184,8 +184,9 @@ Where ``sayings.yaml`` contains:
 
 Running the processor on the first input YAML file will yield the following
 output, where the content of the include file will be inserted into the
-original map/object. Note the content are inserted at the end, due to the
-associative array nature of the map/object.
+original map/object. Note: map/object keys do not have an order, so items
+from the include file will override items in the original map/object that have
+the same keys, regardless of where the items appear in the original map/object.
 
 .. code-block:: yaml
 

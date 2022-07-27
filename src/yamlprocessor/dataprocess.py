@@ -15,6 +15,7 @@ Validate against specified JSON schema if root file starts with either
 """
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from contextlib import suppress
 from datetime import datetime
 from errno import ENOENT
 import logging
@@ -218,12 +219,41 @@ class DataProcessor:
        :type: str
 
        Value to substitute for unbound variables.
+
+    .. py:attribute:: .INCLUDE_SCHEMA
+       :type: dict
+
+       (Class) The schema of the INCLUDE syntax.
     """
 
     INCLUDE_KEY = 'INCLUDE'
     MERGE_KEY = 'MERGE'
     QUERY_KEY = 'QUERY'
     VARIABLES_KEY = 'VARIABLES'
+
+    INCLUDE_SCHEMA = {
+        'properties': {
+            INCLUDE_KEY: {
+                'type': 'string',
+            },
+            MERGE_KEY: {
+                'type': 'boolean',
+            },
+            QUERY_KEY: {
+                'type': 'string',
+            },
+            VARIABLES_KEY: {
+                'patternProperties': {
+                    r'^[A-z_]\w*$': {'type': 'string'},
+                },
+                'additionalProperties': False,
+                'type': 'object',
+            },
+        },
+        'additionalProperties': False,
+        'required': [INCLUDE_KEY],
+        'type': 'object',
+    }
 
     REC_SUBSTITUTE = re.compile(
         r"\A"
@@ -400,11 +430,7 @@ class DataProcessor:
         parent_filenames = list(parent_filenames)
         variable_map = dict(variable_map)
         is_merge = False
-        while (
-            self.is_process_include
-            and isinstance(value, dict)
-            and self.INCLUDE_KEY in value
-        ):
+        while self.is_process_include and self._is_include(value):
             is_merge = (self.MERGE_KEY in orig_value)
             include_filename = self.process_variable(
                 value[self.INCLUDE_KEY])
@@ -423,6 +449,20 @@ class DataProcessor:
             else:
                 value = loaded_value
         return value, parent_filenames, variable_map, is_merge
+
+    @classmethod
+    def _is_include(cls, value: object) -> bool:
+        """Return True if value is recognised as an INCLUDE syntax.
+
+        :param value: Value that may contain file name to load.
+        :return: True if value is recognised as an INCLUDE syntax.
+        """
+        if not isinstance(value, dict) or cls.INCLUDE_KEY not in value:
+            return False
+        with suppress(jsonschema.exceptions.ValidationError):
+            jsonschema.validate(schema=cls.INCLUDE_SCHEMA, instance=value)
+            return True
+        return False
 
     @staticmethod
     def load_file(filename: str) -> object:
