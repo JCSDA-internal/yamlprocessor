@@ -51,7 +51,7 @@ for it from these locations in order:
  - The folder/directory containing the parent file.
  - The current working folder/directory.
  - The list of include folders/directories. This list can be specified:
- 
+
    - Using the environment variable ``YP_INCLUDE_PATH``. Use the same syntax as
      the ``PATH`` environment variable on your platform to specify multiple
      folders/directories.
@@ -61,17 +61,152 @@ for it from these locations in order:
    - In the :py:attr:`.include_paths` (list) attribute of the relevant
      :py:class:`yamlprocessor.dataprocess.DataProcessor` instance.
 
-LIMITATION. It is worth noting that YAML anchors/references will only work
-within files, so an include file will not see anchors in the parent file,
-and vice versa.
+(In Python only.) The :py:attr:`.include_dict` (dict) attribute of the relevant
+:py:class:`yamlprocessor.dataprocess.DataProcessor` instance can be populated
+with keys to match ``INCLUDE`` names. On a matching key, the value will be
+inserted as if it were the content loaded from an include file. The processor
+will always attempt to find a match from this attribute before looking for
+matching include files from the file system. Suppose we use the following
+Python logic with the above files:
+
+.. code-block:: python
+
+   from yamlprocessor.dataprocess import DataProcessor
+   # ...
+   processor = DataProcessor()
+   processor.include_dict.update({
+       'earth.yaml': {'location': 'earth', 'targets': ['dinosaur']},
+   })
+   processor.process_data('hello.yaml')
+
+We'll get:
+
+.. code-block:: yaml
+
+   hello:
+     - location: earth
+       targets:
+         - dinosaur
+     - location: mars
+       targets:
+         - martian
+
+LIMITATIONS
+
+ - YAML anchors/references will only work within files, so an include file will
+   not see anchors in the parent file, and vice versa.
+ - Since INCLUDE is part of a map/dict, keys in the same map/dict that are not
+   recognised will not be processed.
+
+
+Modularisation / Include with Merge
+-----------------------------------
+
+A common use case for include is to merge a list read from an include
+file into the current list, (or similarly to merge a map/object read from an
+include file into the current map/object). We can tell the processor by adding
+the ``MERGE: true`` option to the ``INCLUDE: ...`` instruction.
+
+The following example shows how to merge a list read from an include file
+into a list in place:
+
+.. code-block:: yaml
+
+   hello:
+     - location: Earth
+       targets:
+         - Human
+         - Dolphin
+     - INCLUDE: hello-list.yaml
+       MERGE: true
+     - location: Mars
+       targets:
+         - Martians
+
+Where ``hello-list.yaml`` contains:
+
+.. code-block:: yaml
+
+   - location: Endor
+     targets:
+       - Ewok
+       - Dulok
+   - location: Pandora
+     targets:
+       - "Na'vi"
+       - Avatar
+
+Running the processor on the first input YAML file will yield the following
+output, where the content of the include file will be inserted into the
+original list in place:
+
+.. code-block:: yaml
+
+   hello:
+     - location: Earth
+       targets:
+         - Human
+         - Dolphin
+     - location: Endor
+       targets:
+         - Ewok
+         - Dulok
+     - location: Pandora
+       targets:
+         - "Na'vi"
+         - Avatar
+     - location: Mars
+       targets:
+         - Martians
+
+The following example shows how to merge a map/object read from an include file
+into a map/object in place:
+
+.. code-block:: yaml
+
+   targets:
+     human:
+       say: Hello World
+     others:
+       INCLUDE: sayings.yaml
+       MERGE: true
+     martians:
+       say: Greeting Earthlings
+
+Where ``sayings.yaml`` contains:
+
+.. code-block:: yaml
+
+   cat:
+     say: miaow
+   dog:
+     say: woof woof
+
+Running the processor on the first input YAML file will yield the following
+output, where the content of the include file will be inserted into the
+original map/object. Note: map/object keys do not have an order, so items
+from the include file will override items in the original map/object that have
+the same keys, regardless of where the items appear in the original map/object.
+
+.. code-block:: yaml
+
+   targets:
+     human:
+       say: Hello World
+     martians:
+       say: Greeting Earthlings
+     cat:
+       say: miaow
+     dog:
+       say: woof woof
 
 
 Modularisation / Include with Query
 -----------------------------------
 
-Consider an example where we want to include only a subset of the data structure
-from the include file. We can use a `JMESPath <https://jmespath.org/>`_
-query to achieve this.
+Consider an example where we want to include only a subset of the data
+structure from the include file.
+We can use a `JMESPath <https://jmespath.org/>`_ query to achieve this.
 
 For example, we may have something like this in ``hello-root.yaml``:
 
@@ -127,8 +262,9 @@ Consider:
 
    key: ${SWEET_HOME}/sugar.txt
 
-If ``SWEET_HOME`` is defined in the environment and has a value ``/home/sweet``,
-then passing the above input to the processor will give the following output:
+If ``SWEET_HOME`` is defined in the environment and has a value
+``/home/sweet``, then passing the above input to the processor will give the
+following output:
 
 .. code-block:: yaml
 
@@ -149,9 +285,9 @@ On the command line:
    to define new variables or override the value of an existing one.
  - Use the :option:`--undefine=KEY <yp-data --undefine>` (``-U KEY``)
    option to remove a variable.
- - Use the :option:`--no-environment <yp-data --no-environment>` (``-i``) option
-   if you do not want to use any variables defined in the environment for
-   substitution. (So only those specified with
+ - Use the :option:`--no-environment <yp-data --no-environment>` (``-i``)
+   option if you do not want to use any variables defined in the environment
+   for substitution. (So only those specified with
    :option:`--define=KEY=VALUE <yp-data --define>` will work.)
 
 In Python, simply manipulate the :py:attr:`.variable_map` (dict) attribute of
@@ -159,12 +295,87 @@ the relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance. The
 dict is a copy of :py:data:`os.environ` at initialisation.
 
 Finally, if you reference a variable in YAML that is not defined, you will
-normally get an unbound variable error. You can modify this behaviour by setting
-a place holder. On the command line, use the
+normally get an unbound variable error. You can modify this behaviour by
+setting a place holder. On the command line, use the
 :option:`--unbound-placeholder=VALUE <yp-data --unbound-placeholder>`
 option. In Python, set the :py:attr:`.unbound_placeholder` attribute of the
 relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance to a
 string value.
+
+
+String Value Variable Substitution Include Scope
+------------------------------------------------
+
+It is possible to define or override the values of the variables for
+substitution in include files. The scope of the change will be local to the
+include file (and files that it includes). The following is an example of how
+to specify include scope variables.
+
+Suppose we have a file called ``hello.yaml`` with:
+
+.. code-block:: yaml
+
+   hello:
+     - INCLUDE: world.yaml
+       VARIABLES:
+         WORLD_NAME: venus
+     - INCLUDE: world.yaml
+       VARIABLES:
+         WORLD_NAME: mars
+     - INCLUDE: world.yaml
+
+And a file called ``world.yaml`` with:
+
+.. code-block:: yaml
+
+   name: ${WORLD_NAME}
+   is_rocky: true
+
+Running :program:`yp-data --define=WORLD_NAME=earth hello.yaml <yp-data>` will
+give:
+
+.. code-block:: yaml
+
+   hello:
+     - name: venus
+       is_rocky: true
+     - name: mars
+       is_rocky: true
+     - name: earth
+       is_rocky: true
+
+This can even be nested. For example, suppose we have ``main.yaml``:
+
+.. code-block:: yaml
+
+   hello:
+   - INCLUDE: building.yaml
+     VARIABLES:
+       building: Castle
+       car: Porsche
+
+And a file called ``building.yaml`` with:
+
+.. code-block:: yaml
+
+   property: ${building}
+   car:
+     INCLUDE: cars.yaml
+
+And a file called ``cars.yaml`` with:
+
+.. code-block:: yaml
+
+   type: ${car}
+
+Running :program:`yp-data main.yaml <yp-data>` will give:
+
+.. code-block:: yaml
+
+   hello:
+   - property: Castle
+     car:
+       type: Porsche
 
 
 String Value Date-Time Substitution
@@ -176,8 +387,9 @@ similar syntax, for variables names starting with:
  - ``YP_TIME_NOW`` (current time, time when :program:`yp-data` starts running
    or set on initialisation of a
    :py:class:`yamlprocessor.dataprocess.DataProcessor` instance).
- - ``YP_TIME_REF`` (reference time, specified using the :envvar:`YP_TIME_REF_VALUE`
-   environment variable, the :option:`--time-ref=VALUE <yp-data --time-ref>`
+ - ``YP_TIME_REF`` (reference time, specified using
+   the :envvar:`YP_TIME_REF_VALUE` environment variable,
+   the :option:`--time-ref=VALUE <yp-data --time-ref>`
    command line option, or the :py:attr:`.time_ref` attribute of the relevant
    :py:class:`yamlprocessor.dataprocess.DataProcessor` instance in Python). If
    no value is set for the reference time, any reference to the reference time
@@ -275,6 +487,55 @@ YP_TIME_REF=whatever``, then you will get the value ``whatever`` instead of the
 reference time.
 
 
+Cast Value Variable Substitution
+--------------------------------
+
+Environment variables are strings by nature, but YAML scalars can be numbers or
+booleans. Therefore, for non-string scalar values, i.e. integers, floats and
+booleans, the YAML processor utility supports casting the value to the correct
+type before using it for substitution:
+
+``${NAME.int}``
+    Cast value of ``NAME`` to an integer.
+
+``${NAME.float}``
+    Cast value of ``NAME`` to a float.
+
+``${NAME.bool}``
+    Cast value of ``NAME`` to a boolean. Value of ``NAME`` must be one of
+    the supported case insensitive strings: ``yes``, ``true`` and ``1`` will
+    cast to the boolean ``true``, and ``no``, ``false`` and ``0`` will be cast
+    to the boolean ``false``.
+
+For example, suppose we have ``main.yaml``:
+
+.. code-block:: yaml
+
+   version: ${ITEM_VERSION.int}
+   speed: ${ITEM_SPEED.float}
+
+Running
+:program:`yp-data -D ITEM_VERSION=4 -D ITEM_SPEED=3.14 main.yaml <yp-data>`
+will give:
+
+.. code-block:: yaml
+
+   version: 4
+   speed: 3.14
+
+Note: The processor casts integers and floats using Python's built-in
+:py:func:`int` and :py:func:`float` functions. The exact behaviour may change
+with the version of Python you are using.
+
+However, a single value can only have a single substitution with a cast:
+
+.. code-block:: yaml
+
+   - ${NUM2.int}             # good
+   - xyz${NUM2.int}          # bad
+   - ${NUM2.int}${NUM3.int}  # bad
+
+
 Turn Off Processing
 -------------------
 
@@ -298,9 +559,14 @@ Validation with JSON Schema
 ---------------------------
 
 You can tell the processor to look for a JSON schema file and validate
-the current YAML file by adding a ``#!<SCHEMA-URI>`` to the beginning
-of the YAML file. The ``SCHEMA-URI`` is a string pointing to the location
-of a JSON schema file. Some simple assumptions apply:
+the current YAML file by adding a schema association line to the beginning
+of the YAML file, which can be one of:
+
+ - ``#!<SCHEMA-URI>``
+ - ``# yaml-language-server: $schema=<SCHEMA-URI>``
+
+Where the ``SCHEMA-URI`` is a string pointing to the location of a JSON schema
+file.  Some simple assumptions apply:
 
  - If ``SCHEMA-URI`` is a normal URI with a leading scheme,
    e.g., ``https://``, it is used as-is.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Processor &mdash; yamlprocessor 0.4 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Data Processor &mdash; yamlprocessor 0.5 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -39,9 +39,12 @@
 <li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data Processor</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#modularisation-include">Modularisation / Include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modularisation-include-with-merge">Modularisation / Include with Merge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modularisation-include-with-query">Modularisation / Include with Query</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#string-value-variable-substitution">String Value Variable Substitution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#string-value-variable-substitution-include-scope">String Value Variable Substitution Include Scope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#string-value-date-time-substitution">String Value Date-Time Substitution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cast-value-variable-substitution">Cast Value Variable Substitution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#turn-off-processing">Turn Off Processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#validation-with-json-schema">Validation with JSON Schema</a></li>
 </ul>
@@ -131,15 +134,135 @@ The utility will append each <code class="docutils literal notranslate"><span cl
 </li>
 </ul>
 </div></blockquote>
-<p>LIMITATION. It is worth noting that YAML anchors/references will only work
-within files, so an include file will not see anchors in the parent file,
-and vice versa.</p>
+<p>(In Python only.) The <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor..include_dict" title="yamlprocessor.dataprocess.DataProcessor..include_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">include_dict</span></code></a> (dict) attribute of the relevant
+<a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance can be populated
+with keys to match <code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> names. On a matching key, the value will be
+inserted as if it were the content loaded from an include file. The processor
+will always attempt to find a match from this attribute before looking for
+matching include files from the file system. Suppose we use the following
+Python logic with the above files:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yamlprocessor.dataprocess</span> <span class="kn">import</span> <span class="n">DataProcessor</span>
+<span class="c1"># ...</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">()</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">include_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s1">&#39;earth.yaml&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="s1">&#39;targets&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dinosaur&#39;</span><span class="p">]},</span>
+<span class="p">})</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">(</span><span class="s1">&#39;hello.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We’ll get:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">earth</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dinosaur</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mars</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">martian</span><span class="w"></span>
+</pre></div>
+</div>
+<p>LIMITATIONS</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>YAML anchors/references will only work within files, so an include file will
+not see anchors in the parent file, and vice versa.</p></li>
+<li><p>Since INCLUDE is part of a map/dict, keys in the same map/dict that are not
+recognised will not be processed.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="modularisation-include-with-merge">
+<h2>Modularisation / Include with Merge<a class="headerlink" href="#modularisation-include-with-merge" title="Permalink to this headline">¶</a></h2>
+<p>A common use case for include is to merge a list read from an include
+file into the current list, (or similarly to merge a map/object read from an
+include file into the current map/object). We can tell the processor by adding
+the <code class="docutils literal notranslate"><span class="pre">MERGE:</span> <span class="pre">true</span></code> option to the <code class="docutils literal notranslate"><span class="pre">INCLUDE:</span> <span class="pre">...</span></code> instruction.</p>
+<p>The following example shows how to merge a list read from an include file
+into a list in place:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Earth</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Human</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dolphin</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello-list.yaml</span><span class="w"></span>
+<span class="w">    </span><span class="nt">MERGE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mars</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Martians</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">hello-list.yaml</span></code> contains:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Endor</span><span class="w"></span>
+<span class="w">  </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ewok</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dulok</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pandora</span><span class="w"></span>
+<span class="w">  </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Na&#39;vi&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Avatar</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Running the processor on the first input YAML file will yield the following
+output, where the content of the include file will be inserted into the
+original list in place:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Earth</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Human</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dolphin</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Endor</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ewok</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dulok</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pandora</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Na&#39;vi&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Avatar</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mars</span><span class="w"></span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Martians</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The following example shows how to merge a map/object read from an include file
+into a map/object in place:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">human</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hello World</span><span class="w"></span>
+<span class="w">  </span><span class="nt">others</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sayings.yaml</span><span class="w"></span>
+<span class="w">    </span><span class="nt">MERGE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">martians</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Greeting Earthlings</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">sayings.yaml</span></code> contains:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cat</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">miaow</span><span class="w"></span>
+<span class="nt">dog</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">woof woof</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Running the processor on the first input YAML file will yield the following
+output, where the content of the include file will be inserted into the
+original map/object. Note: map/object keys do not have an order, so items
+from the include file will override items in the original map/object that have
+the same keys, regardless of where the items appear in the original map/object.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">targets</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">human</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hello World</span><span class="w"></span>
+<span class="w">  </span><span class="nt">martians</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Greeting Earthlings</span><span class="w"></span>
+<span class="w">  </span><span class="nt">cat</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">miaow</span><span class="w"></span>
+<span class="w">  </span><span class="nt">dog</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">say</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">woof woof</span><span class="w"></span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="modularisation-include-with-query">
 <h2>Modularisation / Include with Query<a class="headerlink" href="#modularisation-include-with-query" title="Permalink to this headline">¶</a></h2>
-<p>Consider an example where we want to include only a subset of the data structure
-from the include file. We can use a <a class="reference external" href="https://jmespath.org/">JMESPath</a>
-query to achieve this.</p>
+<p>Consider an example where we want to include only a subset of the data
+structure from the include file.
+We can use a <a class="reference external" href="https://jmespath.org/">JMESPath</a> query to achieve this.</p>
 <p>For example, we may have something like this in <code class="docutils literal notranslate"><span class="pre">hello-root.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">planets.yaml</span><span class="w"></span>
@@ -185,8 +308,9 @@ and the output will look like:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${SWEET_HOME}/sugar.txt</span><span class="w"></span>
 </pre></div>
 </div>
-<p>If <code class="docutils literal notranslate"><span class="pre">SWEET_HOME</span></code> is defined in the environment and has a value <code class="docutils literal notranslate"><span class="pre">/home/sweet</span></code>,
-then passing the above input to the processor will give the following output:</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">SWEET_HOME</span></code> is defined in the environment and has a value
+<code class="docutils literal notranslate"><span class="pre">/home/sweet</span></code>, then passing the above input to the processor will give the
+following output:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/sweet/sugar.txt</span><span class="w"></span>
 </pre></div>
 </div>
@@ -207,9 +331,9 @@ so shell variable syntax won’t work.</p></li>
 to define new variables or override the value of an existing one.</p></li>
 <li><p>Use the <a class="reference internal" href="cli.html#cmdoption-yp-data-undefine"><code class="xref std std-option docutils literal notranslate"><span class="pre">--undefine=KEY</span></code></a> (<code class="docutils literal notranslate"><span class="pre">-U</span> <span class="pre">KEY</span></code>)
 option to remove a variable.</p></li>
-<li><p>Use the <a class="reference internal" href="cli.html#cmdoption-yp-data-no-environment"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-environment</span></code></a> (<code class="docutils literal notranslate"><span class="pre">-i</span></code>) option
-if you do not want to use any variables defined in the environment for
-substitution. (So only those specified with
+<li><p>Use the <a class="reference internal" href="cli.html#cmdoption-yp-data-no-environment"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-environment</span></code></a> (<code class="docutils literal notranslate"><span class="pre">-i</span></code>)
+option if you do not want to use any variables defined in the environment
+for substitution. (So only those specified with
 <a class="reference internal" href="cli.html#cmdoption-yp-data-define"><code class="xref std std-option docutils literal notranslate"><span class="pre">--define=KEY=VALUE</span></code></a> will work.)</p></li>
 </ul>
 </div></blockquote>
@@ -217,12 +341,71 @@ substitution. (So only those specified with
 the relevant <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance. The
 dict is a copy of <a class="reference external" href="https://python.readthedocs.io/en/latest/library/os.html#os.environ" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.environ</span></code></a> at initialisation.</p>
 <p>Finally, if you reference a variable in YAML that is not defined, you will
-normally get an unbound variable error. You can modify this behaviour by setting
-a place holder. On the command line, use the
+normally get an unbound variable error. You can modify this behaviour by
+setting a place holder. On the command line, use the
 <a class="reference internal" href="cli.html#cmdoption-yp-data-unbound-placeholder"><code class="xref std std-option docutils literal notranslate"><span class="pre">--unbound-placeholder=VALUE</span></code></a>
 option. In Python, set the <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor..unbound_placeholder" title="yamlprocessor.dataprocess.DataProcessor..unbound_placeholder"><code class="xref py py-attr docutils literal notranslate"><span class="pre">unbound_placeholder</span></code></a> attribute of the
 relevant <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance to a
 string value.</p>
+</div>
+<div class="section" id="string-value-variable-substitution-include-scope">
+<h2>String Value Variable Substitution Include Scope<a class="headerlink" href="#string-value-variable-substitution-include-scope" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to define or override the values of the variables for
+substitution in include files. The scope of the change will be local to the
+include file (and files that it includes). The following is an example of how
+to specify include scope variables.</p>
+<p>Suppose we have a file called <code class="docutils literal notranslate"><span class="pre">hello.yaml</span></code> with:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">world.yaml</span><span class="w"></span>
+<span class="w">    </span><span class="nt">VARIABLES</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">WORLD_NAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">venus</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">world.yaml</span><span class="w"></span>
+<span class="w">    </span><span class="nt">VARIABLES</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">WORLD_NAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mars</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">world.yaml</span><span class="w"></span>
+</pre></div>
+</div>
+<p>And a file called <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code> with:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${WORLD_NAME}</span><span class="w"></span>
+<span class="nt">is_rocky</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Running <strong class="program">yp-data --define=WORLD_NAME=earth hello.yaml &lt;yp-data&gt;</strong> will
+give:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">venus</span><span class="w"></span>
+<span class="w">    </span><span class="nt">is_rocky</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mars</span><span class="w"></span>
+<span class="w">    </span><span class="nt">is_rocky</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">earth</span><span class="w"></span>
+<span class="w">    </span><span class="nt">is_rocky</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This can even be nested. For example, suppose we have <code class="docutils literal notranslate"><span class="pre">main.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">building.yaml</span><span class="w"></span>
+<span class="w">  </span><span class="nt">VARIABLES</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">building</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Castle</span><span class="w"></span>
+<span class="w">    </span><span class="nt">car</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Porsche</span><span class="w"></span>
+</pre></div>
+</div>
+<p>And a file called <code class="docutils literal notranslate"><span class="pre">building.yaml</span></code> with:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${building}</span><span class="w"></span>
+<span class="nt">car</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cars.yaml</span><span class="w"></span>
+</pre></div>
+</div>
+<p>And a file called <code class="docutils literal notranslate"><span class="pre">cars.yaml</span></code> with:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${car}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Running <strong class="program">yp-data main.yaml &lt;yp-data&gt;</strong> will give:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Castle</span><span class="w"></span>
+<span class="w">  </span><span class="nt">car</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Porsche</span><span class="w"></span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="string-value-date-time-substitution">
 <h2>String Value Date-Time Substitution<a class="headerlink" href="#string-value-date-time-substitution" title="Permalink to this headline">¶</a></h2>
@@ -233,8 +416,9 @@ similar syntax, for variables names starting with:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">YP_TIME_NOW</span></code> (current time, time when <strong class="program">yp-data</strong> starts running
 or set on initialisation of a
 <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">YP_TIME_REF</span></code> (reference time, specified using the <span class="target" id="index-0"></span><a class="reference internal" href="cli.html#envvar-YP_TIME_REF_VALUE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_REF_VALUE</span></code></a>
-environment variable, the <a class="reference internal" href="cli.html#cmdoption-yp-data-time-ref"><code class="xref std std-option docutils literal notranslate"><span class="pre">--time-ref=VALUE</span></code></a>
+<li><p><code class="docutils literal notranslate"><span class="pre">YP_TIME_REF</span></code> (reference time, specified using
+the <span class="target" id="index-0"></span><a class="reference internal" href="cli.html#envvar-YP_TIME_REF_VALUE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_REF_VALUE</span></code></a> environment variable,
+the <a class="reference internal" href="cli.html#cmdoption-yp-data-time-ref"><code class="xref std std-option docutils literal notranslate"><span class="pre">--time-ref=VALUE</span></code></a>
 command line option, or the <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor..time_ref" title="yamlprocessor.dataprocess.DataProcessor..time_ref"><code class="xref py py-attr docutils literal notranslate"><span class="pre">time_ref</span></code></a> attribute of the relevant
 <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance in Python). If
 no value is set for the reference time, any reference to the reference time
@@ -361,6 +545,45 @@ defined value takes precedence, so if you have already <code class="docutils lit
 <span class="pre">YP_TIME_REF=whatever</span></code>, then you will get the value <code class="docutils literal notranslate"><span class="pre">whatever</span></code> instead of the
 reference time.</p>
 </div>
+<div class="section" id="cast-value-variable-substitution">
+<h2>Cast Value Variable Substitution<a class="headerlink" href="#cast-value-variable-substitution" title="Permalink to this headline">¶</a></h2>
+<p>Environment variables are strings by nature, but YAML scalars can be numbers or
+booleans. Therefore, for non-string scalar values, i.e. integers, floats and
+booleans, the YAML processor utility supports casting the value to the correct
+type before using it for substitution:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">${NAME.int}</span></code></dt><dd><p>Cast value of <code class="docutils literal notranslate"><span class="pre">NAME</span></code> to an integer.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">${NAME.float}</span></code></dt><dd><p>Cast value of <code class="docutils literal notranslate"><span class="pre">NAME</span></code> to a float.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">${NAME.bool}</span></code></dt><dd><p>Cast value of <code class="docutils literal notranslate"><span class="pre">NAME</span></code> to a boolean. Value of <code class="docutils literal notranslate"><span class="pre">NAME</span></code> must be one of
+the supported case insensitive strings: <code class="docutils literal notranslate"><span class="pre">yes</span></code>, <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> will
+cast to the boolean <code class="docutils literal notranslate"><span class="pre">true</span></code>, and <code class="docutils literal notranslate"><span class="pre">no</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> and <code class="docutils literal notranslate"><span class="pre">0</span></code> will be cast
+to the boolean <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</dd>
+</dl>
+<p>For example, suppose we have <code class="docutils literal notranslate"><span class="pre">main.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${ITEM_VERSION.int}</span><span class="w"></span>
+<span class="nt">speed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${ITEM_SPEED.float}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Running
+<strong class="program">yp-data -D ITEM_VERSION=4 -D ITEM_SPEED=3.14 main.yaml &lt;yp-data&gt;</strong>
+will give:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="nt">speed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.14</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Note: The processor casts integers and floats using Python’s built-in
+<code class="xref py py-func docutils literal notranslate"><span class="pre">int()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">float()</span></code> functions. The exact behaviour may change
+with the version of Python you are using.</p>
+<p>However, a single value can only have a single substitution with a cast:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${NUM2.int}</span><span class="w">             </span><span class="c1"># good</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xyz${NUM2.int}</span><span class="w">          </span><span class="c1"># bad</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${NUM2.int}${NUM3.int}</span><span class="w">  </span><span class="c1"># bad</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="turn-off-processing">
 <h2>Turn Off Processing<a class="headerlink" href="#turn-off-processing" title="Permalink to this headline">¶</a></h2>
 <p>If you need to turn off processing of <code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> syntax, you can do:</p>
@@ -386,9 +609,16 @@ you can do:</p>
 <div class="section" id="validation-with-json-schema">
 <h2>Validation with JSON Schema<a class="headerlink" href="#validation-with-json-schema" title="Permalink to this headline">¶</a></h2>
 <p>You can tell the processor to look for a JSON schema file and validate
-the current YAML file by adding a <code class="docutils literal notranslate"><span class="pre">#!&lt;SCHEMA-URI&gt;</span></code> to the beginning
-of the YAML file. The <code class="docutils literal notranslate"><span class="pre">SCHEMA-URI</span></code> is a string pointing to the location
-of a JSON schema file. Some simple assumptions apply:</p>
+the current YAML file by adding a schema association line to the beginning
+of the YAML file, which can be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">#!&lt;SCHEMA-URI&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">yaml-language-server:</span> <span class="pre">$schema=&lt;SCHEMA-URI&gt;</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>Where the <code class="docutils literal notranslate"><span class="pre">SCHEMA-URI</span></code> is a string pointing to the location of a JSON schema
+file.  Some simple assumptions apply:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>If <code class="docutils literal notranslate"><span class="pre">SCHEMA-URI</span></code> is a normal URI with a leading scheme,

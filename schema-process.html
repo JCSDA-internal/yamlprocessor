@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Schema Processor &mdash; yamlprocessor 0.4 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Schema Processor &mdash; yamlprocessor 0.5 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -108,8 +108,8 @@ be invoke with this syntax:</p>
 <p>For this command to work, we need to supply it with some settings
 to tell it where to split up the schema in the syntax:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;OUTPUT-ROOT-SCHEMA-FILENAME&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;OUTPUT-SUB-SCHEMA-FILENAME-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;JMESPATH-1&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OUTPUT-ROOT-SCHEMA-FILENAME&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;JMESPATH-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OUTPUT-SUB-SCHEMA-FILENAME-1&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;And so on&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
@@ -120,8 +120,8 @@ The <a class="reference external" href="https://jmespath.org/">JMESPath</a> synt
 <code class="docutils literal notranslate"><span class="pre">yp-schema</span></code> command where to split JSON schema into
 subschemas. In the example above, we can use the setting:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;hello.schema.json&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;hello-location.schema.json&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;properties.hello.items&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;properties.hello.items&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello-location.schema.json&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -133,18 +133,7 @@ which can be used to validate both <code class="docutils literal notranslate"><s
 <span class="w">            </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">                </span><span class="nt">&quot;oneOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">                    </span><span class="p">{</span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello-location.schema.json&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">                    </span><span class="p">{</span><span class="w"></span>
-<span class="w">                        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                            </span><span class="nt">&quot;INCLUDE&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                                </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">                            </span><span class="p">},</span><span class="w"></span>
-<span class="w">                            </span><span class="nt">&quot;QUERY&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                                </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">                            </span><span class="p">}</span><span class="w"></span>
-<span class="w">                        </span><span class="p">},</span><span class="w"></span>
-<span class="w">                        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;INCLUDE&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">                        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">                    </span><span class="p">}</span><span class="w"></span>
+<span class="w">                    </span><span class="p">{</span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yp-include.schema.json&quot;</span><span class="p">},</span><span class="w"></span>
 <span class="w">                </span><span class="p">]</span><span class="w"></span>
 <span class="w">            </span><span class="p">},</span><span class="w"></span>
 <span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
@@ -176,6 +165,22 @@ which can be used to validate <code class="docutils literal notranslate"><span c
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+<p>You may notice a file called <code class="docutils literal notranslate"><span class="pre">yp-include.schema.json</span></code> in the current
+working directory. This is the sub-schema for the syntax related to the
+<code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> functionality described in <a class="reference internal" href="data-process.html"><span class="doc">Data Processor</span></a>. The file is
+referenced by <code class="docutils literal notranslate"><span class="pre">hello.schema.json</span></code> in the example above.</p>
+<p>The default output location of the file is <code class="docutils literal notranslate"><span class="pre">yp-include.schema.json</span></code>, but you
+can change it by adding an entry for <code class="docutils literal notranslate"><span class="pre">$ref.yp-include.schema.json</span></code> in the
+configuration file. Using the above example configuration file, you can do:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;$ref:yp-include.schema.json&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yp-include.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;properties.hello.items&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello-location.schema.json&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>(Note: <code class="docutils literal notranslate"><span class="pre">$ref:yp-include.schema.json</span></code> is a special entry. It is not a valid
+JMESPath syntax.)</p>
 </div>
 
 
