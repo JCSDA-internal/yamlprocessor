@@ -99,6 +99,108 @@ LIMITATIONS
    recognised will not be processed.
 
 
+Modularisation / Include with Merge
+-----------------------------------
+
+A common use case for include is to merge a list read from an include
+file into the current list, (or similarly to merge a map/object read from an
+include file into the current map/object). We can tell the processor by adding
+the ``MERGE: true`` option to the ``INCLUDE: ...`` instruction.
+
+The following example shows how to merge a list read from an include file
+into a list in place:
+
+.. code-block:: yaml
+
+   hello:
+     - location: Earth
+       targets:
+         - Human
+         - Dolphin
+     - INCLUDE: hello-list.yaml
+       MERGE: true
+     - location: Mars
+       targets:
+         - Martians
+
+Where ``hello-list.yaml`` contains:
+
+.. code-block:: yaml
+
+   - location: Endor
+     targets:
+       - Ewok
+       - Dulok
+   - location: Pandora
+     targets:
+       - "Na'vi"
+       - Avatar
+
+Running the processor on the first input YAML file will yield the following
+output, where the content of the include file will be inserted into the
+original list in place:
+
+.. code-block:: yaml
+
+   hello:
+     - location: Earth
+       targets:
+         - Human
+         - Dolphin
+     - location: Endor
+       targets:
+         - Ewok
+         - Dulok
+     - location: Pandora
+       targets:
+         - "Na'vi"
+         - Avatar
+     - location: Mars
+       targets:
+         - Martians
+
+The following example shows how to merge a map/object read from an include file
+into a map/object in place:
+
+.. code-block:: yaml
+
+   targets:
+     human:
+       say: Hello World
+     others:
+       INCLUDE: sayings.yaml
+       MERGE: true
+     martians:
+       say: Greeting Earthlings
+
+Where ``sayings.yaml`` contains:
+
+.. code-block:: yaml
+
+   cat:
+     say: miaow
+   dog:
+     say: woof woof
+
+Running the processor on the first input YAML file will yield the following
+output, where the content of the include file will be inserted into the
+original map/object. Note: map/object keys do not have an order, so items
+from the include file will override items in the original map/object that have
+the same keys, regardless of where the items appear in the original map/object.
+
+.. code-block:: yaml
+
+   targets:
+     human:
+       say: Hello World
+     martians:
+       say: Greeting Earthlings
+     cat:
+       say: miaow
+     dog:
+       say: woof woof
+
+
 Modularisation / Include with Query
 -----------------------------------
 

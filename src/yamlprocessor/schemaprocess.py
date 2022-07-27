@@ -26,26 +26,7 @@ from .dataprocess import DataProcessor
 
 
 JSON_DUMP_CONFIG = {'indent': 2}
-INCLUDE_SCHEMA = {
-    'properties': {
-        DataProcessor.INCLUDE_KEY: {
-            'type': 'string',
-        },
-        DataProcessor.QUERY_KEY: {
-            'type': 'string',
-        },
-        DataProcessor.VARIABLES_KEY: {
-            'patternProperties': {
-                r'^[A-z_]\w*$': {'type': 'string'},
-            },
-            'additionalProperties': False,
-            'type': 'object',
-        },
-    },
-    'additionalProperties': False,
-    'required': [DataProcessor.INCLUDE_KEY],
-    'type': 'object',
-}
+INCLUDE_SCHEMA = DataProcessor.INCLUDE_SCHEMA
 INCLUDE_SCHEMA_FILENAME = 'yp-include.schema.json'
 
 
