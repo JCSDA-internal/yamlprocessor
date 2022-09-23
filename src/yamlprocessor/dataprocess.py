@@ -281,6 +281,8 @@ class DataProcessor:
         r"_FORMAT_(?P<name>\w+)",
         re.M | re.S)
 
+    UNBOUND_ORIGINAL = 'YP_ORIGINAL'
+
     def __init__(self):
         self.is_process_include = True
         self.is_process_variable = True
@@ -504,7 +506,7 @@ class DataProcessor:
         item: object,
         variable_map: dict = None,
     ) -> object:
-        """Substitute environment variables into a string value.
+        """Substitute (environment) variables into a string value.
 
         Return `item` as-is if not `.is_process_variable` or if `item` is not a
         string.
@@ -516,14 +518,18 @@ class DataProcessor:
         `.unbound_placeholder` is None, raise an `UnboundVariableError`.
 
         If `NAME` is not defined in the `.variable_map` and
-        `.unbound_placeholder` is not None, substitute `NAME` with the value
+        `.unbound_placeholder` equals to the value of
+        `DataProcessor.UNBOUND_ORIGINAL`, then leave the original syntax
+        unchanged.
+
+        If `NAME` is not defined in the `.variable_map` and
+        `.unbound_placeholder` is not `None`, substitute `NAME` with the value
         of `.unbound_placeholder`.
 
         :param item: Item to process. Do nothing if not a str.
         :return: Processed item on success.
         :param variable_map: :py:attr:`.variable_map` in the local scope,
                              may have additional variables.
-
         """
         if not self.is_process_variable or not isinstance(item, str):
             return item
@@ -538,18 +544,21 @@ class DataProcessor:
             match = self.REC_SUBSTITUTE.match(tail)
             if match:
                 groups = match.groupdict()
-                substitute = groups['symbol']
                 if len(groups['escape']) % 2 == 0:
                     if groups['name'] in variable_map:
                         substitute = variable_map[groups['name']]
                     elif groups['name'].startswith('YP_TIME'):
                         substitute = self._process_time_variable(
                             groups['name'])
+                    elif self.unbound_placeholder == self.UNBOUND_ORIGINAL:
+                        substitute = groups['symbol']
                     elif self.unbound_placeholder is not None:
                         substitute = str(self.unbound_placeholder)
                     else:
                         raise UnboundVariableError(groups['name'])
-                if groups['cast']:
+                else:
+                    substitute = groups['symbol']
+                if substitute != groups['symbol'] and groups['cast']:
                     if groups['head'] or tail != item:
                         raise ValueError(
                             f'{item}: bad substitution expression')
@@ -749,7 +758,12 @@ def main(argv=None):
         '--unbound-placeholder',
         metavar='VALUE',
         default=None,
-        help='Substitute an unbound variable with VALUE instead of failing')
+        help=(
+            'Substitute an unbound variable with VALUE instead of failing.'
+            f' Use {DataProcessor.UNBOUND_ORIGINAL} as VALUE to leave the'
+            ' original syntax unchanged on unbound variables.'
+        ),
+    )
     parser.add_argument(
         '--no-process-include',
         dest='is_process_include',

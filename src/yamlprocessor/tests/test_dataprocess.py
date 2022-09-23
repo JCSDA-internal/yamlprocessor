@@ -252,7 +252,7 @@ def test_main_4(tmp_path, yaml):
 
 
 def test_main_5(tmp_path, yaml):
-    """Test main, process variable."""
+    """Test main, process variable, with placeholder."""
     data = ['${GREET} ${PERSON}', '${GREET} ${ALIEN}']
     infilename = tmp_path / 'a.yaml'
     with infilename.open('w') as infile:
@@ -267,6 +267,15 @@ def test_main_5(tmp_path, yaml):
         str(outfilename),
     ])
     assert yaml.load(outfilename.open()) == ['Hello Jo', 'Hello unknown']
+    main([
+        '--no-environment',
+        '-DGREET=Hello',
+        '--define=PERSON=Jo',
+        '--unbound-placeholder=' + DataProcessor.UNBOUND_ORIGINAL,
+        str(infilename),
+        str(outfilename),
+    ])
+    assert yaml.load(outfilename.open()) == ['Hello Jo', 'Hello ${ALIEN}']
 
 
 def test_main_6(tmp_path, yaml):
