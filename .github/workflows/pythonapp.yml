@@ -13,7 +13,7 @@ jobs:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install doc8 flake8 pytest pytest-cov
           python3 -m pip install -r ./requirements.txt
+          python3 -m pip install doc8 flake8 pytest pytest-cov
       - name: Install package
         run: |
           python3 -m pip install .
