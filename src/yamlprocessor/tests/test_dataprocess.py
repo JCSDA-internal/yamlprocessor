@@ -478,6 +478,39 @@ def test_main_13(tmp_path, yaml):
     }
 
 
+def test_main_14(tmp_path, yaml):
+    """Test main, include at root with include-scope variables."""
+    root_data = {
+        'INCLUDE': 'data.yaml',
+        'VARIABLES': {
+            'GREET_ONE': '$GREET $WORLD',
+            'GREET_TWO': '$GREET $PEOPLE',
+        },
+    }
+    data = {
+        'greet-world': '$GREET_ONE',
+        'greet-people': '$GREET_TWO',
+    }
+    infilename = tmp_path / 'root.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(root_data, infile)
+    include_infilename = tmp_path / 'data.yaml'
+    with include_infilename.open('w') as infile:
+        yaml.dump(data, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main([
+        '--define=GREET=Hello',
+        '--define=WORLD=Mars',
+        '--define=PEOPLE=Martians',
+        str(infilename),
+        str(outfilename),
+    ])
+    assert yaml.load(outfilename.open()) == {
+        'greet-world': 'Hello Mars',
+        'greet-people': 'Hello Martians',
+    }
+
+
 def test_main_validate_1(tmp_path, capsys, yaml):
     """Test main, YAML with JSON schema validation."""
     schema = {
