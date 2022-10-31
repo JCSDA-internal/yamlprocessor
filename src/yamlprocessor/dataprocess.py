@@ -320,6 +320,7 @@ class DataProcessor:
                 # Ignore the MERGE flag.
                 data, parent_filenames, variable_map = self.load_include_file(
                     data, parent_filenames, variable_map)[0:3]
+                root = data
             type_of_data = type(data)
             items_iter = None
             skip_keys = set()
@@ -436,6 +437,9 @@ class DataProcessor:
             is_merge = (self.MERGE_KEY in orig_value)
             include_filename = self.process_variable(
                 value[self.INCLUDE_KEY])
+            if self.VARIABLES_KEY in value:
+                for key, val in value[self.VARIABLES_KEY].copy().items():
+                    value[self.VARIABLES_KEY][key] = self.process_variable(val)
             try:
                 loaded_value = self.include_dict[include_filename]
                 filename = include_filename
