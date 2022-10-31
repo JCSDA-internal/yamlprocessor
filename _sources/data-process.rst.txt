@@ -300,7 +300,8 @@ setting a place holder. On the command line, use the
 :option:`--unbound-placeholder=VALUE <yp-data --unbound-placeholder>`
 option. In Python, set the :py:attr:`.unbound_placeholder` attribute of the
 relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance to a
-string value.
+string value. If you want to leave the original syntax unchanged for unbound
+variables, set the placeholder VALUE to ``YP_ORIGINAL``.
 
 
 String Value Variable Substitution Include Scope

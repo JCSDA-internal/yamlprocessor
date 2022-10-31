@@ -42,7 +42,9 @@ See :doc:`data-process` for detail.
 
 .. option:: --unbound-placeholder=VALUE
 
-   Substitute an unbound variable with VALUE instead of failing.
+   Substitute an unbound variable with VALUE instead of failing. Use
+   ``YP_ORIGINAL`` as VALUE to leave the original syntax unchanged on
+   unbound variables.
 
 .. option:: --no-process-include
 
