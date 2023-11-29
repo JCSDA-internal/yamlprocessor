@@ -56,7 +56,8 @@ html_context = {
     'https://github.com/JCSDA-internal/yamlprocessor/blob/HEAD/docs/',
 }
 
-# html_static_path = ['_static']
+html_favicon = 'favicon.ico'
+html_logo = 'yp-logo.svg'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
