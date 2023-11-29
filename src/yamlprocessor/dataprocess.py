@@ -18,19 +18,24 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from contextlib import suppress
 from datetime import datetime
 from errno import ENOENT
+import json
 import logging
 import logging.config
 import os
 from pathlib import Path
 import re
 import sys
-from urllib.parse import urlparse
 
 from dateutil.parser import parse as datetimeparse
 from dateutil.relativedelta import relativedelta
 from dateutil.tz import tzlocal
 import jmespath
 import jsonschema
+try:
+    from referencing import Registry, Resource
+    from referencing.jsonschema import DRAFT202012
+except ImportError:
+    pass  # python < 3.8
 from ruamel.yaml import YAML
 from ruamel.yaml.constructor import ConstructorError
 
@@ -700,21 +705,42 @@ class DataProcessor:
         """
         if not schema_location:
             return
-        schema = {"$ref": schema_location}
-        if not urlparse(schema_location).scheme:
-            schema_path = Path(schema_location)
-            if schema_path.exists():
-                schema = {"$ref": schema_path.absolute().as_uri()}
-            elif self.schema_prefix:
-                schema = {"$ref": self.schema_prefix + schema_location}
         try:
-            jsonschema.validate(schema=schema, instance=data)
+            registry = Registry(retrieve=self.get_schema_file)
+            jsonschema.Draft202012Validator(
+                {
+                    '$schema': 'https://json-schema.org/draft/2020-12/schema',
+                    '$ref': schema_location,
+                },
+                registry=registry,
+            ).validate(data)
+        except NameError:
+            ref = 'file://' + str(self._get_schema_file(schema_location))
+            jsonschema.validate(schema={'$ref': ref}, instance=data)
         except jsonschema.exceptions.ValidationError as exc:
             logging.error(f'not ok {out_file_name}')
             logging.exception(exc)
             raise
-        else:
-            logging.info(f'ok {out_file_name}')
+        logging.info(f'ok {out_file_name}')
+
+    def get_schema_file(self, schema_location: str):
+        schema_path = self._get_schema_file(schema_location)
+        return Resource(
+            contents=json.loads(schema_path.read_text()),
+            specification=DRAFT202012)
+
+    def _get_schema_file(self, schema_location: str):
+        if schema_location.startswith('file://'):
+            schema_location = schema_location.replace('file://', '', 1)
+        schema_path = Path(schema_location)
+        if not schema_path.exists():
+            for prefix in [self.schema_prefix]:  # FIXME
+                if prefix.startswith('file://'):
+                    prefix = prefix.replace('file://', '', 1)
+                if (Path(prefix) / schema_path).exists():
+                    schema_path = Path(prefix) / schema_path
+                    break
+        return schema_path
 
 
 def main(argv=None):
