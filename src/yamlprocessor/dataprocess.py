@@ -244,7 +244,7 @@ class DataProcessor:
             },
             VARIABLES_KEY: {
                 'patternProperties': {
-                    r'^[A-z_]\w*$': {'type': 'string'},
+                    r'^[A-z_]\w*$': {'description': 'any valid variable name'},
                 },
                 'additionalProperties': False,
                 'type': 'object',
@@ -563,7 +563,7 @@ class DataProcessor:
                 else:
                     substitute = groups['symbol']
                 if substitute != groups['symbol'] and groups['cast']:
-                    if groups['head'] or tail != item:
+                    if groups['head'] or groups['tail'] or tail != item:
                         raise ValueError(
                             f'{item}: bad substitution expression')
                     try:
@@ -586,6 +586,9 @@ class DataProcessor:
                     except ValueError:
                         raise ValueError(
                             f'{item}: bad substitution value: {substitute}')
+                    ret = substitute
+                    tail = ''
+                elif not any(groups[k] for k in ('head', 'escape', 'tail')):
                     ret = substitute
                     tail = ''
                 else:

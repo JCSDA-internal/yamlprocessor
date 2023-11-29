@@ -304,8 +304,8 @@ string value. If you want to leave the original syntax unchanged for unbound
 variables, set the placeholder VALUE to ``YP_ORIGINAL``.
 
 
-String Value Variable Substitution Include Scope
-------------------------------------------------
+Variable Substitution Include Scope
+-----------------------------------
 
 It is possible to define or override the values of the variables for
 substitution in include files. The scope of the change will be local to the
@@ -378,6 +378,44 @@ Running :program:`yp-data main.yaml <yp-data>` will give:
      car:
        type: Porsche
 
+It is possible to pass variables of any type via the include scope, and
+reference them in a substitution. However, only variables of string type can be
+used in substitution that involves a string concatenation.
+
+Consider:
+
+.. code-block:: yaml
+
+   hello:
+   - INCLUDE: greet.yaml
+     VARIABLES:
+       HELLO: greet
+       TARGETS:
+         - Humans
+         - Martians
+
+
+You can reference ``TARGETS`` in ``greet.yaml`` on its own but not in a string
+substitution.
+
+For example, this causes a ``ValueError``:
+
+.. code-block:: yaml
+
+   # greet.yaml
+   say:
+     - ${HELLO} ${TARGETS}  # Bad, cannot concatenate a list to a string
+     # ...
+
+But this is fine:
+
+.. code-block:: yaml
+
+   # greet.yaml
+   say:
+     - hello: ${HELLO}
+       targets: ${TARGETS}  # Good, value used on its own
+     # ...
 
 String Value Date-Time Substitution
 -----------------------------------

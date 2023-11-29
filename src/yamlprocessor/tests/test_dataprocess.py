@@ -511,6 +511,48 @@ def test_main_14(tmp_path, yaml):
     }
 
 
+def test_main_15(tmp_path, yaml):
+    """Test main, include file with variables as anchor."""
+    yaml_0 = """
+hello: &worlds
+  earth: sapiens
+  mars: martians
+greet:
+  INCLUDE: in_1.yaml
+  VARIABLES:
+    WORLDS: *worlds
+"""
+    yaml_1 = """
+known_worlds: $WORLDS
+other_worlds:
+  pandora: Na'vi people
+  endor: ewoks
+"""
+    infilename = tmp_path / 'in_0.yaml'
+    with infilename.open('w') as infile:
+        infile.write(yaml_0)
+    with (tmp_path / 'in_1.yaml').open('w') as infile:
+        infile.write(yaml_1)
+    outfilename = tmp_path / 'out.yaml'
+    main([str(infilename), str(outfilename)])
+    assert yaml.load(outfilename.open()) == {
+        'hello': {
+            'earth': 'sapiens',
+            'mars': 'martians',
+        },
+        'greet': {
+            'known_worlds': {
+                'earth': 'sapiens',
+                'mars': 'martians',
+            },
+            'other_worlds': {
+                'pandora': 'Na\'vi people',
+                'endor': 'ewoks',
+            },
+        },
+    }
+
+
 def test_main_validate_1(tmp_path, capsys, yaml):
     """Test main, YAML with JSON schema validation."""
     schema = {
