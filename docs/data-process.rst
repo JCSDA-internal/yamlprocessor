@@ -414,7 +414,7 @@ But this is fine:
    # greet.yaml
    say:
      - hello: ${HELLO}
-       taregts: ${TARGETS}  # Good, value used on its own
+       targets: ${TARGETS}  # Good, value used on its own
      # ...
 
 String Value Date-Time Substitution
