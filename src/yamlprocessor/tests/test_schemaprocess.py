@@ -1,6 +1,12 @@
 import json
+from pathlib import Path
 
 import jsonschema
+try:
+    from referencing import Registry, Resource
+    from referencing.jsonschema import DRAFT202012
+except ImportError:
+    pass  # python < 3.8
 
 from ..schemaprocess import INCLUDE_SCHEMA, INCLUDE_SCHEMA_FILENAME, main
 
@@ -75,17 +81,8 @@ def test_main_one(monkeypatch, tmp_path):
         ('schema-root.json', SAMPLE_MAIN_ONE_INC),
         ('schema-a.json', SAMPLE_TESTING),
     ):
-        try:
-            jsonschema.validate(
-                schema={
-                    '$ref': (tmp_path / schema_filename).absolute().as_uri()
-                },
-                instance=sample_data,
-            )
-        except jsonschema.exceptions.ValidationError as exc:
-            assert False, f"{schema_filename} does not validate data:\n{exc}"
-        else:
-            assert True, f"{schema_filename} works OK with data"
+        assert_jsonschema_validate(
+            (tmp_path / schema_filename).absolute().as_uri(), sample_data)
 
 
 def test_main_three(monkeypatch, tmp_path):
@@ -189,14 +186,40 @@ def test_main_three(monkeypatch, tmp_path):
         ('schema-b.json', SAMPLE_EXAMINING),
         ('schema-c.json', SAMPLE_EXAMINING_NAME_ONE),
     ):
-        try:
-            jsonschema.validate(
-                schema={
-                    '$ref': (tmp_path / schema_filename).absolute().as_uri()
-                },
-                instance=sample_data,
-            )
-        except jsonschema.exceptions.ValidationError as exc:
-            assert False, f"{schema_filename} does not validate data:\n{exc}"
-        else:
-            assert True, f"{schema_filename} works OK with data"
+        assert_jsonschema_validate(
+            (tmp_path / schema_filename).absolute().as_uri(), sample_data)
+
+
+def assert_jsonschema_validate(schema_uri, sample_data):
+    """Helper to assert schema can be used to validate sample data."""
+    try:
+        registry = Registry(retrieve=get_schema_file)
+        jsonschema.Draft202012Validator(
+            {
+                '$schema': 'https://json-schema.org/draft/2020-12/schema',
+                '$ref': schema_uri
+            },
+            registry=registry,
+        ).validate(sample_data)
+    except NameError:
+        ref = 'file://' + str(_get_schema_file(schema_uri))
+        jsonschema.validate(schema={'$ref': ref}, instance=sample_data)
+    except jsonschema.exceptions.ValidationError as exc:
+        assert False, f"{schema_uri} does not validate data:\n{exc}"
+    else:
+        assert True, f"{schema_uri} works OK with data"
+
+
+def get_schema_file(schema_location: str):
+    """Helper to retrieve a local schema file as Resource."""
+    schema_path = _get_schema_file(schema_location)
+    return Resource(
+        contents=json.loads(schema_path.read_text()),
+        specification=DRAFT202012)
+
+
+def _get_schema_file(schema_location: str):
+    """Helper to retrieve a local schema file."""
+    if schema_location.startswith('file://'):
+        schema_location = schema_location.replace('file://', '', 1)
+    return Path(schema_location)

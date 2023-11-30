@@ -556,6 +556,7 @@ other_worlds:
 def test_main_validate_1(tmp_path, capsys, yaml):
     """Test main, YAML with JSON schema validation."""
     schema = {
+        '$schema': 'https://json-schema.org/draft/2020-12/schema',
         'type': 'object',
         'properties': {'hello': {'type': 'string'}},
         'required': ['hello'],
