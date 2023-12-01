@@ -1,89 +1,48 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Python API &mdash; yamlprocessor 0.5.1 documentation</title>
-  
-
-  
-  
-  
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API &mdash; yamlprocessor 0.5.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+        <script src="_static/documentation_options.js?v=8e576371"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Command Line Reference" href="cli.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> yamlprocessor
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            yamlprocessor
+              <img src="_static/yp-logo.svg" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
@@ -128,72 +87,34 @@
 </li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">yamlprocessor</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>Python API</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python API</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="https://github.com/JCSDA-internal/yamlprocessor/blob/HEAD/docs/api.rst">View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="python-api">
-<h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this heading">¶</a></h1>
+<h1>Python API<a class="headerlink" href="#python-api" title="Link to this heading">¶</a></h1>
 <section id="module-yamlprocessor.dataprocess">
-<span id="yamlprocessor-dataprocess"></span><h2>yamlprocessor.dataprocess<a class="headerlink" href="#module-yamlprocessor.dataprocess" title="Permalink to this heading">¶</a></h2>
+<span id="yamlprocessor-dataprocess"></span><h2>yamlprocessor.dataprocess<a class="headerlink" href="#module-yamlprocessor.dataprocess" title="Link to this heading">¶</a></h2>
 <p>Process includes and variable substitutions in a YAML file.</p>
 <p>For each value <code class="docutils literal notranslate"><span class="pre">{&quot;INCLUDE&quot;:</span> <span class="pre">&quot;filename.yaml&quot;}</span></code>, load content from include file
 and substitute the value with the content of the include file.</p>
@@ -205,7 +126,7 @@ substitute with value of corresponding date-time string.</p>
 <code class="docutils literal notranslate"><span class="pre">#!&lt;SCHEMA-URI&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">yaml-language-server:</span> <span class="pre">$schema=&lt;SCHEMA-URI&gt;</span></code> line.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">DataProcessor</span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">DataProcessor</span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor" title="Link to this definition">¶</a></dt>
 <dd><p>Process YAML and compatible data structure.</p>
 <p>Import sub-data-structure from include files.
 Process variable substitution in string values.
@@ -213,52 +134,52 @@ Process date-time substitution in string values.
 Validate against JSON schema.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..is_process_include">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">is_process_include</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#bool" title="(in Python v3.7)"><span class="pre">bool</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..is_process_include" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">is_process_include</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#bool" title="(in Python v3.7)"><span class="pre">bool</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..is_process_include" title="Link to this definition">¶</a></dt>
 <dd><p>Turn on/off include file processing.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..is_process_variable">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">is_process_variable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#bool" title="(in Python v3.7)"><span class="pre">bool</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..is_process_variable" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">is_process_variable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#bool" title="(in Python v3.7)"><span class="pre">bool</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..is_process_variable" title="Link to this definition">¶</a></dt>
 <dd><p>Turn on/off variable substitution.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..include_dict">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">include_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..include_dict" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">include_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..include_dict" title="Link to this definition">¶</a></dt>
 <dd><p>Dictonary for values that can be substituted for include.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..include_paths">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">include_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..include_paths" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">include_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..include_paths" title="Link to this definition">¶</a></dt>
 <dd><p>Locations for searching include files. Default is the value of the
 <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_INCLUDE_PATH</span></code> environment variable split into a list.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..schema_prefix">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">schema_prefix</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">os.getenv(&quot;YP_SCHEMA_PREFIX&quot;)</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..schema_prefix" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">schema_prefix</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">os.getenv(&quot;YP_SCHEMA_PREFIX&quot;)</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..schema_prefix" title="Link to this definition">¶</a></dt>
 <dd><p>Prefix for JSON schema specified as non-existing relative paths.
 See also <span class="target" id="index-1"></span><a class="reference internal" href="cli.html#envvar-YP_SCHEMA_PREFIX"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_SCHEMA_PREFIX</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..time_formats">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">time_formats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'':</span> <span class="pre">'%FT%T%z'}</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_formats" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">time_formats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'':</span> <span class="pre">'%FT%T%z'}</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_formats" title="Link to this definition">¶</a></dt>
 <dd><p>Default and named time formats.
 See also <span class="target" id="index-2"></span><a class="reference internal" href="cli.html#envvar-YP_TIME_FORMAT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_FORMAT</span></code></a> and <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_FORMAT_</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..time_now">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">time_now</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><span class="pre">datetime.datetime</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_now" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">time_now</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><span class="pre">datetime.datetime</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_now" title="Link to this definition">¶</a></dt>
 <dd><p>Date-time at instance initialisation.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..time_ref">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">time_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><span class="pre">datetime.datetime</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_ref" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">time_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><span class="pre">datetime.datetime</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..time_ref" title="Link to this definition">¶</a></dt>
 <dd><p>Reference date-time. Default is the value of the
 <span class="target" id="index-4"></span><a class="reference internal" href="cli.html#envvar-YP_SCHEMA_PREFIX"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_SCHEMA_PREFIX</span></code></a> environment variable as
 <a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or <a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor..time_now" title="yamlprocessor.dataprocess.DataProcessor..time_now"><code class="xref py py-attr docutils literal notranslate"><span class="pre">time_now</span></code></a> if the environment
@@ -267,25 +188,25 @@ variable is not defined.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..variable_map">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">variable_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">os.environ</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..variable_map" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">variable_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">os.environ</span></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..variable_map" title="Link to this definition">¶</a></dt>
 <dd><p>Mapping for variable substitutions.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..unbound_placeholder">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">unbound_placeholder</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..unbound_placeholder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">unbound_placeholder</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..unbound_placeholder" title="Link to this definition">¶</a></dt>
 <dd><p>Value to substitute for unbound variables.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..INCLUDE_SCHEMA">
-<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">INCLUDE_SCHEMA</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..INCLUDE_SCHEMA" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">INCLUDE_SCHEMA</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..INCLUDE_SCHEMA" title="Link to this definition">¶</a></dt>
 <dd><p>(Class) The schema of the INCLUDE syntax.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.get_filename">
-<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.get_filename" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.get_filename" title="Link to this definition">¶</a></dt>
 <dd><p>Return absolute path of filename.</p>
 <p>If <cite>filename</cite> is a relative path, look for the file but looking in the
 directories containing the parent files, then the current working
@@ -302,7 +223,7 @@ directory, then each path in <cite>.include_paths</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.load_file">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_file" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_file" title="Link to this definition">¶</a></dt>
 <dd><p>Load content of (YAML) file into a data structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -316,7 +237,7 @@ directory, then each path in <cite>.include_paths</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.load_file_schema">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_file_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_file_schema" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_file_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_file_schema" title="Link to this definition">¶</a></dt>
 <dd><p>Load schema location from the schema association line of file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -330,7 +251,7 @@ directory, then each path in <cite>.include_paths</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.load_include_file">
-<span class="sig-name descname"><span class="pre">load_include_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#tuple" title="(in Python v3.7)"><span class="pre">tuple</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_include_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">load_include_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#tuple" title="(in Python v3.7)"><span class="pre">tuple</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.load_include_file" title="Link to this definition">¶</a></dt>
 <dd><p>Load data if value indicates an include file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -346,7 +267,7 @@ may have additional variables.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.process_data">
-<span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_data" title="Link to this definition">¶</a></dt>
 <dd><p>Process includes in input file and dump results in output file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -360,7 +281,7 @@ may have additional variables.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.process_variable">
-<span class="sig-name descname"><span class="pre">process_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/typing.html#typing.Optional" title="(in Python v3.7)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_variable" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">process_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#dict" title="(in Python v3.7)"><span class="pre">dict</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_variable" title="Link to this definition">¶</a></dt>
 <dd><p>Substitute (environment) variables into a string value.</p>
 <p>Return <cite>item</cite> as-is if not <cite>.is_process_variable</cite> or if <cite>item</cite> is not a
 string.</p>
@@ -391,7 +312,7 @@ may have additional variables.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.validate_data">
-<span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.validate_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/functions.html#object" title="(in Python v3.7)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.validate_data" title="Link to this definition">¶</a></dt>
 <dd><p>Attempt to find the schema and use it to validate data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -407,13 +328,13 @@ may have additional variables.</p></li>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.UnboundVariableError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">UnboundVariableError</span></span><a class="headerlink" href="#yamlprocessor.dataprocess.UnboundVariableError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">UnboundVariableError</span></span><a class="headerlink" href="#yamlprocessor.dataprocess.UnboundVariableError" title="Link to this definition">¶</a></dt>
 <dd><p>An error raised on attempt to substitute an unbound variable.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.configure_basic_logging">
-<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">configure_basic_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.configure_basic_logging" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">configure_basic_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.configure_basic_logging" title="Link to this definition">¶</a></dt>
 <dd><p>Configure basic logging, suitable for most CLI applications.</p>
 <p>Basic no-frill format.
 Stream handler prints message on STDERR.</p>
@@ -428,26 +349,26 @@ Stream handler prints message on STDERR.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.construct_yaml_timestamp">
-<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">construct_yaml_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.construct_yaml_timestamp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">construct_yaml_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.construct_yaml_timestamp" title="Link to this definition">¶</a></dt>
 <dd><p>Return a method to add to the YAML constructor to parse datetime.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.get_represent_datetime">
-<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">get_represent_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.get_represent_datetime" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">get_represent_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.get_represent_datetime" title="Link to this definition">¶</a></dt>
 <dd><p>Return a method to add to the YAML representer to represent datetime.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.strftime_with_colon_z">
-<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">strftime_with_colon_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dto</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><span class="pre">datetime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.strftime_with_colon_z" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">strftime_with_colon_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dto</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><span class="pre">datetime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.strftime_with_colon_z" title="Link to this definition">¶</a></dt>
 <dd><p>Wrap dto.strftime to support %:z, %::z and %:::z format code.</p>
 <p>Always use Z for UTC - it is short and recognised by any parser.</p>
 </dd></dl>
 
 </section>
 <section id="module-yamlprocessor.schemaprocess">
-<span id="yamlprocessor-schemaprocess"></span><h2>yamlprocessor.schemaprocess<a class="headerlink" href="#module-yamlprocessor.schemaprocess" title="Permalink to this heading">¶</a></h2>
+<span id="yamlprocessor-schemaprocess"></span><h2>yamlprocessor.schemaprocess<a class="headerlink" href="#module-yamlprocessor.schemaprocess" title="Link to this heading">¶</a></h2>
 <p>Modularise a JSON schema</p>
 <p>Modularise a JSON schema and allows it to accept a data structure that can be
 composed of include files.</p>
@@ -464,7 +385,7 @@ and the values are sub-schema break point locations (expressed as
 <a class="reference external" href="https://jmespath.org/">JMESPath</a> format) in the input JSON schema document.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="yamlprocessor.schemaprocess.schema_process">
-<span class="sig-prename descclassname"><span class="pre">yamlprocessor.schemaprocess.</span></span><span class="sig-name descname"><span class="pre">schema_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.schemaprocess.schema_process" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">yamlprocessor.schemaprocess.</span></span><span class="sig-name descname"><span class="pre">schema_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.schemaprocess.schema_process" title="Link to this definition">¶</a></dt>
 <dd><p>Process schema to handle includes according to configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -481,49 +402,32 @@ and the values are sub-schema break point locations (expressed as
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="cli.html" class="btn btn-neutral float-left" title="Command Line Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli.html" class="btn btn-neutral float-left" title="Command Line Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright British Crown (Met Office) &amp; JCSDA &amp; Contributors
-
-    </p>
+    <p>&#169; Copyright British Crown (Met Office) &amp; JCSDA &amp; Contributors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

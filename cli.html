@@ -1,90 +1,49 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Command Line Reference &mdash; yamlprocessor 0.5.1 documentation</title>
-  
-
-  
-  
-  
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Line Reference &mdash; yamlprocessor 0.5.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+        <script src="_static/documentation_options.js?v=8e576371"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Python API" href="api.html" />
     <link rel="prev" title="Schema Processor" href="schema-process.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> yamlprocessor
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            yamlprocessor
+              <img src="_static/yp-logo.svg" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
@@ -100,117 +59,79 @@
 <li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">yamlprocessor</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>Command Line Reference</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command Line Reference</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="https://github.com/JCSDA-internal/yamlprocessor/blob/HEAD/docs/cli.rst">View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="command-line-reference">
-<h1>Command Line Reference<a class="headerlink" href="#command-line-reference" title="Permalink to this heading">¶</a></h1>
+<h1>Command Line Reference<a class="headerlink" href="#command-line-reference" title="Link to this heading">¶</a></h1>
 <section id="yp-data">
-<h2>yp-data<a class="headerlink" href="#yp-data" title="Permalink to this heading">¶</a></h2>
+<h2>yp-data<a class="headerlink" href="#yp-data" title="Link to this heading">¶</a></h2>
 <p>Usage:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-data <span class="o">[</span>options<span class="o">]</span> input-file-name output-file-name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>input-file-name<span class="w"> </span>output-file-name
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="data-process.html"><span class="doc">Data Processor</span></a> for detail.</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-arg-input-file-name">
-<span class="sig-name descname"><span class="pre">input-file-name</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-input-file-name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">input-file-name</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-input-file-name" title="Link to this definition">¶</a></dt>
 <dd><p>Name of an input file. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> to read from STDIN.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-arg-output-file-name">
-<span class="sig-name descname"><span class="pre">output-file-name</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-output-file-name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">output-file-name</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-output-file-name" title="Link to this definition">¶</a></dt>
 <dd><p>Name of an output file. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> to write to STDOUT.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-include">
-<span id="cmdoption-yp-data-I"></span><span id="cmdoption-yp-data-i"></span><span class="sig-name descname"><span class="pre">--include</span></span><span class="sig-prename descclassname"><span class="pre">=DIR</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-I</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-yp-data-include" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-data-I"></span><span class="sig-name descname"><span class="pre">--include</span></span><span class="sig-prename descclassname"><span class="pre">=DIR</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-I</span></span><span class="sig-prename descclassname"> <span class="pre">DIR</span></span><a class="headerlink" href="#cmdoption-yp-data-include" title="Link to this definition">¶</a></dt>
 <dd><p>Add search locations for item specified as relative paths.
 See also <span class="target" id="index-0"></span><a class="reference internal" href="#envvar-YP_INCLUDE_PATHS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_INCLUDE_PATHS</span></code></a>.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-define">
-<span id="cmdoption-yp-data-D"></span><span id="cmdoption-yp-data-d"></span><span class="sig-name descname"><span class="pre">--define</span></span><span class="sig-prename descclassname"><span class="pre">=KEY=VALUE</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-D</span></span><span class="sig-prename descclassname"> <span class="pre">KEY=VALUE</span></span><a class="headerlink" href="#cmdoption-yp-data-define" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-data-D"></span><span class="sig-name descname"><span class="pre">--define</span></span><span class="sig-prename descclassname"><span class="pre">=KEY=VALUE</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-D</span></span><span class="sig-prename descclassname"> <span class="pre">KEY=VALUE</span></span><a class="headerlink" href="#cmdoption-yp-data-define" title="Link to this definition">¶</a></dt>
 <dd><p>Map KEY to VALUE for variable substitutions.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-undefine">
-<span id="cmdoption-yp-data-U"></span><span id="cmdoption-yp-data-u"></span><span class="sig-name descname"><span class="pre">--undefine</span></span><span class="sig-prename descclassname"><span class="pre">=KEY</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-U</span></span><span class="sig-prename descclassname"> <span class="pre">KEY</span></span><a class="headerlink" href="#cmdoption-yp-data-undefine" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-data-U"></span><span class="sig-name descname"><span class="pre">--undefine</span></span><span class="sig-prename descclassname"><span class="pre">=KEY</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-U</span></span><span class="sig-prename descclassname"> <span class="pre">KEY</span></span><a class="headerlink" href="#cmdoption-yp-data-undefine" title="Link to this definition">¶</a></dt>
 <dd><p>Unmap KEY for variable substitutions.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-no-environment">
-<span id="cmdoption-yp-data-0"></span><span class="sig-name descname"><span class="pre">--no-environment</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-no-environment" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-data-i"></span><span class="sig-name descname"><span class="pre">--no-environment</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-no-environment" title="Link to this definition">¶</a></dt>
 <dd><p>Do not use environment variables in variable substitutions.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-unbound-placeholder">
-<span class="sig-name descname"><span class="pre">--unbound-placeholder</span></span><span class="sig-prename descclassname"><span class="pre">=VALUE</span></span><a class="headerlink" href="#cmdoption-yp-data-unbound-placeholder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">--unbound-placeholder</span></span><span class="sig-prename descclassname"><span class="pre">=VALUE</span></span><a class="headerlink" href="#cmdoption-yp-data-unbound-placeholder" title="Link to this definition">¶</a></dt>
 <dd><p>Substitute an unbound variable with VALUE instead of failing. Use
 <code class="docutils literal notranslate"><span class="pre">YP_ORIGINAL</span></code> as VALUE to leave the original syntax unchanged on
 unbound variables.</p>
@@ -218,79 +139,79 @@ unbound variables.</p>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-no-process-include">
-<span class="sig-name descname"><span class="pre">--no-process-include</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-no-process-include" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">--no-process-include</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-no-process-include" title="Link to this definition">¶</a></dt>
 <dd><p>Do not process include file instructions.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-no-process-variable">
-<span class="sig-name descname"><span class="pre">--no-process-variable</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-no-process-variable" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">--no-process-variable</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-no-process-variable" title="Link to this definition">¶</a></dt>
 <dd><p>Do not process variable substitutions.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-schema-prefix">
-<span class="sig-name descname"><span class="pre">--schema-prefix</span></span><span class="sig-prename descclassname"><span class="pre">=PREFIX</span></span><a class="headerlink" href="#cmdoption-yp-data-schema-prefix" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">--schema-prefix</span></span><span class="sig-prename descclassname"><span class="pre">=PREFIX</span></span><a class="headerlink" href="#cmdoption-yp-data-schema-prefix" title="Link to this definition">¶</a></dt>
 <dd><p>Prefix for relative path schemas. See also <span class="target" id="index-1"></span><a class="reference internal" href="#envvar-YP_SCHEMA_PREFIX"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_SCHEMA_PREFIX</span></code></a>.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-time-format">
-<span id="cmdoption-yp-data-time-format"></span><span class="sig-name descname"><span class="pre">--time-format</span></span><span class="sig-prename descclassname"><span class="pre">=NAME=FORMAT</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--time-format</span></span><span class="sig-prename descclassname"><span class="pre">=FORMAT</span></span><a class="headerlink" href="#cmdoption-yp-data-time-format" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-data-time-format"></span><span class="sig-name descname"><span class="pre">--time-format</span></span><span class="sig-prename descclassname"><span class="pre">=NAME=FORMAT</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--time-format</span></span><span class="sig-prename descclassname"><span class="pre">=FORMAT</span></span><a class="headerlink" href="#cmdoption-yp-data-time-format" title="Link to this definition">¶</a></dt>
 <dd><p>Format for date-time string substitutions.
 See also <span class="target" id="index-2"></span><a class="reference internal" href="#envvar-YP_TIME_FORMAT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_FORMAT</span></code></a> and <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_FORMAT_</span></code>.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-data-time-ref">
-<span class="sig-name descname"><span class="pre">--time-ref</span></span><span class="sig-prename descclassname"><span class="pre">=TIME</span></span><a class="headerlink" href="#cmdoption-yp-data-time-ref" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">--time-ref</span></span><span class="sig-prename descclassname"><span class="pre">=TIME</span></span><a class="headerlink" href="#cmdoption-yp-data-time-ref" title="Link to this definition">¶</a></dt>
 <dd><p>Reference value for date-time substitutions.
 See also <span class="target" id="index-4"></span><a class="reference internal" href="#envvar-YP_TIME_REF_VALUE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_TIME_REF_VALUE</span></code></a>.</p>
 </dd></dl>
 
 </section>
 <section id="yp-schema">
-<h2>yp-schema<a class="headerlink" href="#yp-schema" title="Permalink to this heading">¶</a></h2>
+<h2>yp-schema<a class="headerlink" href="#yp-schema" title="Link to this heading">¶</a></h2>
 <p>Usage:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-schema SCHEMA-FILE CONFIG-FILE
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-schema<span class="w"> </span>SCHEMA-FILE<span class="w"> </span>CONFIG-FILE
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="schema-process.html"><span class="doc">Schema Processor</span></a> for detail.</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-schema-arg-SCHEMA-FILE">
-<span id="cmdoption-yp-schema-arg-schema-file"></span><span class="sig-name descname"><span class="pre">SCHEMA-FILE</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-schema-arg-SCHEMA-FILE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">SCHEMA-FILE</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-schema-arg-SCHEMA-FILE" title="Link to this definition">¶</a></dt>
 <dd><p>Name of the JSON schema file to modularise.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-schema-arg-CONFIG-FILE">
-<span id="cmdoption-yp-schema-arg-config-file"></span><span class="sig-name descname"><span class="pre">CONFIG-FILE</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-schema-arg-CONFIG-FILE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CONFIG-FILE</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-schema-arg-CONFIG-FILE" title="Link to this definition">¶</a></dt>
 <dd><p>Name of the configuration file.</p>
 </dd></dl>
 
 </section>
 <section id="common-options">
-<h2>Common Options<a class="headerlink" href="#common-options" title="Permalink to this heading">¶</a></h2>
+<h2>Common Options<a class="headerlink" href="#common-options" title="Link to this heading">¶</a></h2>
 <p>The following options apply to both <strong class="program">yp-data</strong> and <strong class="program">yp-schema</strong>
 commands.</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-help">
-<span id="cmdoption-yp-h"></span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-help" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-h"></span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-help" title="Link to this definition">¶</a></dt>
 <dd><p>Show help message and exit.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-version">
-<span id="cmdoption-yp-V"></span><span id="cmdoption-yp-v"></span><span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-V</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-version" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-yp-V"></span><span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-V</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-version" title="Link to this definition">¶</a></dt>
 <dd><p>Print version and exit.</p>
 </dd></dl>
 
 </section>
 <section id="environment-variables">
-<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this heading">¶</a></h2>
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">¶</a></h2>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-YP_INCLUDE_PATHS">
-<span class="sig-name descname"><span class="pre">YP_INCLUDE_PATHS</span></span><a class="headerlink" href="#envvar-YP_INCLUDE_PATHS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">YP_INCLUDE_PATHS</span></span><a class="headerlink" href="#envvar-YP_INCLUDE_PATHS" title="Link to this definition">¶</a></dt>
 <dd><p>Set the search path for include files (that are specified as relative
 locations). Expect a list of folders/directories in the same syntax as
 a <code class="docutils literal notranslate"><span class="pre">PATH</span></code> like variable on the relevant platform. (E.g., a colon separated
@@ -300,28 +221,28 @@ See <a class="reference internal" href="data-process.html#modularisation-include
 
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-YP_SCHEMA_PREFIX">
-<span class="sig-name descname"><span class="pre">YP_SCHEMA_PREFIX</span></span><a class="headerlink" href="#envvar-YP_SCHEMA_PREFIX" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">YP_SCHEMA_PREFIX</span></span><a class="headerlink" href="#envvar-YP_SCHEMA_PREFIX" title="Link to this definition">¶</a></dt>
 <dd><p>Set a prefix for relative locations to JSON schema files.
 See <a class="reference internal" href="data-process.html#validation-with-json-schema"><span class="std std-ref">Validation with JSON Schema</span></a> for more info.</p>
 </dd></dl>
 
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-YP_TIME_FORMAT">
-<span class="sig-name descname"><span class="pre">YP_TIME_FORMAT</span></span><a class="headerlink" href="#envvar-YP_TIME_FORMAT" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">YP_TIME_FORMAT</span></span><a class="headerlink" href="#envvar-YP_TIME_FORMAT" title="Link to this definition">¶</a></dt>
 <dd><p>Set the default time format.
 See <a class="reference internal" href="data-process.html#string-value-date-time-substitution"><span class="std std-ref">String Value Date-Time Substitution</span></a> for more info.</p>
 </dd></dl>
 
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-YP_TIME_FORMAT_-NAME">
-<span class="sig-name descname"><span class="pre">YP_TIME_FORMAT_&lt;NAME&gt;</span></span><a class="headerlink" href="#envvar-YP_TIME_FORMAT_-NAME" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">YP_TIME_FORMAT_&lt;NAME&gt;</span></span><a class="headerlink" href="#envvar-YP_TIME_FORMAT_-NAME" title="Link to this definition">¶</a></dt>
 <dd><p>Set a named time format.
 See <a class="reference internal" href="data-process.html#string-value-date-time-substitution"><span class="std std-ref">String Value Date-Time Substitution</span></a> for more info.</p>
 </dd></dl>
 
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-YP_TIME_REF_VALUE">
-<span class="sig-name descname"><span class="pre">YP_TIME_REF_VALUE</span></span><a class="headerlink" href="#envvar-YP_TIME_REF_VALUE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">YP_TIME_REF_VALUE</span></span><a class="headerlink" href="#envvar-YP_TIME_REF_VALUE" title="Link to this definition">¶</a></dt>
 <dd><p>Set the reference time. Expect an ISO-8601 compliant date-time string.
 See <a class="reference internal" href="data-process.html#string-value-date-time-substitution"><span class="std std-ref">String Value Date-Time Substitution</span></a> for more info.</p>
 </dd></dl>
@@ -331,51 +252,33 @@ See <a class="reference internal" href="data-process.html#string-value-date-time
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="api.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="schema-process.html" class="btn btn-neutral float-left" title="Schema Processor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="schema-process.html" class="btn btn-neutral float-left" title="Schema Processor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright British Crown (Met Office) &amp; JCSDA &amp; Contributors
-
-    </p>
+    <p>&#169; Copyright British Crown (Met Office) &amp; JCSDA &amp; Contributors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
