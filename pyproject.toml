@@ -1,3 +1,65 @@
+[project]
+name = "yamlprocessor"
+
+dynamic = ["version"]
+
+description = "Process values in YAML files"
+
+readme = "README.md"
+
+requires-python = ">=3.7"
+
+license = {file = "LICENSE"}
+
+maintainers = [
+  {name = "Matt Shin", email = "matthew.shin@metoffice.gov.uk" }
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development",
+]
+
+dependencies = [
+  "jmespath",
+  "jsonschema",
+  "python-dateutil",
+  "ruamel.yaml",
+]
+
+[project.optional-dependencies]
+test = ["flake8", "pytest", "pytest-cov"]
+
+[project.urls]
+"Homepage" = "https://github.com/JCSDA-internal/yamlprocessor/"
+"Bug Reports" = "https://github.com/JCSDA-internal/yamlprocessor/issues"
+"Source" = "https://github.com/JCSDA-internal/yamlprocessor/"
+
+[project.scripts]
+yp-data = "yamlprocessor.dataprocess:main"
+yp-schema = "yamlprocessor.schemaprocess:main"
+
+[tool.pytest.ini_options]
+norecursedirs = [".git*", "build", "dist", "docs"]
+
+[tool.setuptools.dynamic]
+version = {attr = "yamlprocessor.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [build-system]
 requires = [
     "setuptools>=42",
