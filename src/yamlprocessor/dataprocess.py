@@ -364,7 +364,8 @@ class DataProcessor:
                     del data[key]
                     item = None
                     for include_key, include_item in include_data.items():
-                        data[include_key] = include_item
+                        data[include_key] = self.process_variable(
+                            include_item, variable_map)
                         skip_keys.add(include_key)
                         if (
                             isinstance(include_item, dict)
