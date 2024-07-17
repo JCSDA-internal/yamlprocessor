@@ -459,6 +459,7 @@ def test_main_13(tmp_path, yaml):
     cat_data = {
         'chase': ['rodents', 'birds'],
         'like': ['food', 'play', 'sleep'],
+        'think': '$CAT_THINK',
     }
     infilename = tmp_path / 'root.yaml'
     with infilename.open('w') as infile:
@@ -467,13 +468,18 @@ def test_main_13(tmp_path, yaml):
     with include_infilename.open('w') as infile:
         yaml.dump(cat_data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([
+        str(infilename),
+        str(outfilename),
+        '-D', 'CAT_THINK=humans are cats',
+    ])
     assert yaml.load(outfilename.open()) == {
         'cat': {
             'speak': ['meow', 'miaow'],
             'young': 'kitten',
             'chase': ['rodents', 'birds'],
             'like': ['food', 'play', 'sleep'],
+            'think': 'humans are cats',
         },
     }
 
