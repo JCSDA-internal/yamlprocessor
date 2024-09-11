@@ -12,6 +12,17 @@ substitute with value of corresponding date-time string.
 
 Validate against specified JSON schema if root file starts with either
 ``#!<SCHEMA-URI>`` or ``# yaml-language-server: $schema=<SCHEMA-URI>`` line.
+
+CLI usage allows multiple positional arguments.
+
+In usage 1, the final positional argument is the output file name,
+and the other arguments are input file names.
+
+In usage 2, with ``--output=FILENAME`` (``-o FILENAME``) option,
+all positional arguments are input file names.
+
+In either case, all input files will be concatenated together (as text),
+before being parsed as a combined YAML file.
 """
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -25,6 +36,8 @@ import os
 from pathlib import Path
 import re
 import sys
+from tempfile import SpooledTemporaryFile
+from typing import IO, Iterable, Union
 
 from dateutil.parser import parse as datetimeparse
 from dateutil.relativedelta import relativedelta
@@ -307,16 +320,36 @@ class DataProcessor:
         self.variable_map = os.environ.copy()
         self.unbound_placeholder = None
 
-    def process_data(self, in_filename: str, out_filename: str) -> None:
-        """Process includes in input file and dump results in output file.
+    def process_data(
+        self,
+        in_filenames: Union[str, Iterable[str]],
+        out_filename: str,
+    ) -> None:
+        """Concatenate input files and load resulting data.
 
-        :param in_filename: input file name.
+        Dump results in output file.
+
+        :param in_filenames: input file name str or input file names list.
         :param out_filename: output file name.
         """
-        in_filename = self.get_filename(in_filename, [])
-        root = self.load_file(in_filename)
-        schema_location = self.load_file_schema(in_filename)
-        stack = [[root, [in_filename], self.variable_map]]
+        if isinstance(in_filenames, str):
+            filename = self.get_filename(in_filenames, [])
+            root = self.load_file(filename)
+            schema_location = self.load_file_schema(filename)
+            root_filenames = [filename]
+        else:
+            root_filenames = []
+            with SpooledTemporaryFile(mode='w+') as concat_file:
+                for filename in in_filenames:
+                    filename = self.get_filename(filename, [])
+                    with open(filename) as file_:
+                        concat_file.write(file_.read())
+                    root_filenames.append(filename)
+                concat_file.seek(0)
+                root = self.load_file(concat_file)
+                concat_file.seek(0)
+                schema_location = self.load_file_schema(concat_file)
+        stack = [[root, root_filenames, self.variable_map]]
         while stack:
             data, parent_filenames, variable_map = stack.pop()
             data = self.process_variable(data, variable_map)
@@ -477,10 +510,10 @@ class DataProcessor:
         return False
 
     @staticmethod
-    def load_file(filename: str) -> object:
+    def load_file(filename: Union[str, IO]) -> object:
         """Load content of (YAML) file into a data structure.
 
-        :param filename: name of file to load content.
+        :param filename: file (name) to load content.
         :return: the loaded data structure.
         """
         yaml = YAML(typ='safe', pure=True)
@@ -489,12 +522,14 @@ class DataProcessor:
             construct_yaml_timestamp)
         if filename == '-':
             return yaml.load(sys.stdin)
+        elif hasattr(filename, 'readline'):
+            return yaml.load(filename)
         else:
             with open(filename) as file_:
                 return yaml.load(file_)
 
     @staticmethod
-    def load_file_schema(filename: str) -> object:
+    def load_file_schema(filename: Union[str, IO]) -> object:
         """Load schema location from the schema association line of file.
 
         :param filename: name of file to load schema location.
@@ -502,6 +537,8 @@ class DataProcessor:
         """
         if filename == '-':
             line = sys.stdin.readline()
+        elif hasattr(filename, 'readline'):
+            line = filename.readline()
         else:
             with open(filename) as file_:
                 line = file_.readline()
@@ -750,17 +787,17 @@ def main(argv=None):
         description=__doc__,
         formatter_class=RawDescriptionHelpFormatter,
     )
+    # in_filenames or in_filename + out_filename
     parser.add_argument(
-        'in_filename',
-        metavar='IN-FILE',
-        default='-',
-        nargs='?',
-        help='Name of input file, "-" for STDIN')
+        'filenames',
+        metavar='FILENAME',
+        nargs='*',
+        help='Names of input or input+output files, "-" for STDIN/STDOUT')
+    # out_filename
     parser.add_argument(
-        'out_filename',
-        metavar='OUT-FILE',
-        default='-',
-        nargs='?',
+        '--out-filename', '-o',
+        metavar='FILENAME',
+        action="store",
         help='Name of output file, "-" for STDOUT')
     parser.add_argument(
         '--include', '-I',
@@ -888,7 +925,11 @@ def main(argv=None):
     if args.schema_prefix is not None:
         processor.schema_prefix = args.schema_prefix
 
-    processor.process_data(args.in_filename, args.out_filename)
+    if args.out_filename is None and len(args.filenames) >= 2:
+        args.out_filename = args.filenames.pop()
+    elif args.out_filename is None:
+        args.out_filename = '-'
+    processor.process_data(args.filenames, args.out_filename)
 
 
 if __name__ == '__main__':

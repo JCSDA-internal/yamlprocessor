@@ -9,19 +9,20 @@ Usage:
 
 .. code-block:: bash
 
-   yp-data [options] input-file-name output-file-name
+   yp-data [options] input-file-name ... output-file-name
+   yp-data [options] -o output-file-name input-file-name ...
 
 See :doc:`data-process` for detail.
 
 .. program:: yp-data
 
-.. option:: input-file-name
+.. option:: file-names
 
-   Name of an input file. Use ``-`` to read from STDIN.
+   Names of input or input+output files. Use ``-`` for STDIN/STDOUT.
 
-.. option:: output-file-name
+.. option:: --out-filename=FILENAME, -o FILENAME
 
-   Name of an output file. Use ``-`` to write to STDOUT.
+   Name of output file. Use ``-`` for STDOUT.
 
 .. option:: --include=DIR, -I DIR
 

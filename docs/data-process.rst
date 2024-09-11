@@ -77,7 +77,7 @@ Python logic with the above files:
    processor.include_dict.update({
        'earth.yaml': {'location': 'earth', 'targets': ['dinosaur']},
    })
-   processor.process_data('hello.yaml')
+   processor.process_data(['hello.yaml'])
 
 We'll get:
 
@@ -252,6 +252,46 @@ and the output will look like:
      targets:
        - martian
 
+
+Multiple Input Files Concatenation
+----------------------------------
+
+You can specify multiple input files in both command line and Python usages.
+The input files will be concatenated together (as text) before before parsed as
+a whole YAML document. For example, suppose we have ``part1.yaml`` with:
+
+.. code-block:: yaml
+
+   hello:
+
+And ``part2.yaml`` with:
+
+   - earth
+   - mars
+
+And ``part3.yaml`` with:
+
+   - jupiter
+   - saturn
+
+Running :program:`yp-data -o- part1.yaml part2.yaml part3.yaml` will give:
+
+.. code-block:: yaml
+
+   hello:
+   - earth
+   - mars
+   - jupiter
+   - saturn
+
+You can achieve the same results by running:
+
+.. code-block:: python
+
+   from yamlprocessor.dataprocess import DataProcessor
+   # ...
+   processor = DataProcessor()
+   processor.process_data(['part1.yaml', 'part2.yaml', 'part3.yaml'])
 
 String Value Variable Substitution
 ----------------------------------

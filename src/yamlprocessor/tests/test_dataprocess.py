@@ -598,6 +598,47 @@ def test_main_validate_1(tmp_path, capsys, yaml):
         assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
 
 
+def test_main_concat_input_files(tmp_path, yaml):
+    """Test main, concatentation of multiple input files before parsing."""
+    yaml_part_1 = 'hello:\n'
+    yaml_part_2 = '- earth\n'
+    yaml_part_3 = '- mars\n'
+    infilename1 = tmp_path / 'in_1.yaml'
+    with infilename1.open('w') as infile:
+        infile.write(yaml_part_1)
+    infilename2 = tmp_path / 'in_2.yaml'
+    with infilename2.open('w') as infile:
+        infile.write(yaml_part_2)
+    infilename3 = tmp_path / 'in_3.yaml'
+    with infilename3.open('w') as infile:
+        infile.write(yaml_part_3)
+    outfilename = tmp_path / 'out.yaml'
+    # Arguments are input file names + output file name
+    main([
+        str(infilename1),
+        str(infilename2),
+        str(infilename3),
+        str(outfilename),
+    ])
+    assert yaml.load(outfilename.open()) == {'hello': ['earth', 'mars']}
+    # -o out-file-name, then arguments are only input file names
+    main([
+        '-o', str(outfilename),
+        str(infilename1),
+        str(infilename2),
+        str(infilename3),
+    ])
+    assert yaml.load(outfilename.open()) == {'hello': ['earth', 'mars']}
+    # --out-filename=out-file-name, then arguments are only input file names
+    main([
+        f'--out-filename={outfilename}',
+        str(infilename1),
+        str(infilename2),
+        str(infilename3),
+    ])
+    assert yaml.load(outfilename.open()) == {'hello': ['earth', 'mars']}
+
+
 def test_process_data_include_dict(tmp_path, yaml):
     """Test DataProcessor.process_data, with DataProcessor.include_dict."""
     data = {'testing': ['one', 2, {3: [3.1, 3.14]}]}
