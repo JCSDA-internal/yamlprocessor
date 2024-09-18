@@ -24,7 +24,7 @@ Python usage:
 from yamlprocessor.dataprocess import DataProcessor
 processor = DataProcessor()
 # ... Customise the `DataProcessor` instance as necessary ..., then:
-processor.process_data(in_file_name, out_file_name)
+processor.process_data([in_file_name], out_file_name)
 ```
 
 ## Documentation
