@@ -29,10 +29,8 @@ class DataPreProcessor:
                 # retrieve header file
                 yaml_header_File = iline.split('=')[1].rstrip()
                 # Replace variables in the string
-                print("yaml_header_File = ", yaml_header_File)
                 for key, value in self.replacements.items():
                     yaml_header_File = re.sub(rf'\${key}', value, yaml_header_File)
-                print("yaml_header_File = ", yaml_header_File)
                 # open header file
                 with open(yaml_header_File, 'r') as file:
                     auxFileData = file.read()
