@@ -30,6 +30,7 @@ User Guide And Reference
 
    install
    basic-usage
+   data-preprocessor
    data-process
    schema-process
    cli

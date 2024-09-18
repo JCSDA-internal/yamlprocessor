@@ -13,7 +13,10 @@ import sys
 
 class DataPreProcessor:
 
-    def __init__(self, replacements):
+    def __init__(self):
+        self.replacements = {}
+
+    def add_replacements_map(self, replacements):
         self.replacements = replacements
 
     def process_yaml(self, in_yaml, out_yaml):
@@ -76,7 +79,8 @@ def main():
             key_value_pairs[key] = value
 
     # Run preprocessor
-    preprocessor = DataPreProcessor(key_value_pairs)
+    preprocessor = DataPreProcessor()
+    preprocessor.add_replacements_map(key_value_pairs)
     preprocessor.process_yaml(args.input_file, args.output_file)
 
 if __name__ == "__main__":
