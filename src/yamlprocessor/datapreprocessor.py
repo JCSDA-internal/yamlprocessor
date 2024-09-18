@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""The pre-process looks for the DIRECT_INCLUDE keyword in the input yaml and concatenates
-   the associated file at this point in the input file.  The result is written to the
-   output file.
+"""The datapreprocessor looks for the DIRECT_INCLUDE keyword in the input yaml and concatenates
+   the associated file at this point in the input file. The result is written to the
+   output file or standard out if - is specified.
 
 Example usage:
-    python datapreprocessor.py <input file> <output file> --define JOPA_AUX=/path/to/my/file
+    python datapreprocessor.py -o <output file> <input file> --define JOPA_AUX=/path/to/my/file
+    python datapreprocessor.py -o- <input file> --define JOPA_AUX=/path/to/my/file
 """
 
 import argparse
-import re
+import sys
 
 class DataPreProcessor:
 
@@ -28,37 +29,46 @@ class DataPreProcessor:
             if 'DIRECT_INCLUDE=' in iline:
                 # retrieve header file
                 yaml_header_File = iline.split('=')[1].rstrip()
-                # Replace variables in the string
+                # replace variables in the string
                 for key, value in self.replacements.items():
-                    yaml_header_File = re.sub(rf'\${key}', value, yaml_header_File)
+                    yaml_header_File = yaml_header_File.replace(f'${key}', value)
                 # open header file
                 with open(yaml_header_File, 'r') as file:
                     auxFileData = file.read()
-                # update lies for new file
+                # update lines for new file
                 new_line.append(auxFileData)
             else:
                 new_line.append(iline)
-        # same the outcome
-        with open(out_yaml, "w") as file:
-            file.writelines(new_line)
+        # save the result
+        if out_yaml == '-':
+            out_file = sys.stdout
+        else:
+            out_file = open(out_yaml, 'w')
+        out_file.writelines(new_line)
 
 def main():
     parser = argparse.ArgumentParser(description="Process input and output files with multiple --define options.")
 
-    # Positional arguments for input and output files
+    # Positional argument for input
     parser.add_argument('input_file', type=str, help='Input file')
-    parser.add_argument('output_file', type=str, help='Output file')
+
+    # Output file specified
+    parser.add_argument(
+        '--output-file', '-o',
+        metavar='FILENAME',
+        action="store",
+        help='Name of output file, "-" for STDOUT')
 
     # Optional --define arguments
     parser.add_argument('--define', action='append', help='Key-value pairs in the format key=value', default=[])
 
     # Parse arguments and print for sanity checking
     args = parser.parse_args()
-    print(f"Input file: {args.input_file}")
-    print(f"Output file: {args.output_file}")
-    print(f"Defines: {args.define}")
+    print(f"Input file: {args.input_file}", file=sys.stderr)
+    print(f"Output file: {args.output_file}", file=sys.stderr)
+    print(f"Defines: {args.define}", file=sys.stderr)
 
-    # process define arguments into a dictionary for passing to the class
+    # Process define arguments into a dictionary for passing to the class
     key_value_pairs = {}
     if args.define:
         for item in args.define:
