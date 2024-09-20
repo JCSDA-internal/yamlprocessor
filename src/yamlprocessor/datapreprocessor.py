@@ -29,7 +29,7 @@ class DataPreProcessor:
         new_line = []
         for iline in lines:
             # look for specific pattern in each line
-            if 'DIRECT_INCLUDE=' in iline:
+            if 'DIRECT_INCLUDE' in iline:
                 # retrieve header file
                 yaml_header_File = iline.split('=')[1].rstrip()
                 # replace variables in the string

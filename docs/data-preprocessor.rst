@@ -9,7 +9,7 @@ It is expected that the keyword in the input yaml file will take the following f
 
 .. code-block:: yaml
 
-   DIRECT_INCLUDE: /path/to/file/to/be/included
+   DIRECT_INCLUDE=/path/to/file/to/be/included
 
 Command line
 ------------
@@ -25,7 +25,7 @@ Python
 
 .. code-block:: python
 
-   from yamlprocessor.datapreprocess import DataPreProcessor
+   from yamlprocessor.datapreprocessor import DataPreProcessor
    preprocessor = DataPreProcessor()
    preprocessor.add_replacements_map(keymap) # optional line
    preprocessor.process_yaml(input_file, output_file)
@@ -37,7 +37,7 @@ Consider an input YAML file containing the following data:
 
 .. code-block:: yaml
 
-   DIRECT_INCLUDE: a.yaml
+   DIRECT_INCLUDE=a.yaml
 
    hello:
      - location: *planet
