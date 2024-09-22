@@ -1,7 +1,7 @@
 Data Pre-Processor
 ==================
 
-The preprocessor looks for the DIRECT_INCLUDE keyword in the input yaml and concatenates
+The preprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and concatenates
 the associated file at this point in the input file. The result is written to the
 output file or standard out if - is specified.
 
