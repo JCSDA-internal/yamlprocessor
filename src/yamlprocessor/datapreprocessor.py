@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The datapreprocessor looks for the DIRECT_INCLUDE keyword in the input yaml and concatenates
+"""The datapreprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and concatenates
    the associated file at this point in the input file. The result is written to the
    output file or standard out if - is specified.
 
@@ -29,7 +29,7 @@ class DataPreProcessor:
         new_line = []
         for iline in lines:
             # look for specific pattern in each line
-            if 'DIRECT_INCLUDE' in iline:
+            if 'DIRECT_INCLUDE=' in iline:
                 # retrieve header file
                 yaml_header_File = iline.split('=')[1].rstrip()
                 # replace variables in the string
