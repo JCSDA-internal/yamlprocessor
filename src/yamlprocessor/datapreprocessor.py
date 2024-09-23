@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""The datapreprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and concatenates
-   the associated file at this point in the input file. The result is written to the
-   output file or standard out if - is specified.
+"""The datapreprocessor looks for the DIRECT_INCLUDE= keyword in the input
+   yaml and concatenates the associated file at this point in the input
+   file. The result is written to the output file or standard out if - is
+   specified.
 
 Example usage:
-    python datapreprocessor.py -o <output file> <input file> --define JOPA_AUX=/path/to/my/file
-    python datapreprocessor.py -o- <input file> --define JOPA_AUX=/path/to/my/file
+    python datapreprocessor.py -o <output file> <input file> \
+        --define JOPA_AUX=/path/to/my/file
+    python datapreprocessor.py -o- <input file> \
+        --define JOPA_AUX=/path/to/my/file
 """
 
 import argparse
 import sys
+
 
 class DataPreProcessor:
 
@@ -34,7 +38,8 @@ class DataPreProcessor:
                 yaml_header_File = iline.split('=')[1].rstrip()
                 # replace variables in the string
                 for key, value in self.replacements.items():
-                    yaml_header_File = yaml_header_File.replace(f'${key}', value)
+                    yaml_header_File = \
+                        yaml_header_File.replace(f'${key}', value)
                 # open header file
                 with open(yaml_header_File, 'r') as file:
                     auxFileData = file.read()
@@ -52,7 +57,8 @@ class DataPreProcessor:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Process input and output files with multiple --define options."
+        description="Process input and output "
+                    "files with multiple --define options."
     )
 
     # Positional argument for input
@@ -63,10 +69,13 @@ def main():
         '--output-file', '-o',
         metavar='FILENAME',
         action="store",
-        help='Name of output file, "-" for STDOUT')
+        help='Name of output file, "-" for STDOUT'
+    )
 
     # Optional --define arguments
-    parser.add_argument('--define', action='append',
+    parser.add_argument(
+        '--define',
+        action='append',
         help='Key-value pairs in the format key=value', default=[]
     )
 

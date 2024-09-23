@@ -1,12 +1,8 @@
-import json
-
-from dateutil.parser import parse as datetimeparse
-import filecmp
 import pytest
 from ruamel.yaml import YAML
 
 from ..datapreprocessor import (
-    DataPreProcessor, main)
+    DataPreProcessor)
 
 
 @pytest.fixture
