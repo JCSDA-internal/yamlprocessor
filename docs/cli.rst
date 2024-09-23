@@ -78,9 +78,9 @@ Usage:
 
    yp-preprocesor [options] -o output-file-name input-file-name
 
-See :doc:`data-process` for detail.
+See :doc:`data-preprocessor` for detail.
 
-.. program:: yp-data
+.. program:: yp-preprocessor
 
 .. option:: file-names
 
