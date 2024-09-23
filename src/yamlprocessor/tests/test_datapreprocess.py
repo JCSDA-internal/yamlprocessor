@@ -13,6 +13,7 @@ from ..datapreprocessor import (
 def yaml():
     return YAML(typ='safe', pure=True)
 
+
 def test_main_0(tmp_path, yaml):
     """Test main, basic."""
     yaml_0 = """

@@ -49,8 +49,11 @@ class DataPreProcessor:
             out_file = open(out_yaml, 'w')
         out_file.writelines(new_line)
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Process input and output files with multiple --define options.")
+    parser = argparse.ArgumentParser(
+        description="Process input and output files with multiple --define options."
+    )
 
     # Positional argument for input
     parser.add_argument('input_file', type=str, help='Input file')
@@ -63,7 +66,9 @@ def main():
         help='Name of output file, "-" for STDOUT')
 
     # Optional --define arguments
-    parser.add_argument('--define', action='append', help='Key-value pairs in the format key=value', default=[])
+    parser.add_argument('--define', action='append',
+        help='Key-value pairs in the format key=value', default=[]
+    )
 
     # Parse arguments and print for sanity checking
     args = parser.parse_args()
@@ -82,6 +87,7 @@ def main():
     preprocessor = DataPreProcessor()
     preprocessor.add_replacements_map(key_value_pairs)
     preprocessor.process_yaml(args.input_file, args.output_file)
+
 
 if __name__ == "__main__":
     main()
