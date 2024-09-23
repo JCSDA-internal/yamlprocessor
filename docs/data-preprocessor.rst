@@ -1,11 +1,12 @@
 Data Pre-Processor
 ==================
 
-The preprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and concatenates
-the associated file at this point in the input file. The result is written to the
-output file or standard out if - is specified.
+The preprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and
+concatenates the associated file at this point in the input file. The result
+is written to the output file or standard out if - is specified.
 
-It is expected that the keyword in the input yaml file will take the following format:
+It is expected that the keyword in the input yaml file will take the following
+format:
 
 .. code-block:: yaml
 
@@ -18,7 +19,8 @@ Command line
 
    yp-preprocessor [options] -o output-file-name input-file-name
 
-Type ``yp-preprocessor --help`` for a list of options. See :doc:`cli` for detail.
+Type ``yp-preprocessor --help`` for a list of options. See :doc:`cli` for
+detail.
 
 Python
 ------
@@ -53,7 +55,8 @@ If ``a.yaml`` contains:
    _:
    - &planet earth
 
-Running the preprocessor on the input YAML file will yield the following output:
+Running the preprocessor on the input YAML file will yield the following
+output:
 
 .. code-block:: yaml
 
@@ -67,5 +70,6 @@ Running the preprocessor on the input YAML file will yield the following output:
          - cat
          - dog
 
-The preprocessor simply concatenates the contents of `a.yaml` at the correct place in the
-input yaml file.  This file can then be passed to `yp-data` for parsing.
+The preprocessor simply concatenates the contents of `a.yaml` at the correct
+place in the input yaml file.  This file can then be passed to `yp-data` for
+parsing.

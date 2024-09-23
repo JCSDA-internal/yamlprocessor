@@ -19,7 +19,7 @@ run, for example:
     conda activate yamlprocessor
     python3 -m pip install .
 
-To check that the code has installed correctly the testing can be run from 
+To check that the code has installed correctly the testing can be run from
 the main directory like this:
 
 .. code-block:: bash

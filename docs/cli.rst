@@ -118,8 +118,8 @@ See :doc:`schema-process` for detail.
 Common Options
 --------------
 
-The following options apply to both :program:`yp-data`, :program:`yp-preprocessor`
-and :program:`yp-schema` commands.
+The following options apply to both :program:`yp-data`,
+:program:`yp-preprocessor` and :program:`yp-schema` commands.
 
 .. program:: yp-*
 
