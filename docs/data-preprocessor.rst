@@ -12,8 +12,8 @@ format:
 
    DIRECT_INCLUDE=/path/to/file/to/be/included
 
-Command line
-------------
+Command line useage
+-------------------
 
 .. code-block:: bash
 
@@ -22,8 +22,8 @@ Command line
 Type ``yp-preprocessor --help`` for a list of options. See :doc:`cli` for
 detail.
 
-Python
-------
+Python useage
+-------------
 
 .. code-block:: python
 
@@ -33,7 +33,7 @@ Python
    preprocessor.process_yaml(input_file, output_file)
 
 Examples
-------------------------
+--------
 
 Consider an input YAML file containing the following data:
 
