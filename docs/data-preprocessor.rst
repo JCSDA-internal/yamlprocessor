@@ -17,7 +17,7 @@ Command line useage
 
 .. code-block:: bash
 
-   yp-preprocessor [options] -o output-file-name input-file-name
+   yp-preprocessor input-file-name -o output-file-name [options]
 
 Type ``yp-preprocessor --help`` for a list of options. See :doc:`cli` for
 detail.

@@ -5,9 +5,9 @@
    specified.
 
 Example usage:
-    python datapreprocessor.py -o <output file> <input file> \
+    python datapreprocessor.py  <input file> -o <output file> \
         --define JOPA_AUX=/path/to/my/file
-    python datapreprocessor.py -o- <input file> \
+    python datapreprocessor.py <input file> -o- \
         --define JOPA_AUX=/path/to/my/file
 """
 
@@ -74,7 +74,7 @@ def main():
 
     # Optional --define arguments
     parser.add_argument(
-        '--define',
+        '--define', '-d',
         action='append',
         help='Key-value pairs in the format key=value', default=[]
     )

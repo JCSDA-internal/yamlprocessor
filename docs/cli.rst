@@ -76,7 +76,7 @@ Usage:
 
 .. code-block:: bash
 
-   yp-preprocesor [options] -o output-file-name input-file-name
+   yp-preprocesor input-file-name -o output-file-name [options]
 
 See :doc:`data-preprocessor` for detail.
 
