@@ -12,16 +12,30 @@ Example usage:
 """
 
 import argparse
+import os
+import re
 import sys
 
 
 class DataPreProcessor:
 
     def __init__(self):
-        self.replacements = {}
+        self.replacements = os.environ.copy()
+
+    def __replace_placeholders(self, text):
+        # Create a regex pattern that matches $VAR or ${VAR}
+        pattern = re.compile(r'\$\{(\w+)\}|\$(\w+)')
+
+        # Function to get the replacement value from env_vars
+        def replacer(match):
+            var_name = match.group(1) or match.group(2)
+            return self.replacements.get(var_name, match.group(0))
+
+        # Substitute the placeholders with actual values
+        return pattern.sub(replacer, text)
 
     def add_replacements_map(self, replacements):
-        self.replacements = replacements
+        self.replacements.update(replacements)
 
     def process_yaml(self, in_yaml, out_yaml):
         # read yaml file
@@ -37,9 +51,8 @@ class DataPreProcessor:
                 # retrieve header file
                 yaml_header_File = iline.split('=')[1].rstrip()
                 # replace variables in the string
-                for key, value in self.replacements.items():
-                    yaml_header_File = \
-                        yaml_header_File.replace(f'${key}', value)
+                yaml_header_File = self.__replace_placeholders(
+                    yaml_header_File)
                 # open header file
                 with open(yaml_header_File, 'r') as file:
                     auxFileData = file.read()
@@ -72,12 +85,17 @@ def main():
         help='Name of output file, "-" for STDOUT'
     )
 
-    # Optional --define arguments
+    # Optional
     parser.add_argument(
-        '--define', '-d',
+        '--define', '-D',
         action='append',
         help='Key-value pairs in the format key=value', default=[]
     )
+    parser.add_argument(
+        '--no-environment', '-i',
+        action='store_true',
+        default=False,
+        help='Do not use environment variables in variable substitutions')
 
     # Parse arguments and print for sanity checking
     args = parser.parse_args()
@@ -85,7 +103,8 @@ def main():
     print(f"Output file: {args.output_file}", file=sys.stderr)
     print(f"Defines: {args.define}", file=sys.stderr)
 
-    # Process define arguments into a dictionary for passing to the class
+    # Process define arguments into a dictionary for adding to the
+    # environment variable dictionary
     key_value_pairs = {}
     if args.define:
         for item in args.define:
@@ -94,6 +113,8 @@ def main():
 
     # Run preprocessor
     preprocessor = DataPreProcessor()
+    if args.no_environment:
+        preprocessor.replacements.clear()
     preprocessor.add_replacements_map(key_value_pairs)
     preprocessor.process_yaml(args.input_file, args.output_file)
 

@@ -92,7 +92,13 @@ See :doc:`data-preprocessor` for detail.
 
 .. option:: --define=KEY=VALUE, -D KEY=VALUE
 
-   Map KEY to VALUE for variable substitutions.
+   Map KEY to VALUE for variable substitutions. These override
+   environment variables which are used by default in the variable
+   substitution.
+
+.. option:: --no-environment, -i
+
+   Do not use environment variables in variable substitutions.
 
 yp-schema
 ---------
