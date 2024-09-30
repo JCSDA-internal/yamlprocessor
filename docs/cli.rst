@@ -69,6 +69,36 @@ See :doc:`data-process` for detail.
    Reference value for date-time substitutions.
    See also :envvar:`YP_TIME_REF_VALUE`.
 
+yp-preprocesor
+--------------
+
+Usage:
+
+.. code-block:: bash
+
+   yp-preprocesor input-file-name -o output-file-name [options]
+
+See :doc:`data-preprocessor` for detail.
+
+.. program:: yp-preprocessor
+
+.. option:: file-names
+
+   Names of input or input files. Use ``-`` for STDIN/STDOUT.
+
+.. option:: --out-filename=FILENAME, -o FILENAME
+
+   Name of output file. Use ``-`` for STDOUT.
+
+.. option:: --define=KEY=VALUE, -D KEY=VALUE
+
+   Map KEY to VALUE for variable substitutions. These override
+   environment variables which are used by default in the variable
+   substitution.
+
+.. option:: --no-environment, -i
+
+   Do not use environment variables in variable substitutions.
 
 yp-schema
 ---------
@@ -94,8 +124,8 @@ See :doc:`schema-process` for detail.
 Common Options
 --------------
 
-The following options apply to both :program:`yp-data` and :program:`yp-schema`
-commands.
+The following options apply to both :program:`yp-data`,
+:program:`yp-preprocessor` and :program:`yp-schema` commands.
 
 .. program:: yp-*
 

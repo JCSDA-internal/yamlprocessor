@@ -50,6 +50,7 @@ test = ["flake8", "pytest", "pytest-cov"]
 
 [project.scripts]
 yp-data = "yamlprocessor.dataprocess:main"
+yp-preprocessor = "yamlprocessor.datapreprocessor:main"
 yp-schema = "yamlprocessor.schemaprocess:main"
 
 [tool.pytest.ini_options]
