@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Basic Usages &mdash; yamlprocessor 0.5.2 documentation</title>
+  <title>Basic Usages &mdash; yamlprocessor 0.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -14,13 +14,13 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=8e576371"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/documentation_options.js?v=2a2fe768"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Data Processor" href="data-process.html" />
+    <link rel="next" title="Data Pre-Processor" href="data-preprocessor.html" />
     <link rel="prev" title="Installation" href="install.html" /> 
 </head>
 
@@ -51,6 +51,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#python">Python</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="data-preprocessor.html">Data Pre-Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data-process.html">Data Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema-process.html">Schema Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Reference</a></li>
@@ -85,7 +86,8 @@
 <h1>Basic Usages<a class="headerlink" href="#basic-usages" title="Link to this heading">¶</a></h1>
 <section id="command-line">
 <h2>Command line<a class="headerlink" href="#command-line" title="Link to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>input-file-name<span class="w"> </span>output-file-name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>input-file-name<span class="w"> </span>...<span class="w"> </span>output-file-name
+yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>-o<span class="w"> </span>output-file-name<span class="w"> </span>input-file-name<span class="w"> </span>...
 </pre></div>
 </div>
 <p>Type <code class="docutils literal notranslate"><span class="pre">yp-data</span> <span class="pre">--help</span></code> for a list of options. See <a class="reference internal" href="cli.html"><span class="doc">Command Line Reference</span></a> for detail.</p>
@@ -95,7 +97,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yamlprocessor.dataprocess</span> <span class="kn">import</span> <span class="n">DataProcessor</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">()</span>
 <span class="c1"># ... Customise the `DataProcessor` instance as necessary ..., then:</span>
-<span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">(</span><span class="n">in_file_name</span><span class="p">,</span> <span class="n">out_file_name</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">([</span><span class="n">in_file_name</span><span class="p">],</span> <span class="n">out_file_name</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="api.html"><span class="doc">Python API</span></a> for detail.</p>
@@ -107,7 +109,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="data-process.html" class="btn btn-neutral float-right" title="Data Processor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="data-preprocessor.html" class="btn btn-neutral float-right" title="Data Pre-Processor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

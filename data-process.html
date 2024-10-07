@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Processor &mdash; yamlprocessor 0.5.2 documentation</title>
+  <title>Data Processor &mdash; yamlprocessor 0.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -14,14 +14,14 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=8e576371"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/documentation_options.js?v=2a2fe768"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Schema Processor" href="schema-process.html" />
-    <link rel="prev" title="Basic Usages" href="basic-usage.html" /> 
+    <link rel="prev" title="Data Pre-Processor" href="data-preprocessor.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,10 +47,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-preprocessor.html">Data Pre-Processor</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data Processor</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#modularisation-include">Modularisation / Include</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modularisation-include-with-merge">Modularisation / Include with Merge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modularisation-include-with-query">Modularisation / Include with Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-input-files-concatenation">Multiple Input Files Concatenation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#string-value-variable-substitution">String Value Variable Substitution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#variable-substitution-include-scope">Variable Substitution Include Scope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#string-value-date-time-substitution">String Value Date-Time Substitution</a></li>
@@ -157,7 +159,7 @@ Python logic with the above files:</p>
 <span class="n">processor</span><span class="o">.</span><span class="n">include_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
     <span class="s1">&#39;earth.yaml&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="s1">&#39;targets&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dinosaur&#39;</span><span class="p">]},</span>
 <span class="p">})</span>
-<span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">(</span><span class="s1">&#39;hello.yaml&#39;</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">([</span><span class="s1">&#39;hello.yaml&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>We’ll get:</p>
@@ -309,6 +311,44 @@ and the output will look like:</p>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rocky</span>
 <span class="w">  </span><span class="nt">targets</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">martian</span>
+</pre></div>
+</div>
+</section>
+<section id="multiple-input-files-concatenation">
+<h2>Multiple Input Files Concatenation<a class="headerlink" href="#multiple-input-files-concatenation" title="Link to this heading">¶</a></h2>
+<p>You can specify multiple input files in both command line and Python usages.
+The input files will be concatenated together (as text) before before parsed as
+a whole YAML document. For example, suppose we have <code class="docutils literal notranslate"><span class="pre">part1.yaml</span></code> with:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>And <code class="docutils literal notranslate"><span class="pre">part2.yaml</span></code> with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>earth</p></li>
+<li><p>mars</p></li>
+</ul>
+</div></blockquote>
+<p>And <code class="docutils literal notranslate"><span class="pre">part3.yaml</span></code> with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>jupiter</p></li>
+<li><p>saturn</p></li>
+</ul>
+</div></blockquote>
+<p>Running <strong class="program">yp-data -o- part1.yaml part2.yaml part3.yaml</strong> will give:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">earth</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mars</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupiter</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">saturn</span>
+</pre></div>
+</div>
+<p>You can achieve the same results by running:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yamlprocessor.dataprocess</span> <span class="kn">import</span> <span class="n">DataProcessor</span>
+<span class="c1"># ...</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">()</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">([</span><span class="s1">&#39;part1.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;part2.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;part3.yaml&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -690,7 +730,7 @@ against the JSON schema in <code class="docutils literal notranslate"><span clas
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="basic-usage.html" class="btn btn-neutral float-left" title="Basic Usages" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data-preprocessor.html" class="btn btn-neutral float-left" title="Data Pre-Processor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="schema-process.html" class="btn btn-neutral float-right" title="Schema Processor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

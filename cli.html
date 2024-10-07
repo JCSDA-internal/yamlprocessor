@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Command Line Reference &mdash; yamlprocessor 0.5.2 documentation</title>
+  <title>Command Line Reference &mdash; yamlprocessor 0.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -14,8 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=8e576371"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/documentation_options.js?v=2a2fe768"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -47,10 +47,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-preprocessor.html">Data Pre-Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data-process.html">Data Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema-process.html">Schema Processor</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#yp-data">yp-data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yp-preprocesor">yp-preprocesor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#yp-schema">yp-schema</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#common-options">Common Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
@@ -88,20 +90,21 @@
 <section id="yp-data">
 <h2>yp-data<a class="headerlink" href="#yp-data" title="Link to this heading">¶</a></h2>
 <p>Usage:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>input-file-name<span class="w"> </span>output-file-name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>input-file-name<span class="w"> </span>...<span class="w"> </span>output-file-name
+yp-data<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span>-o<span class="w"> </span>output-file-name<span class="w"> </span>input-file-name<span class="w"> </span>...
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="data-process.html"><span class="doc">Data Processor</span></a> for detail.</p>
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-yp-data-arg-input-file-name">
-<span class="sig-name descname"><span class="pre">input-file-name</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-input-file-name" title="Link to this definition">¶</a></dt>
-<dd><p>Name of an input file. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> to read from STDIN.</p>
+<dt class="sig sig-object std" id="cmdoption-yp-data-arg-file-names">
+<span class="sig-name descname"><span class="pre">file-names</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-file-names" title="Link to this definition">¶</a></dt>
+<dd><p>Names of input or input+output files. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> for STDIN/STDOUT.</p>
 </dd></dl>
 
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-yp-data-arg-output-file-name">
-<span class="sig-name descname"><span class="pre">output-file-name</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-data-arg-output-file-name" title="Link to this definition">¶</a></dt>
-<dd><p>Name of an output file. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> to write to STDOUT.</p>
+<dt class="sig sig-object std" id="cmdoption-yp-data-out-filename">
+<span id="cmdoption-yp-data-o"></span><span class="sig-name descname"><span class="pre">--out-filename</span></span><span class="sig-prename descclassname"><span class="pre">=FILENAME</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">FILENAME</span></span><a class="headerlink" href="#cmdoption-yp-data-out-filename" title="Link to this definition">¶</a></dt>
+<dd><p>Name of output file. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> for STDOUT.</p>
 </dd></dl>
 
 <dl class="std option">
@@ -170,6 +173,40 @@ See also <span class="target" id="index-4"></span><a class="reference internal" 
 </dd></dl>
 
 </section>
+<section id="yp-preprocesor">
+<h2>yp-preprocesor<a class="headerlink" href="#yp-preprocesor" title="Link to this heading">¶</a></h2>
+<p>Usage:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-preprocesor<span class="w"> </span>input-file-name<span class="w"> </span>-o<span class="w"> </span>output-file-name<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="data-preprocessor.html"><span class="doc">Data Pre-Processor</span></a> for detail.</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-yp-preprocessor-arg-file-names">
+<span class="sig-name descname"><span class="pre">file-names</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-preprocessor-arg-file-names" title="Link to this definition">¶</a></dt>
+<dd><p>Names of input or input files. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> for STDIN/STDOUT.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-yp-preprocessor-out-filename">
+<span id="cmdoption-yp-preprocessor-o"></span><span class="sig-name descname"><span class="pre">--out-filename</span></span><span class="sig-prename descclassname"><span class="pre">=FILENAME</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">FILENAME</span></span><a class="headerlink" href="#cmdoption-yp-preprocessor-out-filename" title="Link to this definition">¶</a></dt>
+<dd><p>Name of output file. Use <code class="docutils literal notranslate"><span class="pre">-</span></code> for STDOUT.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-yp-preprocessor-define">
+<span id="cmdoption-yp-preprocessor-D"></span><span class="sig-name descname"><span class="pre">--define</span></span><span class="sig-prename descclassname"><span class="pre">=KEY=VALUE</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-D</span></span><span class="sig-prename descclassname"> <span class="pre">KEY=VALUE</span></span><a class="headerlink" href="#cmdoption-yp-preprocessor-define" title="Link to this definition">¶</a></dt>
+<dd><p>Map KEY to VALUE for variable substitutions. These override
+environment variables which are used by default in the variable
+substitution.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-yp-preprocessor-no-environment">
+<span id="cmdoption-yp-preprocessor-i"></span><span class="sig-name descname"><span class="pre">--no-environment</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-preprocessor-no-environment" title="Link to this definition">¶</a></dt>
+<dd><p>Do not use environment variables in variable substitutions.</p>
+</dd></dl>
+
+</section>
 <section id="yp-schema">
 <h2>yp-schema<a class="headerlink" href="#yp-schema" title="Link to this heading">¶</a></h2>
 <p>Usage:</p>
@@ -192,8 +229,8 @@ See also <span class="target" id="index-4"></span><a class="reference internal" 
 </section>
 <section id="common-options">
 <h2>Common Options<a class="headerlink" href="#common-options" title="Link to this heading">¶</a></h2>
-<p>The following options apply to both <strong class="program">yp-data</strong> and <strong class="program">yp-schema</strong>
-commands.</p>
+<p>The following options apply to both <strong class="program">yp-data</strong>,
+<strong class="program">yp-preprocessor</strong> and <strong class="program">yp-schema</strong> commands.</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-yp-help">
 <span id="cmdoption-yp-h"></span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-yp-help" title="Link to this definition">¶</a></dt>

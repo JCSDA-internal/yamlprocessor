@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; yamlprocessor 0.5.2 documentation</title>
+  <title>Index &mdash; yamlprocessor 0.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -13,8 +13,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=8e576371"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/documentation_options.js?v=2a2fe768"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
@@ -44,6 +44,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic-usage.html">Basic Usages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-preprocessor.html">Data Pre-Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data-process.html">Data Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema-process.html">Schema Processor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Reference</a></li>
@@ -82,12 +83,12 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -104,6 +105,8 @@
 
       <ul>
         <li><a href="cli.html#cmdoption-yp-data-define">yp-data command line option</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-define">yp-preprocessor command line option</a>
 </li>
       </ul></li>
       <li>
@@ -126,6 +129,8 @@
       <ul>
         <li><a href="cli.html#cmdoption-yp-data-no-environment">yp-data command line option</a>
 </li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-no-environment">yp-preprocessor command line option</a>
+</li>
       </ul></li>
       <li>
     --no-process-include
@@ -139,6 +144,15 @@
 
       <ul>
         <li><a href="cli.html#cmdoption-yp-data-no-process-variable">yp-data command line option</a>
+</li>
+      </ul></li>
+      <li>
+    --out-filename
+
+      <ul>
+        <li><a href="cli.html#cmdoption-yp-data-out-filename">yp-data command line option</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-out-filename">yp-preprocessor command line option</a>
 </li>
       </ul></li>
       <li>
@@ -191,6 +205,8 @@
       <ul>
         <li><a href="cli.html#cmdoption-yp-data-define">yp-data command line option</a>
 </li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-define">yp-preprocessor command line option</a>
+</li>
       </ul></li>
       <li>
     -h
@@ -211,6 +227,17 @@
 
       <ul>
         <li><a href="cli.html#cmdoption-yp-data-no-environment">yp-data command line option</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-no-environment">yp-preprocessor command line option</a>
+</li>
+      </ul></li>
+      <li>
+    -o
+
+      <ul>
+        <li><a href="cli.html#cmdoption-yp-data-out-filename">yp-data command line option</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-out-filename">yp-preprocessor command line option</a>
 </li>
       </ul></li>
       <li>
@@ -284,6 +311,21 @@
   </ul></td>
 </tr></table>
 
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    file-names
+
+      <ul>
+        <li><a href="cli.html#cmdoption-yp-data-arg-file-names">yp-data command line option</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-arg-file-names">yp-preprocessor command line option</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -303,17 +345,10 @@
 </li>
       <li><a href="api.html#yamlprocessor.dataprocess.DataProcessor..include_paths">include_paths (yamlprocessor.dataprocess.DataProcessor. attribute)</a>
 </li>
-      <li><a href="api.html#yamlprocessor.dataprocess.DataProcessor..INCLUDE_SCHEMA">INCLUDE_SCHEMA (yamlprocessor.dataprocess.DataProcessor. attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    input-file-name
-
-      <ul>
-        <li><a href="cli.html#cmdoption-yp-data-arg-input-file-name">yp-data command line option</a>
+      <li><a href="api.html#yamlprocessor.dataprocess.DataProcessor..INCLUDE_SCHEMA">INCLUDE_SCHEMA (yamlprocessor.dataprocess.DataProcessor. attribute)</a>
 </li>
-      </ul></li>
       <li><a href="api.html#yamlprocessor.dataprocess.DataProcessor..is_process_include">is_process_include (yamlprocessor.dataprocess.DataProcessor. attribute)</a>
 </li>
       <li><a href="api.html#yamlprocessor.dataprocess.DataProcessor..is_process_variable">is_process_variable (yamlprocessor.dataprocess.DataProcessor. attribute)</a>
@@ -355,19 +390,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#index-3">NAME</a>, <a href="cli.html#index-3">[1]</a>
 </li>
-  </ul></td>
-</tr></table>
-
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    output-file-name
-
-      <ul>
-        <li><a href="cli.html#cmdoption-yp-data-arg-output-file-name">yp-data command line option</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -486,6 +508,8 @@
 </li>
         <li><a href="cli.html#cmdoption-yp-data-no-process-variable">--no-process-variable</a>
 </li>
+        <li><a href="cli.html#cmdoption-yp-data-out-filename">--out-filename</a>
+</li>
         <li><a href="cli.html#cmdoption-yp-data-schema-prefix">--schema-prefix</a>
 </li>
         <li><a href="cli.html#cmdoption-yp-data-time-format">--time-format</a>, <a href="cli.html#cmdoption-yp-data-time-format">[1]</a>
@@ -502,15 +526,34 @@
 </li>
         <li><a href="cli.html#cmdoption-yp-data-no-environment">-i</a>
 </li>
+        <li><a href="cli.html#cmdoption-yp-data-out-filename">-o</a>
+</li>
         <li><a href="cli.html#cmdoption-yp-data-undefine">-U</a>
 </li>
-        <li><a href="cli.html#cmdoption-yp-data-arg-input-file-name">input-file-name</a>
-</li>
-        <li><a href="cli.html#cmdoption-yp-data-arg-output-file-name">output-file-name</a>
+        <li><a href="cli.html#cmdoption-yp-data-arg-file-names">file-names</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    yp-preprocessor command line option
+
+      <ul>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-define">--define</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-no-environment">--no-environment</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-out-filename">--out-filename</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-define">-D</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-no-environment">-i</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-out-filename">-o</a>
+</li>
+        <li><a href="cli.html#cmdoption-yp-preprocessor-arg-file-names">file-names</a>
+</li>
+      </ul></li>
       <li>
     yp-schema command line option
 

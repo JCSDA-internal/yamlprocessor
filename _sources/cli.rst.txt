@@ -9,19 +9,20 @@ Usage:
 
 .. code-block:: bash
 
-   yp-data [options] input-file-name output-file-name
+   yp-data [options] input-file-name ... output-file-name
+   yp-data [options] -o output-file-name input-file-name ...
 
 See :doc:`data-process` for detail.
 
 .. program:: yp-data
 
-.. option:: input-file-name
+.. option:: file-names
 
-   Name of an input file. Use ``-`` to read from STDIN.
+   Names of input or input+output files. Use ``-`` for STDIN/STDOUT.
 
-.. option:: output-file-name
+.. option:: --out-filename=FILENAME, -o FILENAME
 
-   Name of an output file. Use ``-`` to write to STDOUT.
+   Name of output file. Use ``-`` for STDOUT.
 
 .. option:: --include=DIR, -I DIR
 
@@ -68,6 +69,36 @@ See :doc:`data-process` for detail.
    Reference value for date-time substitutions.
    See also :envvar:`YP_TIME_REF_VALUE`.
 
+yp-preprocesor
+--------------
+
+Usage:
+
+.. code-block:: bash
+
+   yp-preprocesor input-file-name -o output-file-name [options]
+
+See :doc:`data-preprocessor` for detail.
+
+.. program:: yp-preprocessor
+
+.. option:: file-names
+
+   Names of input or input files. Use ``-`` for STDIN/STDOUT.
+
+.. option:: --out-filename=FILENAME, -o FILENAME
+
+   Name of output file. Use ``-`` for STDOUT.
+
+.. option:: --define=KEY=VALUE, -D KEY=VALUE
+
+   Map KEY to VALUE for variable substitutions. These override
+   environment variables which are used by default in the variable
+   substitution.
+
+.. option:: --no-environment, -i
+
+   Do not use environment variables in variable substitutions.
 
 yp-schema
 ---------
@@ -93,8 +124,8 @@ See :doc:`schema-process` for detail.
 Common Options
 --------------
 
-The following options apply to both :program:`yp-data` and :program:`yp-schema`
-commands.
+The following options apply to both :program:`yp-data`,
+:program:`yp-preprocessor` and :program:`yp-schema` commands.
 
 .. program:: yp-*
 
