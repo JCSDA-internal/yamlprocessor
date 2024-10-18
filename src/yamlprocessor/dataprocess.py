@@ -55,7 +55,7 @@ from ruamel.yaml.constructor import ConstructorError
 from . import __version__
 
 
-def configure_basic_logging():
+def configure_basic_logging(level=logging.INFO):
     """Configure basic logging, suitable for most CLI applications.
 
     Basic no-frill format.
@@ -80,7 +80,7 @@ def configure_basic_logging():
         },
         'handlers': {
             'default': {
-                'level': 'DEBUG',
+                'level': level,
                 'formatter': 'basic',
                 'class': 'logging.StreamHandler',
             },
@@ -88,12 +88,12 @@ def configure_basic_logging():
         'loggers': {
             '': {  # root logger
                 'handlers': ['default'],
-                'level': 'INFO',
+                'level': level,
                 'propagate': False,
             },
             '__main__': {  # if __name__ == '__main__'
                 'handlers': ['default'],
-                'level': 'DEBUG',
+                'level': level,
                 'propagate': False,
             },
         }
@@ -299,6 +299,7 @@ class DataProcessor:
         r"_FORMAT_(?P<name>\w+)",
         re.M | re.S)
 
+    TIME_FORMAT_DEFAULT = '%FT%T%:z'
     UNBOUND_ORIGINAL = 'YP_ORIGINAL'
 
     def __init__(self):
@@ -310,7 +311,7 @@ class DataProcessor:
             if item)
         self.include_dict = {}
         self.schema_prefix = os.getenv('YP_SCHEMA_PREFIX')
-        self.time_formats = {'': '%FT%T%:z'}
+        self.time_formats = {'': self.TIME_FORMAT_DEFAULT}
         self.time_now = datetime.now(tzlocal())  # assume application is fast
         time_ref_value = os.getenv('YP_TIME_REF_VALUE')
         if time_ref_value is None:
@@ -319,6 +320,29 @@ class DataProcessor:
             self.time_ref = datetimeparse(time_ref_value)
         self.variable_map = os.environ.copy()
         self.unbound_placeholder = None
+
+    def log_settings(self):
+        """Log (info) current settings of the processor."""
+        if self.is_process_include and self.include_paths:
+            logging.info(
+                'YP_INCLUDE_PATH=%s',
+                os.pathsep.join(self.include_paths),
+            )
+        if self.is_process_variable:
+            if self.time_now != self.time_ref:
+                logging.info(
+                    'YP_TIME_REF_VALUE=%s',
+                    strftime_with_colon_z(
+                        self.time_ref,
+                        self.time_formats[''],
+                    ),
+                )
+            if self.time_formats:
+                for key, time_format in self.time_formats.items():
+                    if key:
+                        logging.info('YP_TIME_FORMAT_%s=%s', key, time_format)
+                    elif time_format != self.TIME_FORMAT_DEFAULT:
+                        logging.info('YP_TIME_FORMAT=%s', time_format)
 
     def process_data(
         self,
@@ -335,15 +359,23 @@ class DataProcessor:
         if isinstance(in_filenames, str):
             filename = self.get_filename(in_filenames, [])
             root = self.load_file(filename)
+            logging.info('< %s', filename)
             schema_location = self.load_file_schema(filename)
             root_filenames = [filename]
         else:
             root_filenames = []
             with SpooledTemporaryFile(mode='w+') as concat_file:
+                if not in_filenames:
+                    in_filenames = ['-']
                 for filename in in_filenames:
                     filename = self.get_filename(filename, [])
-                    with open(filename) as file_:
-                        concat_file.write(file_.read())
+                    if filename == '-':
+                        concat_file.write(sys.stdin.read())
+                        sys.stdin.close()
+                    else:
+                        with open(filename) as file_:
+                            concat_file.write(file_.read())
+                    logging.info('< %s', filename)
                     root_filenames.append(filename)
                 concat_file.seek(0)
                 root = self.load_file(concat_file)
@@ -486,6 +518,7 @@ class DataProcessor:
                 filename = self.get_filename(
                     include_filename, parent_filenames)
                 loaded_value = self.load_file(filename)
+                logging.info('< %s %s', '+' * len(parent_filenames), filename)
             parent_filenames.append(filename)
             if self.VARIABLES_KEY in value:
                 variable_map.update(value[self.VARIABLES_KEY])
@@ -848,6 +881,12 @@ def main(argv=None):
         default=True,
         help='Do not process variable substitutions')
     parser.add_argument(
+        '--quiet', '-q',
+        dest='is_quiet_mode',
+        action='store_true',
+        default=False,
+        help='Reduce diagnostic message verbosity')
+    parser.add_argument(
         '--schema-prefix',
         metavar='PREFIX',
         dest='schema_prefix',
@@ -884,6 +923,8 @@ def main(argv=None):
 
     if args.is_print_version:
         parser.exit(0, f'{parser.prog} {__version__}\n')
+    if args.is_quiet_mode:
+        configure_basic_logging(level=logging.ERROR)
 
     # Set up processor
     processor = DataProcessor()
@@ -929,6 +970,7 @@ def main(argv=None):
         args.out_filename = args.filenames.pop()
     elif args.out_filename is None:
         args.out_filename = '-'
+    processor.log_settings()
     processor.process_data(args.filenames, args.out_filename)
 
 
