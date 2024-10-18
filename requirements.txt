@@ -2,5 +2,5 @@ jmespath
 jsonschema
 python-dateutil
 ruamel.yaml
-sphinx
-sphinx-rtd-theme
+sphinx<8
+sphinx-rtd-theme<3

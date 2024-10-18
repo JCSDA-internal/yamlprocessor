@@ -7,8 +7,8 @@ dependencies:
   - flake8
   - jmespath
   - jsonschema
-  - sphinx
-  - sphinx_rtd_theme
+  - sphinx<8
+  - sphinx_rtd_theme<3
   - pytest
   - pytest-cov
   - python-build

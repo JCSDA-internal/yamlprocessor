@@ -27,7 +27,7 @@ See :doc:`data-process` for detail.
 .. option:: --include=DIR, -I DIR
 
    Add search locations for item specified as relative paths.
-   See also :envvar:`YP_INCLUDE_PATHS`.
+   See also :envvar:`YP_INCLUDE_PATH`.
 
 .. option:: --define=KEY=VALUE, -D KEY=VALUE
 
@@ -141,7 +141,7 @@ The following options apply to both :program:`yp-data`,
 Environment Variables
 ---------------------
 
-.. envvar:: YP_INCLUDE_PATHS
+.. envvar:: YP_INCLUDE_PATH
 
    Set the search path for include files (that are specified as relative
    locations). Expect a list of folders/directories in the same syntax as
