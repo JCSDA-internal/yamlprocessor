@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python API &mdash; yamlprocessor 0.5.3 documentation</title>
+  <title>Python API &mdash; yamlprocessor 0.6.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=2a2fe768"></script>
+        <script src="_static/documentation_options.js?v=2bd037f0"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -68,6 +68,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.load_file"><code class="docutils literal notranslate"><span class="pre">DataProcessor.load_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.load_file_schema"><code class="docutils literal notranslate"><span class="pre">DataProcessor.load_file_schema()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.load_include_file"><code class="docutils literal notranslate"><span class="pre">DataProcessor.load_include_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.log_settings"><code class="docutils literal notranslate"><span class="pre">DataProcessor.log_settings()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.process_data"><code class="docutils literal notranslate"><span class="pre">DataProcessor.process_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.process_variable"><code class="docutils literal notranslate"><span class="pre">DataProcessor.process_variable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#yamlprocessor.dataprocess.DataProcessor.validate_data"><code class="docutils literal notranslate"><span class="pre">DataProcessor.validate_data()</span></code></a></li>
@@ -162,7 +163,7 @@ Validate against JSON schema.</p>
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor..include_paths">
 <span class="sig-prename descclassname"><span class="pre">.</span></span><span class="sig-name descname"><span class="pre">include_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#list" title="(in Python v3.7)"><span class="pre">list</span></a></em><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor..include_paths" title="Link to this definition">¶</a></dt>
 <dd><p>Locations for searching include files. Default is the value of the
-<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_INCLUDE_PATH</span></code> environment variable split into a list.</p>
+<span class="target" id="index-0"></span><a class="reference internal" href="cli.html#envvar-YP_INCLUDE_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">YP_INCLUDE_PATH</span></code></a> environment variable split into a list.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -274,6 +275,12 @@ may have additional variables.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.log_settings">
+<span class="sig-name descname"><span class="pre">log_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.log_settings" title="Link to this definition">¶</a></dt>
+<dd><p>Log (info) current settings of the processor.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.DataProcessor.process_data">
 <span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/typing.html#typing.Iterable" title="(in Python v3.7)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/stdtypes.html#str" title="(in Python v3.7)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://python.readthedocs.io/en/latest/library/constants.html#None" title="(in Python v3.7)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#yamlprocessor.dataprocess.DataProcessor.process_data" title="Link to this definition">¶</a></dt>
 <dd><p>Concatenate input files and load resulting data.</p>
@@ -343,7 +350,7 @@ may have additional variables.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yamlprocessor.dataprocess.configure_basic_logging">
-<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">configure_basic_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.configure_basic_logging" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">yamlprocessor.dataprocess.</span></span><span class="sig-name descname"><span class="pre">configure_basic_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yamlprocessor.dataprocess.configure_basic_logging" title="Link to this definition">¶</a></dt>
 <dd><p>Configure basic logging, suitable for most CLI applications.</p>
 <p>Basic no-frill format.
 Stream handler prints message on STDERR.</p>
