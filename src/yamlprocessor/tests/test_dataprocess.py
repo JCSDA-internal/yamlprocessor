@@ -1,3 +1,4 @@
+import io
 import json
 
 from dateutil.parser import parse as datetimeparse
@@ -208,18 +209,22 @@ def test_main_0(tmp_path, yaml):
     assert yaml.load(outfilename.open()) == data
 
 
-def test_main_1(tmp_path, yaml):
+def test_main_1(capsys, tmp_path, yaml):
     """Test main, single include."""
     data = {'testing': [1, 2, 3]}
     data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, 3]}
     infilename = tmp_path / 'a.yaml'
     with infilename.open('w') as infile:
         yaml.dump(data_0, infile)
-    with (tmp_path / '1.yaml').open('w') as infile_1:
+    infilename_1 = tmp_path / '1.yaml'
+    with (infilename_1).open('w') as infile_1:
         yaml.dump(1, infile_1)
     outfilename = tmp_path / 'b.yaml'
     main([str(infilename), str(outfilename)])
     assert yaml.load(outfilename.open()) == data
+    captured = capsys.readouterr()
+    assert f'[INFO] < {infilename}' in captured.err.splitlines()
+    assert f'[INFO] < + {infilename_1}' in captured.err.splitlines()
 
 
 def test_main_3(tmp_path, yaml):
@@ -289,7 +294,7 @@ def test_main_6(tmp_path, yaml):
     assert yaml.load(outfilename.open()) == data
 
 
-def test_main_7(tmp_path, yaml):
+def test_main_7(capsys, tmp_path, yaml):
     """Test main, include files in a separate folder."""
     data = {'testing': [1, 2, {3: [3.1, 3.14]}]}
     data_0 = {'testing': [{'INCLUDE': '1.yaml'}, 2, {'INCLUDE': '3.yaml'}]}
@@ -298,15 +303,24 @@ def test_main_7(tmp_path, yaml):
         yaml.dump(data_0, infile)
     include_d = tmp_path / 'include'
     include_d.mkdir()
-    with (include_d / '1.yaml').open('w') as infile_1:
+    include_1 = include_d / '1.yaml'
+    with (include_1).open('w') as infile_1:
         yaml.dump(1, infile_1)
-    with (include_d / '3.yaml').open('w') as infile_3:
+    include_3 = include_d / '3.yaml'
+    with (include_3).open('w') as infile_3:
         yaml.dump({3: {'INCLUDE': '3x.yaml'}}, infile_3)
-    with (include_d / '3x.yaml').open('w') as infile_3x:
+    include_3x = include_d / '3x.yaml'
+    with (include_3x).open('w') as infile_3x:
         yaml.dump([3.1, 3.14], infile_3x)
     outfilename = tmp_path / 'b.yaml'
     main(['-I', str(include_d), str(infilename), str(outfilename)])
     assert yaml.load(outfilename.open()) == data
+    captured = capsys.readouterr()
+    assert f'[INFO] YP_INCLUDE_PATH={include_d}' in captured.err.splitlines()
+    assert f'[INFO] < {infilename}' in captured.err.splitlines()
+    assert f'[INFO] < + {include_1}' in captured.err.splitlines()
+    assert f'[INFO] < + {include_3}' in captured.err.splitlines()
+    assert f'[INFO] < ++ {include_3x}' in captured.err.splitlines()
 
 
 def test_main_8(tmp_path, yaml):
@@ -557,6 +571,34 @@ other_worlds:
             },
         },
     }
+
+
+def test_main_16(capsys, monkeypatch):
+    """Test main, positional argument -, so read sys.stdin."""
+    monkeypatch.setattr('sys.stdin', io.StringIO('hello: world\n'))
+    main(['-o-', '-'])
+    captured = capsys.readouterr()
+    assert captured.out.splitlines() == ['hello: world']
+
+
+def test_main_17(capsys, monkeypatch):
+    """Test main, no positional argument, so read sys.stdin."""
+    monkeypatch.setattr('sys.stdin', io.StringIO('hello: world\n'))
+    main(['-o-'])
+    captured = capsys.readouterr()
+    assert captured.out.splitlines() == ['hello: world']
+
+
+def test_main_18(capsys, monkeypatch):
+    """Test main, set reference time."""
+    monkeypatch.setattr('sys.stdin', io.StringIO('time: ${YP_TIME_REF}\n'))
+    main(['-o-', '--time-ref=2028-02-29T13:48:50Z'])
+    captured = capsys.readouterr()
+    assert captured.out.splitlines() == ["time: '2028-02-29T13:48:50Z'"]
+    assert (
+        '[INFO] YP_TIME_REF_VALUE=2028-02-29T13:48:50Z'
+        in captured.err.splitlines()
+    )
 
 
 def test_main_validate_1(tmp_path, capsys, yaml):
