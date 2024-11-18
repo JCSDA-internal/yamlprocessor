@@ -67,6 +67,7 @@ data:
     preprocessor.process_yaml(tmp_path / 'in_1.yaml', outfilename1)
     assert yaml.load(outfilename1.open()) == ref_yaml
 
+
 def test_main_1(tmp_path, yaml):
     """Test direct insert with spaces."""
     yaml_in = """
