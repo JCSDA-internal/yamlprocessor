@@ -48,6 +48,8 @@ class DataPreProcessor:
         for iline in lines:
             # look for specific pattern in each line
             if 'DIRECT_INCLUDE=' in iline:
+                # get spaces before 'DIRECT_INCLUDE'
+                spaces = newstring.split('DIRECT_INCLUDE')[0]
                 # retrieve header file
                 yaml_header_File = iline.split('=')[1].rstrip()
                 # replace variables in the string
@@ -56,8 +58,10 @@ class DataPreProcessor:
                 # open header file
                 with open(yaml_header_File, 'r') as file:
                     auxFileData = file.read()
+                # add spaces to front of lines
+                auxFileData_offset = [spaces + line for line in auxFileData]
                 # update lines for new file
-                new_line.append(auxFileData)
+                new_line.append(auxFileData_offset)
             else:
                 new_line.append(iline)
         # save the result
