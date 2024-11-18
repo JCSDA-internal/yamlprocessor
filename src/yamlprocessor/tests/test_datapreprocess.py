@@ -66,3 +66,46 @@ data:
     outfilename1 = tmp_path / 'test_1.yaml'
     preprocessor.process_yaml(tmp_path / 'in_1.yaml', outfilename1)
     assert yaml.load(outfilename1.open()) == ref_yaml
+
+
+def test_main_1(tmp_path, yaml):
+    """Test direct insert with spaces."""
+    yaml_in = """
+_:
+- &banana 1
+- &groups [4, 5, 6]
+
+data:
+    brain: *banana
+    DIRECT_INCLUDE=$FILE_PATH/aux.yaml
+"""
+    yaml_aux = """
+tel: *groups
+"""
+    reference = """
+_:
+- &banana 1
+- &groups [4, 5, 6]
+
+data:
+    brain: *banana
+    tel: *groups
+"""
+    infilename = tmp_path / 'in_0.yaml'
+    with infilename.open('w') as infile:
+        infile.write(yaml_in)
+
+    auxfilename = tmp_path / 'aux.yaml'
+    with auxfilename.open('w') as auxfile:
+        auxfile.write(yaml_aux)
+
+    # Run preprocessor
+    preprocessor = DataPreProcessor()
+    keymap = {"FILE_PATH": str(tmp_path)}
+    preprocessor.add_replacements_map(keymap)
+    # Setup reference
+    ref_yaml = yaml.load(reference)
+    # Test first style input
+    outfilename0 = tmp_path / 'test_0.yaml'
+    preprocessor.process_yaml(tmp_path / 'in_0.yaml', outfilename0)
+    assert yaml.load(outfilename0.open()) == ref_yaml

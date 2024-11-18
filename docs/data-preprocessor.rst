@@ -3,7 +3,9 @@ Data Pre-Processor
 
 The preprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and
 concatenates the associated file at this point in the input file. The result
-is written to the output file or standard out if - is specified.
+is written to the output file or standard out if - is specified.  If the
+DIRECT_INCLUDE keyword has proceeding spaces these will be used to offset
+the lines which are being concatenated.
 
 It is expected that the keyword in the input yaml file will take the following
 format:
