@@ -49,19 +49,18 @@ class DataPreProcessor:
             # look for specific pattern in each line
             if 'DIRECT_INCLUDE=' in iline:
                 # get spaces before 'DIRECT_INCLUDE'
-                spaces = newstring.split('DIRECT_INCLUDE')[0]
+                spaces = iline.split('DIRECT_INCLUDE')[0]
                 # retrieve header file
-                yaml_header_File = iline.split('=')[1].rstrip()
+                yaml_aux_File = iline.split('=')[1].rstrip()
                 # replace variables in the string
-                yaml_header_File = self.__replace_placeholders(
-                    yaml_header_File)
-                # open header file
-                with open(yaml_header_File, 'r') as file:
-                    auxFileData = file.read()
-                # add spaces to front of lines
-                auxFileData_offset = [spaces + line for line in auxFileData]
-                # update lines for new file
-                new_line.append(auxFileData_offset)
+                yaml_aux_File = self.__replace_placeholders(
+                    yaml_aux_File)
+                # open and read header file
+                with open(yaml_aux_File, 'r') as file:
+                    auxFileData = file.readlines()
+                # Add spaces and append to output
+                for auxline in auxFileData:
+                    new_line.append(spaces + auxline)
             else:
                 new_line.append(iline)
         # save the result
