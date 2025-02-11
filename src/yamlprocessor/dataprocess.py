@@ -523,7 +523,8 @@ class DataProcessor:
             if self.VARIABLES_KEY in value:
                 variable_map.update(value[self.VARIABLES_KEY])
             if self.QUERY_KEY in value:
-                value = jmespath.search(value[self.QUERY_KEY], loaded_value)
+                query_value = self.process_variable(value[self.QUERY_KEY])
+                value = jmespath.search(query_value, loaded_value)
             else:
                 value = loaded_value
         return value, parent_filenames, variable_map, is_merge

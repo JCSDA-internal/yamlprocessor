@@ -601,6 +601,50 @@ def test_main_18(capsys, monkeypatch):
     )
 
 
+def test_main_19(tmp_path, yaml):
+    """Test main, single include with query value as variable."""
+    data_0 = {'flowers': {
+        'item1': {
+            'INCLUDE': '19i.yaml',
+            'QUERY': '${COLOUR_A}',
+            'MERGE': True,
+        },
+        'item2': {
+            'INCLUDE': '19i.yaml',
+            'QUERY': '${COLOUR_B}',
+            'MERGE': True,
+        },
+    }}
+    data_1 = {
+        'red': {'rose': 'U+1F339'},
+        'pink': {'tulip': 'U+1F337'},
+        'yellow': {'sunflower': 'U+1F33B'},
+        'white': {},
+    }
+    infilename = tmp_path / '19.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(data_0, infile)
+    with (tmp_path / '19i.yaml').open('w') as infile_1:
+        yaml.dump(data_1, infile_1)
+    outfilename = tmp_path / '19o.yaml'
+    main([
+        '-DCOLOUR_A=red',
+        '-DCOLOUR_B=yellow',
+        str(infilename),
+        str(outfilename),
+    ])
+    assert yaml.load(outfilename.open()) == {
+        'flowers': {'rose': 'U+1F339', 'sunflower': 'U+1F33B'}}
+    main([
+        '-DCOLOUR_A=white',
+        '-DCOLOUR_B=pink',
+        str(infilename),
+        str(outfilename),
+    ])
+    assert yaml.load(outfilename.open()) == {
+        'flowers': {'tulip': 'U+1F337'}}
+
+
 def test_main_validate_1(tmp_path, capsys, yaml):
     """Test main, YAML with JSON schema validation."""
     schema = {
