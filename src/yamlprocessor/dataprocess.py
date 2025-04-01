@@ -409,17 +409,19 @@ class DataProcessor:
                         item, parent_filenames, variable_map))
                 if is_merge and type_of_data != type(include_data):
                     raise TypeError()
-                if is_merge and type_of_data is list:
-                    # For a list, the iterator seems to handle the new items
-                    # perfectly fine. We insert the included list at and after
-                    # the current position. The current item is logically
-                    # replaced by the first item of the inserted list.
+                if is_merge and type_of_data is list and len(include_data) == 1:
+                    # For a list, if the incoming is a single element list, then
+                    # it can replace the original with no issue.
+                    item = data[key] = include_data[0]
+                elif is_merge and type_of_data is list:
+                    # For a list, if the incoming is not a single element list,
+                    # the iterator will stop working, so we need to re-process
+                    # the list for correctness.
                     del data[key]
-                    item = None
                     for i, include_item in enumerate(include_data):
                         data.insert(key + i, include_item)
-                        if i == 0:
-                            item = include_item
+                    stack.append([data, parent_filenames, variable_map])
+                    break
                 elif is_merge and type_of_data is dict:
                     # For a dict, the iterator cannot handle size changes, so
                     # we can only iterate over a copy of the original dict. We
