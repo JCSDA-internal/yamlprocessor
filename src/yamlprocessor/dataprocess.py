@@ -409,9 +409,13 @@ class DataProcessor:
                         item, parent_filenames, variable_map))
                 if is_merge and type_of_data != type(include_data):
                     raise TypeError()
-                if is_merge and type_of_data is list and len(include_data) == 1:
-                    # For a list, if the incoming is a single element list, then
-                    # it can replace the original with no issue.
+                if (
+                    is_merge
+                    and type_of_data is list
+                    and len(include_data) == 1
+                ):
+                    # For a list, if the incoming is a single element list,
+                    # then it can replace the original with no issue.
                     item = data[key] = include_data[0]
                 elif is_merge and type_of_data is list:
                     # For a list, if the incoming is not a single element list,
