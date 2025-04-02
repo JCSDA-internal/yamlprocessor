@@ -1,22 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Processor &mdash; yamlprocessor 0.6.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  <title>Data Processor &mdash; yamlprocessor 0.6.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/documentation_options.js?v=2bd037f0"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=73d9a94e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -91,9 +91,9 @@
            <div itemprop="articleBody">
              
   <section id="data-processor">
-<h1>Data Processor<a class="headerlink" href="#data-processor" title="Link to this heading">¶</a></h1>
+<h1>Data Processor<a class="headerlink" href="#data-processor" title="Link to this heading"></a></h1>
 <section id="modularisation-include">
-<h2>Modularisation / Include<a class="headerlink" href="#modularisation-include" title="Link to this heading">¶</a></h2>
+<h2>Modularisation / Include<a class="headerlink" href="#modularisation-include" title="Link to this heading"></a></h2>
 <p>Consider an input YAML file containing the following data:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hello</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">INCLUDE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">earth.yaml</span>
@@ -153,7 +153,7 @@ inserted as if it were the content loaded from an include file. The processor
 will always attempt to find a match from this attribute before looking for
 matching include files from the file system. Suppose we use the following
 Python logic with the above files:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yamlprocessor.dataprocess</span> <span class="kn">import</span> <span class="n">DataProcessor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">yamlprocessor.dataprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataProcessor</span>
 <span class="c1"># ...</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">()</span>
 <span class="n">processor</span><span class="o">.</span><span class="n">include_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
@@ -183,7 +183,7 @@ recognised will not be processed.</p></li>
 </div></blockquote>
 </section>
 <section id="modularisation-include-with-merge">
-<h2>Modularisation / Include with Merge<a class="headerlink" href="#modularisation-include-with-merge" title="Link to this heading">¶</a></h2>
+<h2>Modularisation / Include with Merge<a class="headerlink" href="#modularisation-include-with-merge" title="Link to this heading"></a></h2>
 <p>A common use case for include is to merge a list read from an include
 file into the current list, (or similarly to merge a map/object read from an
 include file into the current map/object). We can tell the processor by adding
@@ -271,7 +271,7 @@ the same keys, regardless of where the items appear in the original map/object.<
 </div>
 </section>
 <section id="modularisation-include-with-query">
-<h2>Modularisation / Include with Query<a class="headerlink" href="#modularisation-include-with-query" title="Link to this heading">¶</a></h2>
+<h2>Modularisation / Include with Query<a class="headerlink" href="#modularisation-include-with-query" title="Link to this heading"></a></h2>
 <p>Consider an example where we want to include only a subset of the data
 structure from the include file.
 We can use a <a class="reference external" href="https://jmespath.org/">JMESPath</a> query to achieve this.</p>
@@ -315,7 +315,7 @@ and the output will look like:</p>
 </div>
 </section>
 <section id="multiple-input-files-concatenation">
-<h2>Multiple Input Files Concatenation<a class="headerlink" href="#multiple-input-files-concatenation" title="Link to this heading">¶</a></h2>
+<h2>Multiple Input Files Concatenation<a class="headerlink" href="#multiple-input-files-concatenation" title="Link to this heading"></a></h2>
 <p>You can specify multiple input files in both command line and Python usages.
 The input files will be concatenated together (as text) before before parsed as
 a whole YAML document. For example, suppose we have <code class="docutils literal notranslate"><span class="pre">part1.yaml</span></code> with:</p>
@@ -345,7 +345,7 @@ a whole YAML document. For example, suppose we have <code class="docutils litera
 </pre></div>
 </div>
 <p>You can achieve the same results by running:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yamlprocessor.dataprocess</span> <span class="kn">import</span> <span class="n">DataProcessor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">yamlprocessor.dataprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataProcessor</span>
 <span class="c1"># ...</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">()</span>
 <span class="n">processor</span><span class="o">.</span><span class="n">process_data</span><span class="p">([</span><span class="s1">&#39;part1.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;part2.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;part3.yaml&#39;</span><span class="p">])</span>
@@ -353,7 +353,7 @@ a whole YAML document. For example, suppose we have <code class="docutils litera
 </div>
 </section>
 <section id="string-value-variable-substitution">
-<h2>String Value Variable Substitution<a class="headerlink" href="#string-value-variable-substitution" title="Link to this heading">¶</a></h2>
+<h2>String Value Variable Substitution<a class="headerlink" href="#string-value-variable-substitution" title="Link to this heading"></a></h2>
 <p>Consider:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${SWEET_HOME}/sugar.txt</span>
 </pre></div>
@@ -389,7 +389,7 @@ for substitution. (So only those specified with
 </div></blockquote>
 <p>In Python, simply manipulate the <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor..variable_map" title="yamlprocessor.dataprocess.DataProcessor..variable_map"><code class="xref py py-attr docutils literal notranslate"><span class="pre">variable_map</span></code></a> (dict) attribute of
 the relevant <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance. The
-dict is a copy of <a class="reference external" href="https://python.readthedocs.io/en/latest/library/os.html#os.environ" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.environ</span></code></a> at initialisation.</p>
+dict is a copy of <a class="reference external" href="https://docs.python.org/3/library/os.html#os.environ" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.environ</span></code></a> at initialisation.</p>
 <p>Finally, if you reference a variable in YAML that is not defined, you will
 normally get an unbound variable error. You can modify this behaviour by
 setting a place holder. On the command line, use the
@@ -400,7 +400,7 @@ string value. If you want to leave the original syntax unchanged for unbound
 variables, set the placeholder VALUE to <code class="docutils literal notranslate"><span class="pre">YP_ORIGINAL</span></code>.</p>
 </section>
 <section id="variable-substitution-include-scope">
-<h2>Variable Substitution Include Scope<a class="headerlink" href="#variable-substitution-include-scope" title="Link to this heading">¶</a></h2>
+<h2>Variable Substitution Include Scope<a class="headerlink" href="#variable-substitution-include-scope" title="Link to this heading"></a></h2>
 <p>It is possible to define or override the values of the variables for
 substitution in include files. The scope of the change will be local to the
 include file (and files that it includes). The following is an example of how
@@ -489,7 +489,7 @@ substitution.</p>
 </div>
 </section>
 <section id="string-value-date-time-substitution">
-<h2>String Value Date-Time Substitution<a class="headerlink" href="#string-value-date-time-substitution" title="Link to this heading">¶</a></h2>
+<h2>String Value Date-Time Substitution<a class="headerlink" href="#string-value-date-time-substitution" title="Link to this heading"></a></h2>
 <p>The YAML processor utility also supports date-time substitution using a
 similar syntax, for variables names starting with:</p>
 <blockquote>
@@ -619,7 +619,7 @@ defined value takes precedence, so if you have already <code class="docutils lit
 reference time.</p>
 </section>
 <section id="cast-value-variable-substitution">
-<h2>Cast Value Variable Substitution<a class="headerlink" href="#cast-value-variable-substitution" title="Link to this heading">¶</a></h2>
+<h2>Cast Value Variable Substitution<a class="headerlink" href="#cast-value-variable-substitution" title="Link to this heading"></a></h2>
 <p>Environment variables are strings by nature, but YAML scalars can be numbers or
 booleans. Therefore, for non-string scalar values, i.e. integers, floats and
 booleans, the YAML processor utility supports casting the value to the correct
@@ -658,7 +658,7 @@ with the version of Python you are using.</p>
 </div>
 </section>
 <section id="turn-off-processing">
-<h2>Turn Off Processing<a class="headerlink" href="#turn-off-processing" title="Link to this heading">¶</a></h2>
+<h2>Turn Off Processing<a class="headerlink" href="#turn-off-processing" title="Link to this heading"></a></h2>
 <p>If you need to turn off processing of <code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> syntax, you can do:</p>
 <blockquote>
 <div><ul class="simple">
@@ -680,7 +680,7 @@ you can do:</p>
 </div></blockquote>
 </section>
 <section id="validation-with-json-schema">
-<h2>Validation with JSON Schema<a class="headerlink" href="#validation-with-json-schema" title="Link to this heading">¶</a></h2>
+<h2>Validation with JSON Schema<a class="headerlink" href="#validation-with-json-schema" title="Link to this heading"></a></h2>
 <p>You can tell the processor to look for a JSON schema file and validate
 the current YAML file by adding a schema association line to the beginning
 of the YAML file, which can be one of:</p>

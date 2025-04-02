@@ -1,22 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Pre-Processor &mdash; yamlprocessor 0.6.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  <title>Data Pre-Processor &mdash; yamlprocessor 0.6.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/documentation_options.js?v=2bd037f0"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=73d9a94e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -84,17 +84,19 @@
            <div itemprop="articleBody">
              
   <section id="data-pre-processor">
-<h1>Data Pre-Processor<a class="headerlink" href="#data-pre-processor" title="Link to this heading">¶</a></h1>
+<h1>Data Pre-Processor<a class="headerlink" href="#data-pre-processor" title="Link to this heading"></a></h1>
 <p>The preprocessor looks for the DIRECT_INCLUDE= keyword in the input yaml and
 concatenates the associated file at this point in the input file. The result
-is written to the output file or standard out if - is specified.</p>
+is written to the output file or standard out if - is specified.  If the
+DIRECT_INCLUDE keyword has proceeding spaces these will be used to offset
+the lines which are being concatenated.</p>
 <p>It is expected that the keyword in the input yaml file will take the following
 format:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">DIRECT_INCLUDE=/path/to/file/to/be/included</span>
 </pre></div>
 </div>
 <section id="command-line-useage">
-<h2>Command line useage<a class="headerlink" href="#command-line-useage" title="Link to this heading">¶</a></h2>
+<h2>Command line useage<a class="headerlink" href="#command-line-useage" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yp-preprocessor<span class="w"> </span>input-file-name<span class="w"> </span>-o<span class="w"> </span>output-file-name<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
 </pre></div>
 </div>
@@ -102,8 +104,8 @@ format:</p>
 detail.</p>
 </section>
 <section id="python-useage">
-<h2>Python useage<a class="headerlink" href="#python-useage" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yamlprocessor.datapreprocessor</span> <span class="kn">import</span> <span class="n">DataPreProcessor</span>
+<h2>Python useage<a class="headerlink" href="#python-useage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">yamlprocessor.datapreprocessor</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataPreProcessor</span>
 <span class="n">preprocessor</span> <span class="o">=</span> <span class="n">DataPreProcessor</span><span class="p">()</span>
 <span class="n">preprocessor</span><span class="o">.</span><span class="n">add_replacements_map</span><span class="p">(</span><span class="n">keymap</span><span class="p">)</span> <span class="c1"># optional line</span>
 <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_yaml</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
@@ -111,7 +113,7 @@ detail.</p>
 </div>
 </section>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <p>Consider an input YAML file containing the following data:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">DIRECT_INCLUDE=a.yaml</span>
 
