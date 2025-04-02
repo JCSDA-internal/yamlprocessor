@@ -460,6 +460,31 @@ def test_main_12(tmp_path, yaml):
     ]
 
 
+def test_main_12_1(tmp_path, yaml):
+    """Test main, merge include file with empty list and variable process.
+
+    Issue 35.
+    """
+    root_data = [
+        {'name': '${MATTER}'},
+        {'INCLUDE': 'void.yaml', 'MERGE': True},
+        {'name': '${MATTER}'},
+    ]
+    void_data = []
+    infilename = tmp_path / 'root.yaml'
+    with infilename.open('w') as infile:
+        yaml.dump(root_data, infile)
+    include_infilename = tmp_path / 'void.yaml'
+    with include_infilename.open('w') as infile:
+        yaml.dump(void_data, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    assert yaml.load(outfilename.open()) == [
+        {'name': 'stuff'},
+        {'name': 'stuff'},
+    ]
+
+
 def test_main_13(tmp_path, yaml):
     """Test main, merge include files into a map/object."""
     root_data = {
