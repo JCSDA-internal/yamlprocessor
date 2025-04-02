@@ -394,64 +394,51 @@ class DataProcessor:
             type_of_data = type(data)
             items_iter = None
             skip_keys = set()
+            key_offset = 0
             if type_of_data is list:
-                items_iter = enumerate(data)
+                items_iter = enumerate(data.copy())
             elif type_of_data is dict:
                 items_iter = data.copy().items()
             if items_iter is None:
                 continue
-            for key, item in items_iter:
-                if key in skip_keys:
+            for ikey, item in items_iter:
+                if ikey in skip_keys:
                     continue
+                if key_offset:
+                    key = ikey + key_offset
+                else:
+                    key = ikey
                 item = data[key] = self.process_variable(item, variable_map)
                 include_data, parent_filenames_x, variable_map_x, is_merge = (
                     self.load_include_file(
                         item, parent_filenames, variable_map))
                 if is_merge and type_of_data != type(include_data):
                     raise TypeError()
-                if (
-                    is_merge
-                    and type_of_data is list
-                    and len(include_data) == 1
-                ):
-                    # For a list, if the incoming is a single element list,
-                    # then it can replace the original with no issue.
-                    item = data[key] = include_data[0]
-                elif is_merge and type_of_data is list:
-                    # For a list, if the incoming is not a single element list,
-                    # the iterator will stop working, so we need to re-process
-                    # the list for correctness.
+                p_items = []  # processed items
+                if is_merge and type_of_data is list:
                     del data[key]
+                    key_offset += len(include_data) - 1
                     for i, include_item in enumerate(include_data):
                         data.insert(key + i, include_item)
-                    stack.append([data, parent_filenames, variable_map])
-                    break
+                        p_items.append(include_item)
                 elif is_merge and type_of_data is dict:
-                    # For a dict, the iterator cannot handle size changes, so
-                    # we can only iterate over a copy of the original dict. We
-                    # insert the items in the dict normally, but we'll need to
-                    # add elements of the dict to the stack to ensure we visit
-                    # any sub-trees for include files, etc.
                     del data[key]
-                    item = None
                     for include_key, include_item in include_data.items():
+                        p_items.append(include_item)
                         data[include_key] = self.process_variable(
                             include_item, variable_map)
                         skip_keys.add(include_key)
-                        if (
-                            isinstance(include_item, dict)
-                            or isinstance(include_item, list)
-                        ):
-                            stack.append([
-                                include_item,
-                                parent_filenames_x,
-                                variable_map_x,
-                            ])
                 elif include_data != item:
-                    item = data[key] = include_data
-                if isinstance(item, dict) or isinstance(item, list):
-                    stack.append(
-                        [data[key], parent_filenames_x, variable_map_x])
+                    data[key] = include_data
+                    p_items.append(data[key])
+                else:
+                    p_items.append(data[key])
+                # If a processed item is a dict/list, then need to process
+                # its sub data structures.
+                for p_item in p_items:
+                    if isinstance(p_item, dict) or isinstance(p_item, list):
+                        stack.append(
+                            [p_item, parent_filenames_x, variable_map_x])
         if out_filename == '-':
             out_file = sys.stdout
         else:
