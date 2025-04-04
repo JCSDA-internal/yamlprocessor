@@ -9,8 +9,7 @@ readme = "README.md"
 
 requires-python = ">=3.11"
 
-license = "BSD-3-Clause"
-license-files = ["LICENSE"]
+license = {file = "LICENSE"}
 
 maintainers = [
   {name = "Matt Shin", email = "matthew.shin@metoffice.gov.uk" }
@@ -20,6 +19,7 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Science/Research",
   "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
