@@ -433,8 +433,16 @@ class DataProcessor:
                     p_items.append(data[key])
                 else:
                     p_items.append(data[key])
-                # If a processed item is a dict/list, then need to process
-                # its sub data structures.
+                # If any processed item contains another merge include, then
+                # need to reconsider the original dict/list as a whole.
+                # Otherwise, if a processed item is a dict/list, then need to
+                # process its sub data structures.
+                if any(
+                    self._is_include(p_item) and self.MERGE_KEY in p_item
+                    for p_item in p_items
+                ):
+                    stack.append([data, parent_filenames, variable_map])
+                    break
                 for p_item in p_items:
                     if isinstance(p_item, dict) or isinstance(p_item, list):
                         stack.append(
