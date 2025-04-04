@@ -460,7 +460,7 @@ def test_main_12(tmp_path, yaml):
     ]
 
 
-def test_main_12_1(tmp_path, yaml):
+def test_main_12_empty_list_1(tmp_path, yaml):
     """Test main, merge include file with empty list and variable process.
 
     Issue 35.
@@ -485,7 +485,33 @@ def test_main_12_1(tmp_path, yaml):
     ]
 
 
-def test_main_12_2(tmp_path, yaml):
+def test_main_12_empty_list_2(tmp_path, yaml):
+    """Test main, recursive merge include file with empty list.
+
+    Issue 35, but with recursive merge include of an empty list.
+    """
+    root_data = [
+        {'name': '${MATTER}'},
+        {'INCLUDE': 'one.yaml', 'MERGE': True},
+        {'name': '${MATTER}'},
+    ]
+    for name, data in (
+        ('void.yaml', []),
+        ('one.yaml', [{'INCLUDE': 'void.yaml', 'MERGE': True}]),
+        ('root.yaml', root_data),
+    ):
+        infilename = tmp_path / name
+        with infilename.open('w') as infile:
+            yaml.dump(data, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    assert yaml.load(outfilename.open()) == [
+        {'name': 'stuff'},
+        {'name': 'stuff'},
+    ]
+
+
+def test_main_12_empty_dict_1(tmp_path, yaml):
     """Test main, merge include file with empty dict and variable process.
 
     Issue 35, but with an empty dict.
@@ -502,6 +528,32 @@ def test_main_12_2(tmp_path, yaml):
     include_infilename = tmp_path / 'void.yaml'
     with include_infilename.open('w') as infile:
         yaml.dump(void_data, infile)
+    outfilename = tmp_path / 'b.yaml'
+    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    assert yaml.load(outfilename.open()) == {
+        'name1': 'stuff',
+        'name2': 'stuff',
+    }
+
+
+def test_main_12_empty_dict_2(tmp_path, yaml):
+    """Test main, recursive merge include file with empty dict.
+
+    Issue 35, but with recursive merge include of an empty dict.
+    """
+    root_data = {
+        'name1': '${MATTER}',
+        'one': {'INCLUDE': 'one.yaml', 'MERGE': True},
+        'name2': '${MATTER}',
+    }
+    for name, data in (
+        ('void.yaml', {}),
+        ('one.yaml', {'void': {'INCLUDE': 'void.yaml', 'MERGE': True}}),
+        ('root.yaml', root_data),
+    ):
+        infilename = tmp_path / name
+        with infilename.open('w') as infile:
+            yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
     main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
     assert yaml.load(outfilename.open()) == {
