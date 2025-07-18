@@ -51,6 +51,7 @@ except ImportError:
     pass  # python < 3.8
 from ruamel.yaml import YAML
 from ruamel.yaml.constructor import ConstructorError
+import ruamel.yaml
 
 from . import __version__
 
@@ -148,6 +149,9 @@ class UnboundVariableError(ValueError):
 
     __str__ = __repr__
 
+class NonAliasingRTRepresenter(ruamel.yaml.representer.RoundTripRepresenter):
+    def ignore_aliases(self, data):
+        return True
 
 def construct_yaml_timestamp(constructor, node):
     """Return a method to add to the YAML constructor to parse datetime."""
@@ -454,9 +458,11 @@ class DataProcessor:
         yaml = YAML(typ='safe', pure=True)
         yaml.default_flow_style = False
         yaml.sort_base_mapping_type_on_output = False
+        yaml.Representer = NonAliasingRTRepresenter
         yaml.representer.add_representer(
             datetime,
             get_represent_datetime(self.time_formats['']))
+            
         yaml.dump(root, out_file)
         self.validate_data(root, out_filename, schema_location)
 
