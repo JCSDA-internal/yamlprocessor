@@ -205,7 +205,7 @@ def test_main_0(tmp_path, yaml):
     with infilename.open('w') as infile:
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
 
 
@@ -220,7 +220,7 @@ def test_main_1(capsys, tmp_path, yaml):
     with (infilename_1).open('w') as infile_1:
         yaml.dump(1, infile_1)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
     captured = capsys.readouterr()
     assert f'[INFO] < {infilename}' in captured.err.splitlines()
@@ -241,7 +241,7 @@ def test_main_3(tmp_path, yaml):
     with (tmp_path / '3x.yaml').open('w') as infile_3x:
         yaml.dump([3.1, 3.14], infile_3x)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
 
 
@@ -252,7 +252,7 @@ def test_main_4(tmp_path, yaml):
     with infilename.open('w') as infile:
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main(['--no-process-include', str(infilename), str(outfilename)])
+    main(['--no-process-include', str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
 
 
@@ -269,6 +269,7 @@ def test_main_5(tmp_path, yaml):
         '--define=PERSON=Jo',
         '--unbound-placeholder=unknown',
         str(infilename),
+        '-o',
         str(outfilename),
     ])
     assert yaml.load(outfilename.open()) == ['Hello Jo', 'Hello unknown']
@@ -278,6 +279,7 @@ def test_main_5(tmp_path, yaml):
         '--define=PERSON=Jo',
         '--unbound-placeholder=' + DataProcessor.UNBOUND_ORIGINAL,
         str(infilename),
+        '-o',
         str(outfilename),
     ])
     assert yaml.load(outfilename.open()) == ['Hello Jo', 'Hello ${ALIEN}']
@@ -290,7 +292,7 @@ def test_main_6(tmp_path, yaml):
     with infilename.open('w') as infile:
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main(['--no-process-variable', str(infilename), str(outfilename)])
+    main(['--no-process-variable', str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
 
 
@@ -313,7 +315,7 @@ def test_main_7(capsys, tmp_path, yaml):
     with (include_3x).open('w') as infile_3x:
         yaml.dump([3.1, 3.14], infile_3x)
     outfilename = tmp_path / 'b.yaml'
-    main(['-I', str(include_d), str(infilename), str(outfilename)])
+    main(['-I', str(include_d), str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
     captured = capsys.readouterr()
     assert f'[INFO] YP_INCLUDE_PATH={include_d}' in captured.err.splitlines()
@@ -330,7 +332,7 @@ def test_main_8(tmp_path, yaml):
     with infilename.open('w') as infile:
         infile.write(incontent)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     with outfilename.open() as outfile:
         outcontent = outfile.read()
     assert incontent == outcontent
@@ -357,7 +359,7 @@ def test_main_9(tmp_path, yaml):
     with (tmp_path / '1.yaml').open('w') as infile_1:
         yaml.dump(data_1, infile_1)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == data
 
 
@@ -372,7 +374,7 @@ def test_main_10(tmp_path, yaml):
     with infilename.open('w') as infile:
         yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == {
         'you-time': '2030-04-05T06:07:08Z',
         'me-time': '2030-04-05T06:07:08+09:00',
@@ -413,6 +415,7 @@ def test_main_11(tmp_path, yaml):
         '--define=NAME=earth',
         '--define=PEOPLE=human',
         str(infilename),
+        '-o',
         str(outfilename)])
     assert yaml.load(outfilename.open()) == {
         'hello': [
@@ -449,7 +452,7 @@ def test_main_12(tmp_path, yaml):
     with include_infilename.open('w') as infile:
         yaml.dump(more_data_2, infile)
     outfilename = tmp_path / 'b.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == [
         {'name': 'cat', 'speak': ['meow', 'miaow']},
         {'name': 'dog', 'speak': ['woof', 'bark']},
@@ -478,7 +481,7 @@ def test_main_12_empty_list_1(tmp_path, yaml):
     with include_infilename.open('w') as infile:
         yaml.dump(void_data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    main(['--define=MATTER=stuff', str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == [
         {'name': 'stuff'},
         {'name': 'stuff'},
@@ -504,7 +507,7 @@ def test_main_12_empty_list_2(tmp_path, yaml):
         with infilename.open('w') as infile:
             yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    main(['--define=MATTER=stuff', str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == [
         {'name': 'stuff'},
         {'name': 'stuff'},
@@ -529,7 +532,7 @@ def test_main_12_empty_dict_1(tmp_path, yaml):
     with include_infilename.open('w') as infile:
         yaml.dump(void_data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    main(['--define=MATTER=stuff', str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == {
         'name1': 'stuff',
         'name2': 'stuff',
@@ -555,7 +558,7 @@ def test_main_12_empty_dict_2(tmp_path, yaml):
         with infilename.open('w') as infile:
             yaml.dump(data, infile)
     outfilename = tmp_path / 'b.yaml'
-    main(['--define=MATTER=stuff', str(infilename), str(outfilename)])
+    main(['--define=MATTER=stuff', str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == {
         'name1': 'stuff',
         'name2': 'stuff',
@@ -586,6 +589,7 @@ def test_main_13(tmp_path, yaml):
     outfilename = tmp_path / 'b.yaml'
     main([
         str(infilename),
+        '-o',
         str(outfilename),
         '-D', 'CAT_THINK=humans are cats',
     ])
@@ -625,6 +629,7 @@ def test_main_14(tmp_path, yaml):
         '--define=WORLD=Mars',
         '--define=PEOPLE=Martians',
         str(infilename),
+        '-o',
         str(outfilename),
     ])
     assert yaml.load(outfilename.open()) == {
@@ -656,7 +661,7 @@ other_worlds:
     with (tmp_path / 'in_1.yaml').open('w') as infile:
         infile.write(yaml_1)
     outfilename = tmp_path / 'out.yaml'
-    main([str(infilename), str(outfilename)])
+    main([str(infilename), '-o', str(outfilename)])
     assert yaml.load(outfilename.open()) == {
         'hello': {
             'earth': 'sapiens',
@@ -733,6 +738,7 @@ def test_main_19(tmp_path, yaml):
         '-DCOLOUR_A=red',
         '-DCOLOUR_B=yellow',
         str(infilename),
+        '-o',
         str(outfilename),
     ])
     assert yaml.load(outfilename.open()) == {
@@ -745,6 +751,32 @@ def test_main_19(tmp_path, yaml):
     ])
     assert yaml.load(outfilename.open()) == {
         'flowers': {'tulip': 'U+1F337'}}
+
+
+def test_main_20(tmp_path, yaml):
+    """Test main, remove underscore sub-object at root level."""
+    infilename = tmp_path / 'a.yaml'
+    with infilename.open('w') as infile:
+        infile.write('_:\n')
+        infile.write('- &breakfast\n')
+        infile.write('  - egg\n')
+        infile.write('  - bread\n')
+        infile.write('food: *breakfast\n')
+    outfilename = tmp_path / 'b.yaml'
+    # Default
+    main([str(infilename), '-o', str(outfilename)])
+    assert yaml.load(outfilename.open()) == {'food': ['egg', 'bread']}
+    # Don't remove root underscore
+    main([
+        '--no-remove-root-underscore',
+        str(infilename),
+        '-o',
+        str(outfilename),
+    ])
+    assert yaml.load(outfilename.open()) == {
+        '_': [['egg', 'bread']],
+        'food': ['egg', 'bread'],
+    }
 
 
 def test_main_validate_1(tmp_path, capsys, yaml):
@@ -766,7 +798,7 @@ def test_main_validate_1(tmp_path, capsys, yaml):
         with infilename.open('w') as infile:
             infile.write(f'{prefix}{schemafilename}\n')
             yaml.dump({'hello': 'earth'}, infile)
-        main([str(infilename), str(outfilename)])
+        main([str(infilename), '-o', str(outfilename)])
         captured = capsys.readouterr()
         assert f'[INFO] ok {outfilename}' in captured.err.splitlines()
         # Schema specified as a file:// URL

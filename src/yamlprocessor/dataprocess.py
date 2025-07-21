@@ -187,7 +187,10 @@ class DataProcessor:
     .. py:attribute:: .is_process_variable
        :type: bool
 
-       Turn on/off variable substitution.
+    .. py:attribute:: .is_remove_root_underscore
+       :type: bool
+
+       Turn on/off removal of root level sub-object with an underscore key.
 
     .. py:attribute:: .include_dict
        :type: dict
@@ -305,6 +308,7 @@ class DataProcessor:
     def __init__(self):
         self.is_process_include = True
         self.is_process_variable = True
+        self.is_remove_root_underscore = True
         self.include_paths = list(
             item
             for item in os.getenv('YP_INCLUDE_PATH', '').split(os.pathsep)
@@ -447,6 +451,7 @@ class DataProcessor:
                     if isinstance(p_item, dict) or isinstance(p_item, list):
                         stack.append(
                             [p_item, parent_filenames_x, variable_map_x])
+        # Finally dump data
         if out_filename == '-':
             out_file = sys.stdout
         else:
@@ -454,9 +459,13 @@ class DataProcessor:
         yaml = YAML(typ='safe', pure=True)
         yaml.default_flow_style = False
         yaml.sort_base_mapping_type_on_output = False
+        yaml.representer.ignore_aliases = lambda data: True
         yaml.representer.add_representer(
             datetime,
             get_represent_datetime(self.time_formats['']))
+        if self.is_remove_root_underscore:
+            with suppress(KeyError, TypeError):
+                del root['_']
         yaml.dump(root, out_file)
         self.validate_data(root, out_filename, schema_location)
 
@@ -883,6 +892,12 @@ def main(argv=None):
         default=True,
         help='Do not process variable substitutions')
     parser.add_argument(
+        '--no-remove-root-underscore',
+        dest='is_remove_root_underscore',
+        action='store_false',
+        default=True,
+        help='Do not remove root level sub-object with an underscore key')
+    parser.add_argument(
         '--quiet', '-q',
         dest='is_quiet_mode',
         action='store_true',
@@ -930,6 +945,8 @@ def main(argv=None):
 
     # Set up processor
     processor = DataProcessor()
+    # Remove root level sub-object with underscore key option
+    processor.is_remove_root_underscore = args.is_remove_root_underscore
     # Include options
     processor.is_process_include = args.is_process_include
     for item in args.include_paths:
