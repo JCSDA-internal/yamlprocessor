@@ -639,7 +639,7 @@ Turn Off Removal of Root Level Sub-object with Underscore Key
 
 By default, if the document is an object at root and if the root object
 contains a value with an underscore ``_`` key, the application will remove the
-value with the underscore key before dumping the result To turn off this
+value with the underscore key before dumping the result. To turn off this
 behaviour, you can do:
 
  - On the command line, use the
