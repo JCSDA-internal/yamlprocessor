@@ -634,6 +634,22 @@ you can do:
    :py:class:`yamlprocessor.dataprocess.DataProcessor` instance to ``False``.
 
 
+Turn Off Removal of Root Level Sub-object with Underscore Key
+-------------------------------------------------------------
+
+By default, if the document is an object at root and if the root object
+contains a value with an underscore ``_`` key, the application will remove the
+value with the underscore key before dumping the result. To turn off this
+behaviour, you can do:
+
+ - On the command line, use the
+   :option:`--no-remove-root-underscore <yp-data --no-remove-root-underscore>`
+   option.
+ - In Python, set the :py:attr:`.is_remove_root_underscore` attribute of the
+   relevant :py:class:`yamlprocessor.dataprocess.DataProcessor` instance to
+   ``True``.
+
+
 Validation with JSON Schema
 ---------------------------
 
