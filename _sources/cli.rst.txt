@@ -55,6 +55,10 @@ See :doc:`data-process` for detail.
 
    Do not process variable substitutions.
 
+.. option:: --no-remove-root-underscore
+
+   Turn off removal of root level sub-object with an underscore key.
+
 .. option:: --schema-prefix=PREFIX
 
    Prefix for relative path schemas. See also :envvar:`YP_SCHEMA_PREFIX`.

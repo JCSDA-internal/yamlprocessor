@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Processor &mdash; yamlprocessor 0.6.4 documentation</title>
+  <title>Data Processor &mdash; yamlprocessor 0.6.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=73d9a94e"></script>
+      <script src="_static/documentation_options.js?v=e059a73d"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -58,6 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#string-value-date-time-substitution">String Value Date-Time Substitution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cast-value-variable-substitution">Cast Value Variable Substitution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#turn-off-processing">Turn Off Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#turn-off-removal-of-root-level-sub-object-with-underscore-key">Turn Off Removal of Root Level Sub-object with Underscore Key</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#validation-with-json-schema">Validation with JSON Schema</a></li>
 </ul>
 </li>
@@ -676,6 +677,23 @@ you can do:</p>
 <a class="reference internal" href="cli.html#cmdoption-yp-data-no-process-variable"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-process-variable</span></code></a> option.</p></li>
 <li><p>In Python, set the <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor..is_process_variable" title="yamlprocessor.dataprocess.DataProcessor..is_process_variable"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_process_variable</span></code></a> attribute of the relevant
 <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="turn-off-removal-of-root-level-sub-object-with-underscore-key">
+<h2>Turn Off Removal of Root Level Sub-object with Underscore Key<a class="headerlink" href="#turn-off-removal-of-root-level-sub-object-with-underscore-key" title="Link to this heading"></a></h2>
+<p>By default, if the document is an object at root and if the root object
+contains a value with an underscore <code class="docutils literal notranslate"><span class="pre">_</span></code> key, the application will remove the
+value with the underscore key before dumping the result. To turn off this
+behaviour, you can do:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>On the command line, use the
+<a class="reference internal" href="cli.html#cmdoption-yp-data-no-remove-root-underscore"><code class="xref std std-option docutils literal notranslate"><span class="pre">--no-remove-root-underscore</span></code></a>
+option.</p></li>
+<li><p>In Python, set the <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor..is_remove_root_underscore" title="yamlprocessor.dataprocess.DataProcessor..is_remove_root_underscore"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_remove_root_underscore</span></code></a> attribute of the
+relevant <a class="reference internal" href="api.html#yamlprocessor.dataprocess.DataProcessor" title="yamlprocessor.dataprocess.DataProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">yamlprocessor.dataprocess.DataProcessor</span></code></a> instance to
+<code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </div></blockquote>
 </section>
