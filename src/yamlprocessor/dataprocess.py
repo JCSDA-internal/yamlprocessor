@@ -459,6 +459,7 @@ class DataProcessor:
         yaml = YAML(typ='safe', pure=True)
         yaml.default_flow_style = False
         yaml.sort_base_mapping_type_on_output = False
+        yaml.width = 4096  # prevent text wrapping for most cases
         yaml.representer.ignore_aliases = lambda data: True
         yaml.representer.add_representer(
             datetime,
